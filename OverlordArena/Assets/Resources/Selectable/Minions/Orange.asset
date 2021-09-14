@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cd7a1e4406fd4429e433ec47a1d1b0, type: 3}
+  m_Name: Orange
+  m_EditorClassIdentifier: 
+  characterArt: {fileID: 21300000, guid: bf4b24897c262914fac11760c4fd8352, type: 3}
+  healthPoints: 2
+  movementSpeed: 8
+  physicalArmour: 66
+  magicArmour: 2
+  attackDamage: 88
+  attackSpeed: 2
+  abilities:
+  - {fileID: 11400000, guid: a6378129ac893c54c8e47026c45599c1, type: 2}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cd7a1e4406fd4429e433ec47a1d1b0, type: 3}
+  m_Name: Green
+  m_EditorClassIdentifier: 
+  characterArt: {fileID: 21300000, guid: fbfeea8406d79504b8216fe2f720b93e, type: 3}
+  healthPoints: 555
+  movementSpeed: 4
+  physicalArmour: 465
+  magicArmour: 66
+  attackDamage: 4
+  attackSpeed: 4
+  isRanged: 1
+  abilities:
+  - {fileID: 11400000, guid: 40f4796bf2190be45ba8108c96e910ae, type: 2}

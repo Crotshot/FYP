@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cd7a1e4406fd4429e433ec47a1d1b0, type: 3}
+  m_Name: Boxy
+  m_EditorClassIdentifier: 
+  characterArt: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  healthPoints: 456
+  movementSpeed: 34
+  physicalArmour: 678
+  magicArmour: 8878
+  attackDamage: 678
+  attackSpeed: 678
+  abilities:
+  - {fileID: 11400000, guid: ab81e76884bc5944daa4467b3b648d60, type: 2}
