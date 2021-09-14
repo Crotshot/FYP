@@ -5,28 +5,28 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -2042199095151454456
-    second: Shock
+    second: Ability1
   - first:
       74: -679172168660463150
-    second: MK3Action.005
+    second: Attack3
   - first:
       74: -5424189931987021581
-    second: Recovery 2
+    second: Recovery2
   - first:
       74: 2467059205597020393
-    second: Swing 2
+    second: Attack2
   - first:
       74: 828201781840867685
-    second: Swing 1 Recovery
+    second: Recovery1
   - first:
       74: 7119539187504151731
-    second: Swing 1
+    second: Attack1
   - first:
       74: -1803976989739477343
-    second: Walk Cycle
+    second: Walking
   - first:
       74: -8294314962118491812
-    second: Breathing
+    second: Idle
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -56,7 +56,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Shock
+      name: Ability1
       takeName: Shock
       internalID: 0
       firstFrame: 0
@@ -85,7 +85,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: MK3Action.005
+      name: Attack3
       takeName: MK3Action.005
       internalID: 0
       firstFrame: 0
@@ -114,7 +114,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Recovery 2
+      name: Recovery2
       takeName: Recovery 2
       internalID: 0
       firstFrame: 0
@@ -143,7 +143,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Swing 2
+      name: Attack2
       takeName: Swing 2
       internalID: 0
       firstFrame: 0
@@ -172,7 +172,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Swing 1 Recovery
+      name: Recovery1
       takeName: Swing 1 Recovery
       internalID: 0
       firstFrame: 0
@@ -201,7 +201,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Swing 1
+      name: Attack1
       takeName: Swing 1
       internalID: 0
       firstFrame: 0
@@ -230,7 +230,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walk Cycle
+      name: Walking
       takeName: Walk Cycle
       internalID: 0
       firstFrame: 0
@@ -259,7 +259,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Breathing
+      name: Idle
       takeName: Breathing
       internalID: 0
       firstFrame: 0
