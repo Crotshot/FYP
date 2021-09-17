@@ -16,7 +16,7 @@ public class Player_Controller : MonoBehaviour
     Animator animator;
     AnimationClip currentClip;
     AnimatorStateInfo stateInfo;
-    int animationIndex = 0, percentChangeIndex;
+    int animationIndex = -1, percentChangeIndex = -1;
 
     private void Awake()
     {
@@ -41,12 +41,12 @@ public class Player_Controller : MonoBehaviour
     {
         if (!locked)
         {
-            if (inputs.GetMovementInput() != Vector3.zero)
-                animator.SetBool(animations[0].animName, true);
-            else
-                animator.SetBool(animations[0].animName, false);
-
             navTarget.localPosition = inputs.GetMovementInput();
+            if (navTarget.localPosition != Vector3.zero)
+                animator.SetBool("Moving", true);
+            else
+                animator.SetBool("Moving", false);
+            Debug.Log("Banana");
             agent.SetDestination(navTarget.position); // Use SetDest so it updates each time its changed
         }
 
