@@ -10,7 +10,32 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] float agentSpeed = 4.1f, agentAngularSpeed = 270f;
 
     Inputs inputs;
-    bool locked = false;
+
+    private void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        inputs = FindObjectOfType<Inputs>();
+        navTarget = transform.GetChild(1).GetChild(1);
+    }
+
+    private void Start()
+    {
+        agent.speed = agentSpeed;
+        agent.angularSpeed = agentAngularSpeed;
+    }
+
+    private void Update()
+    {
+        agent.SetDestination(navTarget.position); // Set Destination immediately makes agent repath
+    }
+}
+
+
+/*
+ *
+ *         animator = GetComponentInChildren<Animator>();
+ *
+ *     bool locked = false;
 
     [SerializeField] AnimationMovement[] animations;
     Animator animator;
@@ -18,27 +43,11 @@ public class Player_Controller : MonoBehaviour
     AnimatorStateInfo stateInfo;
     int animationIndex = -1, percentChangeIndex = -1;
 
-    private void Awake()
-    {
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
-        inputs = FindObjectOfType<Inputs>();
 
-        navTarget = transform.GetChild(1).GetChild(1);
-        //animatedNavTarget = transform.GetChild(2);
-    }
-
-    private void Start()
-    {
-        agent.speed = agentSpeed;
-        agent.angularSpeed = agentAngularSpeed;
-
-        AnimatorClipInfo[] currentClipInfo = animator.GetCurrentAnimatorClipInfo(0);
+ *      AnimatorClipInfo[] currentClipInfo = animator.GetCurrentAnimatorClipInfo(0);
         currentClip = currentClipInfo[0].clip;
-    }
 
-    private void Update()
-    {
+
         if (!locked)
         {
             navTarget.localPosition = inputs.GetMovementInput();
@@ -46,14 +55,14 @@ public class Player_Controller : MonoBehaviour
                 animator.SetBool("Moving", true);
             else
                 animator.SetBool("Moving", false);
-            agent.SetDestination(navTarget.position); // Use SetDest so it updates each time its changed
+            
         }
 
         AnimationControls();
         UpdateCurrentClip();
-        AnimationRestrictions();
-    }
-
+        AnimationRestrictions(); 
+*/
+/*
     //Get inputs and set animator bools accordingly
     private void AnimationControls()
     {
@@ -73,7 +82,9 @@ public class Player_Controller : MonoBehaviour
             }
         }
     }
+*/
 
+/*
     //Gets the currently active animation clip and sets the current animations[] index
     private void UpdateCurrentClip()
     {
@@ -112,8 +123,9 @@ public class Player_Controller : MonoBehaviour
 
         stateInfo = animator.GetCurrentAnimatorStateInfo(0);
     }
+*/
 
-
+/*
     //Change players control over conqueror while using animations
     private void AnimationRestrictions()
     {
@@ -143,4 +155,4 @@ public class Player_Controller : MonoBehaviour
         navTarget.position = transform.position + transform.TransformDirection(animations[animationIndex].direction[percentChangeIndex].x, 0, animations[animationIndex].direction[percentChangeIndex].z);
         agent.SetDestination(navTarget.position);
     }
-}
+*/
