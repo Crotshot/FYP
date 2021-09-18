@@ -46,7 +46,6 @@ public class Player_Controller : MonoBehaviour
                 animator.SetBool("Moving", true);
             else
                 animator.SetBool("Moving", false);
-            Debug.Log("Banana");
             agent.SetDestination(navTarget.position); // Use SetDest so it updates each time its changed
         }
 
@@ -60,17 +59,17 @@ public class Player_Controller : MonoBehaviour
     {
         for (int i = 0; i < animations.Length; i++)
         {
-            if (animations[i].animName.Equals("") || animations[i].animName.Contains("Recovery"))
+            if (animations[i].animatorBool.Equals("") || animations[i].animName.Contains("Recovery"))
             {
                 continue;
             }
-            if (inputs.GetAnyInput(animations[i].animName) > 0)
+            if (inputs.GetAnyInput(animations[i].animatorBool) > 0)
             {
-                animator.SetBool(animations[i].animName, true);
+                animator.SetBool(animations[i].animatorBool, true);
             }
             else
             {
-                animator.SetBool(animations[i].animName, false);
+                animator.SetBool(animations[i].animatorBool, false);
             }
         }
     }
@@ -88,21 +87,26 @@ public class Player_Controller : MonoBehaviour
                 animationIndex = -1;
                 percentChangeIndex = -1;
                 locked = false;
+
                 for(int i = 0; i < animations.Length; i++)
                 {
-                    if (currentClip.name.Contains(animations[i].animName))
+                    if (currentClip.name.Equals(animations[i].animName))
                     {
-                        if(animations[i].percentChange.Length > 0)
+                        animationIndex = i;
+                        if (animations[i].percentChange.Length > 0)
                         {
                             percentChangeIndex = 0;
-                            animationIndex = i;
+                            agent.speed = animations[animationIndex].agentSpeed[percentChangeIndex];
                         }
                         break;
                     }
                 }
 
-                agent.speed = agentSpeed;
-                agent.angularSpeed = agentAngularSpeed;
+                if (animationIndex == -1)
+                {
+                    agent.speed = agentSpeed;
+                    agent.angularSpeed = agentAngularSpeed;
+                }
             }
         }
 
@@ -115,14 +119,18 @@ public class Player_Controller : MonoBehaviour
     {
         if (animationIndex == -1)
             return;
-        else if (animations[animationIndex].lockMoveRot)
+        else if (animations[animationIndex].lockMoveRot) //---------------------------------------------------------This entire function does not work
+        {
             locked = true;
+            agent.angularSpeed = 0;
+        }
 
         if (percentChangeIndex == -1)
             return;
 
-        // If percentage of completion is               >       index percent change 
-        if((stateInfo.normalizedTime / stateInfo.length) > animations[animationIndex].percentChange[percentChangeIndex])
+        // If percentage of completion is               >       index percent change
+        Debug.Log((stateInfo.normalizedTime / stateInfo.length));
+        if ((stateInfo.normalizedTime / stateInfo.length) > animations[animationIndex].percentChange[percentChangeIndex])
         {
             percentChangeIndex++; //Increment
             if(percentChangeIndex == animations[animationIndex].percentChange.Length)
@@ -130,67 +138,9 @@ public class Player_Controller : MonoBehaviour
                 percentChangeIndex = -1;
                 return;
             }
-            //Update speed when pChangeIndex is changed
-            if (animations[animationIndex].agentSpeed[percentChangeIndex] > -1)//Do not change agent.speed if it is -1
-            {
-                agent.speed = animations[animationIndex].agentSpeed[percentChangeIndex];
-            }
+            agent.speed = animations[animationIndex].agentSpeed[percentChangeIndex];
         }
-        // Update position each call as the avater might reach the point if the times between are too long and stand still
-        if (animations[animationIndex].direction[percentChangeIndex].y > -(Vector3.one).y) //Y value should always be zero so if it is less than 0 we ignore the direction
-        {
-            //animatedNavTarget.localPosition = (transform.position + animations[animationIndex].direction[percentChangeIndex]);
-            //agent.SetDestination(animatedNavTarget.position);
-            navTarget.position = transform.position + transform.TransformDirection(animations[animationIndex].direction[percentChangeIndex].x, 0, animations[animationIndex].direction[percentChangeIndex].z);
-            agent.SetDestination(navTarget.position);
-        }
+        navTarget.position = transform.position + transform.TransformDirection(animations[animationIndex].direction[percentChangeIndex].x, 0, animations[animationIndex].direction[percentChangeIndex].z);
+        agent.SetDestination(navTarget.position);
     }
 }
-
-
-/*
-bool animationIsInArray = false;
-for (int i = 0; i < animations.Length; i++)
-{
-    if (currentClip.name.Contains(animations[i].animName)) //Check that were looking at the right animation
-    {
-        animationIsInArray = true;
-        animationIndex = i;
-        if (animations[i].lockMoveRot)
-        {
-            locked = true;
-            agent.angularSpeed = 0;
-        }
-        else
-        {
-            agent.speed = agentSpeed;
-            agent.angularSpeed = agentAngularSpeed;
-            locked = false;
-        }
-
-
-        for (int j = 0; j < animations[i].percentChange.Length; j++)
-        {
-            if (animations[i].percentChange[j] >= (stateInfo.normalizedTime / stateInfo.length)) //Is the time of the animationMovment index > the % completion of the animation
-            {
-                if (animations[i].agentSpeed[j] > -1)//Do not change agent.speed if it is -1
-                {
-                    agent.speed = animations[i].agentSpeed[j];
-                }
-                if (animations[i].direction[j].y > -(Vector3.one).y) //Y value should always be zero so if it is less than 0 we ignore it
-                {
-                    navTarget.position = (transform.position + animations[i].direction[j]);
-                    agent.SetDestination(navTarget.position);
-                }
-            }
-        }
-
-    }
-}
-if (!animationIsInArray)
-{
-    agent.speed = agentSpeed;
-    agent.angularSpeed = agentAngularSpeed;
-    locked = false;
-}
-*/
