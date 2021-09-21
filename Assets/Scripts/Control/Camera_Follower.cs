@@ -8,7 +8,7 @@ public class Camera_Follower : MonoBehaviour
     [SerializeField] float mouseModifier, cameraMoveLimit = 12f, cameraMoveMinimum = 8f, cameraSpeedModifier = 4f;
 
     Inputs inputs;
-    private void Start()
+    public void Setup()
     {
         player = transform.parent;
         transform.parent = null;
