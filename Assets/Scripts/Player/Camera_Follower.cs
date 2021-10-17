@@ -54,7 +54,7 @@ public class Camera_Follower : MonoBehaviour
     //Returns the position of the mouse in world space at y = 0
     private Vector3 YInterceptOfCameraRay() //Gets a the mouse position in worldspace at y = 0
     {
-        Ray cameraRay = Camera.main.ScreenPointToRay(inputs.GetMousePosition());
+        Ray cameraRay = playerCamera.GetComponent<Camera>().ScreenPointToRay(inputs.GetMousePosition());
         Plane yInterceptPlane = new Plane(Vector3.up, Vector3.zero); //Plane to represent the y intercept
 
         if (yInterceptPlane.Raycast(cameraRay, out float distance))
@@ -67,7 +67,10 @@ public class Camera_Follower : MonoBehaviour
     //Stops camera from moving when mouse is close to screen centre
     private Vector3 RestrictPosition(Vector3 pos, float maxDistance, float minDistance)
     { //If distance is not high enough dont move the camera
-        if(StaticHelpers.Vector3Distance(transform.position, pos) < minDistance) 
+        if (inputs.GetShiftAlt() > 0)
+            return cameraOrbitPoint.position;
+
+        if (StaticHelpers.Vector3Distance(transform.position, pos) < minDistance) 
         {
             return transform.position;
         }
