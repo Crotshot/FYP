@@ -20,13 +20,9 @@ public class MinionDetails : MonoBehaviour
         moveSpeed.text = stats.movementSpeed.ToString();
         physicalArmour.text = stats.physicalArmour.ToString();
         magicArmour.text = stats.magicArmour.ToString();
-        attackSpeed.text = stats.attackSpeed.ToString();
         attackDamage.text = stats.attackDamage.ToString();
         minionName.text = stats.name;
-        if(stats.isRanged)
-            rorM.text = "Ranged";
-        else
-            rorM.text = "Melee";
+
         description.text = stats.abilities[0].abilityDescription;
         minionArt.sprite = stats.characterArt;
 

@@ -59,7 +59,7 @@ public class GameNetworkManager : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
-        if (sM.GetSceneName() == "Lobby" && newSceneName.StartsWith("Arena")) //Change for selection scene
+        if (sM.GetSceneName() == "Lobby" && newSceneName.StartsWith("Selection"))
         {
             for (int i = RoomPlayers.Count - 1; i >= 0; i--)
             {
@@ -70,6 +70,9 @@ public class GameNetworkManager : NetworkManager
                 NetworkServer.Destroy(conn.identity.gameObject);
                 NetworkServer.ReplacePlayerForConnection(conn, gameplayerInstance.gameObject);
             }
+        }
+        else if(sM.GetSceneName() == "Selection" && newSceneName.StartsWith("Arena")) {
+
         }
         base.ServerChangeScene(newSceneName);
     }
@@ -87,9 +90,9 @@ public class GameNetworkManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, roomInstance.gameObject);
     }
 
-    public void StartGame() //Change later to go to selection scene
+    public void StartGame()
     {
-        ServerChangeScene("Arena");
+        ServerChangeScene("Selection");
     }
 
     public override void OnStopServer()

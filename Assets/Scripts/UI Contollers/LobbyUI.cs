@@ -125,6 +125,7 @@ public class LobbyUI : MonoBehaviour
             NetworkManager.singleton.StopHost();
         else
             NetworkManager.singleton.StopClient();
+        sM.LoadScene(sM.GetSceneName());
     }
 
     public void B_BackToMenu()

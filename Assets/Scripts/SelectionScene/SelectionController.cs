@@ -76,14 +76,8 @@ public class SelectionController : MonoBehaviour
         moveSpeed.text = stats.movementSpeed.ToString();
         physicalArmour.text = stats.physicalArmour.ToString();
         magicArmour.text = stats.magicArmour.ToString();
-        attackSpeed.text = stats.attackSpeed.ToString();
         attackDamage.text = stats.attackDamage.ToString();
         characterName.text = stats.name;
-
-        if (stats.isRanged)
-            rorM.sprite = rangedSymbol;
-        else
-            rorM.sprite = meleeSymbol;
 
         characterArt.sprite = stats.characterArt;
 
