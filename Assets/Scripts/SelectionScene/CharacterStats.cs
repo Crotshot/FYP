@@ -6,7 +6,7 @@ using UnityEngine;
 public class CharacterStats : ScriptableObject
 {
     public Sprite characterArt;
-    public int healthPoints, movementSpeed, physicalArmour, magicArmour, attackDamage;
+    public int healthPoints, movementSpeed, attackDamage, attackSpeed;
     /// <summary>
     /// For minions use only one ability with the name "N/A"
     /// </summary>

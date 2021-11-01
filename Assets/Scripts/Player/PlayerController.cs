@@ -6,9 +6,16 @@ using Mirror;
 
 public class PlayerController : NetworkBehaviour
 {
-
+    private void Start() {
+        if (hasAuthority) {
+            transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
+        }
+        else{
+            Destroy(transform.GetChild(0).gameObject);
+            Destroy(this);
+        }   
+    }
 }
-
 ////2D sprite mapped by the 3D object
 //Inputs inputs;
 //NavMeshAgent agent;
@@ -26,7 +33,7 @@ public class PlayerController : NetworkBehaviour
 //    agent = GetComponent<NavMeshAgent>();
 //    agent.speed = agentSpeed;
 //    agent.angularSpeed = agentAngularSpeed;
-//    transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
+//    
 //    navTarget = transform.GetChild(0).GetChild(1);
 //    inputs = FindObjectOfType<Inputs>();
 //}

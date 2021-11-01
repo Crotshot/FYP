@@ -105,7 +105,8 @@ public class LobbyUI : MonoBehaviour
     public void B_JoinLobby()
     {
         string address = inputIP.text;
-
+        if (address == "")
+            address = "localhost";
         NetworkManager.singleton.networkAddress = address;
         NetworkManager.singleton.StartClient();
     }

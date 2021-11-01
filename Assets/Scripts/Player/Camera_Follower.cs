@@ -22,6 +22,8 @@ public class Camera_Follower : MonoBehaviour
 
     private void Update()
     {
+        if (player == null)// Remove later
+            return;
         transform.position = player.position; //Set position to player
         CameraRotation();
         LerpCameraPosition();

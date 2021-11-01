@@ -8,11 +8,11 @@ public class SelectionController : MonoBehaviour
 {
     [SerializeField] GameObject characterCardPrefab, minionCardPrefab, characterSelectionContent, minionSelectionContent;
     private List<Button> characterButtons, minionButtons;
-    [SerializeField] private TMP_Text healthPoints, moveSpeed, physicalArmour, magicArmour, attackSpeed, attackDamage, characterName,
+    [SerializeField] private TMP_Text healthPoints, moveSpeed, attackSpeed, attackDamage, characterName,
         pName, pDesc, ab1Name, ab1Desc, ab2Name, ab2Desc, sName, sDes;
-    [SerializeField] private Image characterArt, rorM, pas, ab1, ab2, spec;
-    [SerializeField] private Sprite rangedSymbol, meleeSymbol;
+    [SerializeField] private Image characterArt, pas, ab1, ab2, spec;
     [SerializeField] private MinionDetails[] selectedMinions;
+    [SerializeField] private LockIn lockInScript;
 
     private void Start()
     {
@@ -74,10 +74,10 @@ public class SelectionController : MonoBehaviour
 
         healthPoints.text = stats.healthPoints.ToString();
         moveSpeed.text = stats.movementSpeed.ToString();
-        physicalArmour.text = stats.physicalArmour.ToString();
-        magicArmour.text = stats.magicArmour.ToString();
         attackDamage.text = stats.attackDamage.ToString();
+        attackSpeed.text = stats.attackSpeed.ToString();
         characterName.text = stats.name;
+        lockInScript.conqName = stats.name;
 
         characterArt.sprite = stats.characterArt;
 

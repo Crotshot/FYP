@@ -11,7 +11,7 @@ public class GameNetworkManager : NetworkManager
     public static event Action ServerOnConnected;
     public static event Action ServerOnDisconnected;
     //public static event Action OnServerStopped;
-
+    
     //Prefabs to be spawned for the players
     [Header("Room")] [SerializeField] private Net_Room playerRoomPrefab = null;
     [Header("Game")] [SerializeField] private Net_Player gamePlayerPrefab = null;
@@ -22,6 +22,8 @@ public class GameNetworkManager : NetworkManager
 
     private _SceneManager sM;
 
+    public int readyPlayers = 0;
+
     public override void Awake()
     {
         base.Awake();
@@ -31,6 +33,7 @@ public class GameNetworkManager : NetworkManager
     #region Server
     public override void OnServerConnect(NetworkConnection conn) //Can be rejumbled later when game scene is implemented
     {
+        readyPlayers = 0;
         if (sM.GetSceneName() == "Lobby")
         {
             ServerOnConnected?.Invoke();
@@ -44,6 +47,7 @@ public class GameNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
+        readyPlayers = 0;
         if (sM.GetSceneName() == "Lobby")
         {
             //Debug.Log("Player: " + conn.address.ToString() + " has left");
@@ -59,6 +63,7 @@ public class GameNetworkManager : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
+        readyPlayers = 0;
         if (sM.GetSceneName() == "Lobby" && newSceneName.StartsWith("Selection"))
         {
             for (int i = RoomPlayers.Count - 1; i >= 0; i--)
@@ -79,6 +84,7 @@ public class GameNetworkManager : NetworkManager
 
     public override void OnServerChangeScene(string newSceneName)
     {
+        readyPlayers = 0;
         base.OnServerChangeScene(newSceneName);
         //throw new NotImplementedException();
     }
@@ -86,6 +92,7 @@ public class GameNetworkManager : NetworkManager
     //Only called if in the lobby due to OnServerConnect() removing players who attempt to connect when outside the Lobby scene
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
+        readyPlayers = 0;
         Net_Room roomInstance = Instantiate(playerRoomPrefab);
         NetworkServer.AddPlayerForConnection(conn, roomInstance.gameObject);
     }
@@ -119,5 +126,12 @@ public class GameNetworkManager : NetworkManager
         if (sM.GetSceneName() == "Lobby")
             ClientOnDisconnected?.Invoke();
     }
-    #endregion    
+    #endregion
+
+    public void StartMatch() {
+        readyPlayers++;
+        if (readyPlayers == NetworkServer.connections.Count) {
+            ServerChangeScene("Arena");
+        }
+    }
 }

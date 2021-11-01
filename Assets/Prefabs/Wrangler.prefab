@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 475210411806175496}
   - component: {fileID: 3805770664851072804}
   m_Layer: 0
-  m_Name: _RtardWrangler
+  m_Name: Wrangler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
