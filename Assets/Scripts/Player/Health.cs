@@ -6,23 +6,18 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     [SerializeField] float maxHealth, regenDelay;
-    int team = 0;
     [SerializeField] bool isPlayer;
     [Range(0, 1)]
     [SerializeField] float regenPercentPerSec;
     float currentHealth, regenTimer;
+    public int team;
 
     public UnityEvent<float> damaged;
 
     private void Awake() {
         if (damaged == null)
             damaged = new UnityEvent<float>();
-        if (isPlayer) {
-//RE-ENABLE            team = GetComponent<PlayerController>().GetTeam();
-        }
-        else {
-            team = Random.Range(100,100000);//Will need to be changed later for minions
-        }
+        team = GetComponent<Team>().GetTeam();
     }
 
     private void Update() {
@@ -43,11 +38,11 @@ public class Health : MonoBehaviour
         damaged?.Invoke(currentHealth);
     }
 
-    public int GetTeam() {
-        return team;
-    }
-
     public void ResetHealth() {
         currentHealth = maxHealth;
+    }
+
+    public int GetTeam() {
+        return team;
     }
 }

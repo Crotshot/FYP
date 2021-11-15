@@ -6,14 +6,27 @@ using Mirror;
 
 public class PlayerController : NetworkBehaviour
 {
+    Inputs inputs;
+    NavMeshAgent agent;
+    Transform navTarget;
+
     private void Start() {
         if (hasAuthority) {
+            navTarget = transform.GetChild(0).GetChild(1); 
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
+            inputs = FindObjectOfType<Inputs>();
+            agent = GetComponent<NavMeshAgent>();
+            GetComponent<Team>().AssignTeam();
         }
         else{
             Destroy(transform.GetChild(0).gameObject);
             Destroy(this);
-        }   
+        }
+    }
+
+    private void Update() {
+        navTarget.localPosition = inputs.GetMovementInput();
+        agent.destination = navTarget.position;
     }
 }
 ////2D sprite mapped by the 3D object
@@ -36,15 +49,6 @@ public class PlayerController : NetworkBehaviour
 //    
 //    navTarget = transform.GetChild(0).GetChild(1);
 //    inputs = FindObjectOfType<Inputs>();
-//}
-
-//private void Update()
-//{
-//    if (!isLocalPlayer) {
-//        return;
-//    }
-//    navTarget.localPosition = inputs.GetMovementInput();
-//    agent.destination = navTarget.position;
 //}
 
 //public int GetTeam() {

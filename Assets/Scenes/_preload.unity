@@ -183,6 +183,7 @@ MonoBehaviour:
   - {fileID: 7417867749941967423, guid: 854d2fa22b0417f4ab2f716dbd8a1b02, type: 3}
   - {fileID: 8888298963108967615, guid: 9e040520db93a354db35fe7b182ffe3d, type: 3}
   - {fileID: 2814933875791984564, guid: bec96ef03bcd26d46867574f4274421c, type: 3}
+  - {fileID: 9137215830886651479, guid: 3c9c4d21b102870409d5582204f6eb72, type: 3}
   playerRoomPrefab: {fileID: -6223738119716034043, guid: 5cddf750ba5922a4585935014e7d9241, type: 3}
   gamePlayerPrefab: {fileID: 473611523937665362, guid: 77b6c797498fd464d8a19e8d81e98e45, type: 3}
   readyPlayers: 0
