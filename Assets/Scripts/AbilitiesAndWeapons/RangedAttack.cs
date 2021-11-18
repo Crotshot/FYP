@@ -6,11 +6,10 @@ using Mirror;
 
 public class RangedAttack : NetworkBehaviour {
     [SerializeField] float roundsPerMinute = 60f;
-    [SerializeField] Transform spawnPoint;
+    [SerializeField] Vector3 spawnPoint;
     [SerializeField] GameObject projectilePrefab;
     Inputs inputs;
     float fireRatetimer;
-    int team;
 
     public UnityEvent weaponFired;
 
@@ -21,12 +20,11 @@ public class RangedAttack : NetworkBehaviour {
         inputs = FindObjectOfType<Inputs>();
         if (weaponFired == null)
             weaponFired = new UnityEvent();
-        team = GetComponent<Team>().GetTeam();
     }
 
     void Update() {
         if (inputs.GetAttackInput() != 0 && fireRatetimer <= 0) {
-            CmdSpawnBullet();
+            CmdSpawnBullet(transform.TransformPoint(spawnPoint), transform.rotation); //Later update this to use the weapon.transform.rotation
             fireRatetimer = 60f / roundsPerMinute;
             weaponFired?.Invoke();
         }
@@ -41,14 +39,10 @@ public class RangedAttack : NetworkBehaviour {
     }
 
     [Command]
-    void CmdSpawnBullet() {
-        GameObject newProj = Instantiate(projectilePrefab, spawnPoint);
-        NetworkServer.Spawn(newProj);
-        newProj.GetComponent<BasicShell>().Make(team);
+    void CmdSpawnBullet(Vector3 pos, Quaternion rot, NetworkConnectionToClient sender = null) {
+        GameObject newProj = Instantiate(projectilePrefab, pos, rot);
+        NetworkServer.Spawn(newProj, sender);
+       
         newProj.transform.parent = null;
-    }
-
-    public int GetTeam() {
-        return team;
     }
 }

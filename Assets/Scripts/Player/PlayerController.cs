@@ -12,7 +12,8 @@ public class PlayerController : NetworkBehaviour
 
     private void Start() {
         if (hasAuthority) {
-            navTarget = transform.GetChild(0).GetChild(1); 
+            navTarget = transform.GetChild(0).GetChild(1);
+            GetComponent<Respawn>().Setup();
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
             inputs = FindObjectOfType<Inputs>();
             agent = GetComponent<NavMeshAgent>();

@@ -8,13 +8,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject[] conquerorPrefabs;
     [SerializeField] GameObject[] minionPrefabs;
 
-    private void Awake()
-    {
+    private void Awake() {
         sceneManager = GetComponent<_SceneManager>();
     }
 
-    private void Start()
-    {
+    private void Start() {
         sceneManager.LoadScene("MainMenu");
     }
 

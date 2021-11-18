@@ -4,9 +4,6 @@ using UnityEngine;
 using static StaticHelpers;
 using Mirror;
 
-/*
- * Class  might be redundent, maybe using transfrom.lookat might be better with clampling
- */
 public class Mouse_Pointer : NetworkBehaviour {
     [SerializeField] MouseFollower[] pointers;
     [SerializeField] Camera playerCam;

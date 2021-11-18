@@ -14,8 +14,7 @@ public class PlayerConstructor : NetworkBehaviour
         gameObject.name = "Local";
     }
 
-    public void SetConqueror(string name) {
-        //Grab player prefab from GameManager
+    public void SetConqueror(string name) {        //Grab player prefab from GameManager
         CmdReadyUp(name);
     }
 

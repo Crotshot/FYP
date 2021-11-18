@@ -1,42 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class BasicShell : MonoBehaviour
+public class BasicShell :  NetworkBehaviour
 {
-    [SerializeField] float shellSpeed = 20f, deleteTime = 10f, damage = 20f, rayLength = 0.5f;
+    [SerializeField] float shellSpeed = 2f, deleteTime = 10f, damage = 20f, rayLength = 0.5f;
     [SerializeField] Vector3 rayOrigin;
     [SerializeField] Vector3[] directions;
-    int team;
-    bool armed = false;
 
-    public void Make(int team) {
-        this.team = team;
-        armed = true;
+    private void Start() {
+        Invoke(nameof(DestroySelf), deleteTime);
     }
 
     void Update() {
-        if (!armed)
-            return;
         transform.Translate(Vector3.forward * Time.deltaTime * shellSpeed, Space.Self);
-        deleteTime -= Time.deltaTime;
-        if (deleteTime <= 0) {
-            Destroy(gameObject);
-        }
         foreach (Vector3 direction in directions) {
             Debug.DrawRay(transform.position + transform.TransformDirection(rayOrigin), transform.TransformDirection(direction) * rayLength, Color.blue/*, 0.1f*/);
             Ray ray = new Ray(transform.position + transform.TransformDirection(rayOrigin), transform.TransformDirection(direction));
             if (Physics.Raycast(ray, out RaycastHit hit, rayLength)) {
-                if (hit.collider.TryGetComponent(out Health hp)) {
-                    if (hp.GetTeam() != team) {
-                        hp.Damage(damage);
-                        Destroy(gameObject);
-                    }
-                }
-                else {
-                    Destroy(gameObject);
-                }
+                RayCollision(hit.collider.transform);
             }
         }
+    }
+
+    private void RayCollision(Transform hit) {
+        if (isServer) {
+            if (hit.TryGetComponent(out NetworkIdentity networkIdentity)) {
+                if (networkIdentity.connectionToClient == connectionToClient)
+                    return;
+            }
+            if (hit.TryGetComponent(out Health health)) {
+                health.Damage(damage);
+            }
+            DestroySelf();
+        }
+        else {
+            CmdRayCollision(hit);
+        }
+    }
+
+    [Command]
+    void CmdRayCollision(Transform h) {
+        RayCollision(h);
+    }
+
+    private void DestroySelf() {
+        NetworkServer.Destroy(gameObject);
     }
 }

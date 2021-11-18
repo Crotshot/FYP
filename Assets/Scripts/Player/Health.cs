@@ -2,47 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Mirror;
+using System;
 
-public class Health : MonoBehaviour
+public class Health : NetworkBehaviour
 {
-    [SerializeField] float maxHealth, regenDelay;
-    [SerializeField] bool isPlayer;
-    [Range(0, 1)]
-    [SerializeField] float regenPercentPerSec;
-    float currentHealth, regenTimer;
-    public int team;
+    [SerializeField] float maxHealth;//, regenDelay;
+    //[Range(0, 1)]
+    //[SerializeField] float regenPercentPerSec;
+    //float regenTimer;
+    [SyncVar][SerializeField] private float currentHealth;
 
-    public UnityEvent<float> damaged;
-
-    private void Awake() {
-        if (damaged == null)
-            damaged = new UnityEvent<float>();
-        team = GetComponent<Team>().GetTeam();
-    }
-
-    private void Update() {
-        if(regenTimer > 0) {
-            regenTimer -= Time.deltaTime;
-        }
-        else {
-            if(currentHealth < maxHealth) {
-                currentHealth += regenPercentPerSec * Time.deltaTime;
-                currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-            }
-        }
-    }
+    public event Action<float> Damaged;
+    public event Action Dead;
 
     public void Damage(float damage) {
-        currentHealth -= damage;
-        regenTimer = regenDelay;
-        damaged?.Invoke(currentHealth);
+        if (isServer) {
+            currentHealth -= damage;
+            //regenTimer = regenDelay;
+            if (currentHealth != 0) {
+                Damaged?.Invoke(currentHealth);
+                return;
+            }
+            Dead?.Invoke();
+        }
+        else {
+            CmdDamage(damage);
+        }
+    }
+
+    [Command]
+    void CmdDamage(float damage) {
+        Damage(damage);
     }
 
     public void ResetHealth() {
         currentHealth = maxHealth;
     }
-
-    public int GetTeam() {
-        return team;
-    }
 }
+
+//private void Update() {
+//    if (regenTimer > 0) {
+//        regenTimer -= Time.deltaTime;
+//    }
+//    else {
+//        RegenerateHealth();
+//    }
+//}
+
+//[Server]
+//public void RegenerateHealth() {
+//    if (currentHealth < maxHealth) {
+//        currentHealth += regenPercentPerSec * Time.deltaTime;
+//        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+//    }
+//}

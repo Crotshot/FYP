@@ -17,7 +17,7 @@ public class Camera_Follower : MonoBehaviour
         cameraOrbitPoint.SetParent(null);
 
         inputs = FindObjectOfType<Inputs>();
-        Cursor.lockState = CursorLockMode.Confined; //Maybe move this to somewhere better
+        //Cursor.lockState = CursorLockMode.Confined;
     }
 
     private void Update()
