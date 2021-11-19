@@ -277,7 +277,6 @@ GameObject:
   - component: {fileID: 4815264820297841319}
   - component: {fileID: 6765244711210296098}
   - component: {fileID: 4526436914234655767}
-  - component: {fileID: 5161185334412835577}
   - component: {fileID: 6351804243656272699}
   m_Layer: 6
   m_Name: 0_Rodger
@@ -525,20 +524,6 @@ MonoBehaviour:
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
   target: {fileID: 6648755265882079255}
---- !u!114 &5161185334412835577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 605830872944974801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f67250647f03b743a376c9979aaf8b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!114 &6351804243656272699
 MonoBehaviour:
   m_ObjectHideFlags: 0
