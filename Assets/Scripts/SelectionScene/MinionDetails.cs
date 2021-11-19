@@ -6,8 +6,7 @@ using TMPro;
 
 public class MinionDetails : MonoBehaviour
 {
-    [SerializeField] private TMP_Text healthPoints, moveSpeed, physicalArmour, magicArmour, attackSpeed, attackDamage, minionName,
-        rorM, description;
+    [SerializeField] private TMP_Text healthPoints, moveSpeed, attackSpeed, attackDamage, minionName, description;
     [SerializeField] private Image minionArt;
     [SerializeField] private Sprite defaultBlackground;
     public bool assigned;
@@ -18,15 +17,10 @@ public class MinionDetails : MonoBehaviour
         assigned = true;
         healthPoints.text = stats.healthPoints.ToString();
         moveSpeed.text = stats.movementSpeed.ToString();
-        physicalArmour.text = stats.physicalArmour.ToString();
-        magicArmour.text = stats.magicArmour.ToString();
-        attackSpeed.text = stats.attackSpeed.ToString();
         attackDamage.text = stats.attackDamage.ToString();
+        attackSpeed.text = stats.attackSpeed.ToString();
         minionName.text = stats.name;
-        if(stats.isRanged)
-            rorM.text = "Ranged";
-        else
-            rorM.text = "Melee";
+
         description.text = stats.abilities[0].abilityDescription;
         minionArt.sprite = stats.characterArt;
 
@@ -38,12 +32,9 @@ public class MinionDetails : MonoBehaviour
         assigned = false;
         healthPoints.text = "-";
         moveSpeed.text = "-";
-        physicalArmour.text = "-";
-        magicArmour.text = "-";
         attackSpeed.text = "-";
         attackDamage.text = "-";
         minionName.text = "-";
-        rorM.text = "-";
         description.text = "-";
         minionArt.sprite = defaultBlackground;
 

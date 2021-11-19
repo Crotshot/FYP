@@ -18,7 +18,7 @@ public class LobbyUI : MonoBehaviour
     private void Awake()
     {
         sM = FindObjectOfType<_SceneManager>();
-        startButton.interactable = false;
+        //startButton.interactable = false;//----------------------------------------->Important Re-enable later
         hostButton.interactable = false;
         joinButton.interactable = false;
     }
@@ -50,7 +50,7 @@ public class LobbyUI : MonoBehaviour
         if (NetworkServer.active && NetworkClient.isConnected)
         {
             lobbyText.text = "Waiting for opponent . . .";
-            startButton.interactable = false;
+            //startButton.interactable = false;//----------------------------------------->Important Re-enable later
         }
         else
         {
@@ -80,7 +80,7 @@ public class LobbyUI : MonoBehaviour
         if (NetworkServer.active && NetworkClient.isConnected) //If P2 leaves -> Update Host to say waiting for opponent
         {
             lobbyText.text = "Waiting for opponent . . .";
-            startButton.interactable = false;
+            //startButton.interactable = false;//----------------------------------------->Important Re-enable later
         }
     }
     #endregion
@@ -105,7 +105,8 @@ public class LobbyUI : MonoBehaviour
     public void B_JoinLobby()
     {
         string address = inputIP.text;
-
+        if (address == "")
+            address = "localhost";
         NetworkManager.singleton.networkAddress = address;
         NetworkManager.singleton.StartClient();
     }
@@ -125,6 +126,7 @@ public class LobbyUI : MonoBehaviour
             NetworkManager.singleton.StopHost();
         else
             NetworkManager.singleton.StopClient();
+        sM.LoadScene(sM.GetSceneName());
     }
 
     public void B_BackToMenu()

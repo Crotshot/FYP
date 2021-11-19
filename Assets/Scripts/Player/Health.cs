@@ -2,52 +2,109 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Mirror;
+using System;
 
-public class Health : MonoBehaviour
+public class Health : NetworkBehaviour
 {
-    [SerializeField] float maxHealth, regenDelay;
-    int team = 0;
-    [SerializeField] bool isPlayer;
-    [Range(0, 1)]
-    [SerializeField] float regenPercentPerSec;
-    float currentHealth, regenTimer;
+    [SerializeField] float maxHealth;//, regenDelay;
+    //[Range(0, 1)]
+    //[SerializeField] float regenPercentPerSec;
+    //float regenTimer;
+    [SyncVar(hook = nameof(HealthChanged))][SerializeField] private float currentHealth;
+    
+    public event Action<float> Damaged;
+    public event Action Dead;
 
-    public UnityEvent<float> damaged;
+    List<GameObject> spawnPoints = new List<GameObject>(); //Temp respawn code
 
-    private void Awake() {
-        if (damaged == null)
-            damaged = new UnityEvent<float>();
-        if (isPlayer) {
-//RE-ENABLE            team = GetComponent<PlayerController>().GetTeam();
+
+    //TEST
+    public bool die;
+    //
+
+    private void Start() {
+        Setup();
+    }
+
+    private void Setup() {
+        if (isServer) {
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Respawn"))
+                spawnPoints.Add(obj);
         }
         else {
-            team = Random.Range(100,100000);//Will need to be changed later for minions
+            CmdSetup();
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Respawn"))
+                spawnPoints.Add(obj);
         }
     }
 
-    private void Update() {
-        if(regenTimer > 0) {
-            regenTimer -= Time.deltaTime;
+    [Command]
+    void CmdSetup() {
+        Setup();
+    }
+
+
+    void HealthChanged(float oldHealth, float newHealth) {
+        if (newHealth >= oldHealth)
+            return;
+        if (currentHealth > 0) {
+            Damaged?.Invoke(currentHealth);
+            return;
         }
-        else {
-            if(currentHealth < maxHealth) {
-                currentHealth += regenPercentPerSec * Time.deltaTime;
-                currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-            }
-        }
+        Respawn();
     }
 
     public void Damage(float damage) {
-        currentHealth -= damage;
-        regenTimer = regenDelay;
-        damaged?.Invoke(currentHealth);
+        if (isServer) {
+            currentHealth -= damage;
+        }
+        else {
+            CmdDamage(damage);
+        }
     }
 
-    public int GetTeam() {
-        return team;
+    [Command]
+    void CmdDamage(float damage) {
+        Damage(damage);
+    }
+
+    void Respawn() {
+        if (isServer) {
+            RPCRespawn();
+        }
+        else {
+            Dead?.Invoke();
+            ResetHealth();
+            transform.position = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Count)].transform.position;
+        }
+    }
+
+    [ClientRpc]
+    void RPCRespawn() {
+        Dead?.Invoke();
+        ResetHealth();
+        transform.position = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Count)].transform.position;
     }
 
     public void ResetHealth() {
         currentHealth = maxHealth;
     }
 }
+
+//private void Update() {
+//    if (regenTimer > 0) {
+//        regenTimer -= Time.deltaTime;
+//    }
+//    else {
+//        RegenerateHealth();
+//    }
+//}
+
+//[Server]
+//public void RegenerateHealth() {
+//    if (currentHealth < maxHealth) {
+//        currentHealth += regenPercentPerSec * Time.deltaTime;
+//        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+//    }
+//}

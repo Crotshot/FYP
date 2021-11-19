@@ -17,78 +17,66 @@ public class Camera_Follower : MonoBehaviour
         cameraOrbitPoint.SetParent(null);
 
         inputs = FindObjectOfType<Inputs>();
-        //Cursor.lockState = CursorLockMode.Confined; //Maybe move this to somewhere better
+        //Cursor.lockState = CursorLockMode.Confined;
     }
 
     private void Update()
     {
+        if (player == null)// Remove later
+            return;
         transform.position = player.position; //Set position to player
-        CameraRotation();
-        LerpCameraPosition();
-    }
 
-    //Rotates camera whe
-    private void CameraRotation()
-    {
-        if (inputs.GetMouseMovement().x != 0 && inputs.GetShiftAlt() > 0)
-        {
+        if (inputs.GetMouseMovement().x != 0 && inputs.GetShiftAlt() > 0) {
             transform.RotateAround(transform.position, transform.up, mouseModifier * inputs.GetMouseMovement().x * Time.deltaTime);
             cameraOrbitPoint.rotation = transform.rotation;
         }
-    }
 
-    //Smoothly moves the point that the camera looks at
-    private void LerpCameraPosition()
-    {
-        Vector3 lerpPoint = YInterceptOfCameraRay();
-        lerpPoint = RestrictPosition(lerpPoint, cameraMoveLimit, cameraMoveMinimum);
-        lerpPoint = new Vector3(
-            (lerpPoint.x + transform.position.x) / 2,
-            (lerpPoint.y + transform.position.y) / 2,       //Halfway point between the restricted camera point and player position
-            (lerpPoint.z + transform.position.z) / 2);
+        Ray cameraRay = playerCamera.GetComponent<Camera>().ScreenPointToRay(inputs.GetMousePosition());
+        Plane yInterceptPlane = new Plane(Vector3.up, Vector3.zero); //Plane to represent the y intercept
+        Vector3 lerpPoint = player.position;
 
         cameraOrbitPoint.position = Vector3.Lerp(cameraOrbitPoint.position, lerpPoint, cameraSpeedModifier * Time.deltaTime);
         playerCamera.LookAt(cameraOrbitPoint.position);
     }
-    
-    //Returns the position of the mouse in world space at y = 0
-    private Vector3 YInterceptOfCameraRay() //Gets a the mouse position in worldspace at y = 0
-    {
-        Ray cameraRay = playerCamera.GetComponent<Camera>().ScreenPointToRay(inputs.GetMousePosition());
-        Plane yInterceptPlane = new Plane(Vector3.up, Vector3.zero); //Plane to represent the y intercept
 
-        if (yInterceptPlane.Raycast(cameraRay, out float distance))
-        {
-            return cameraRay.GetPoint(distance);
-        }
-        return Vector3.zero;
-    }
 
-    //Stops camera from moving when mouse is close to screen centre
-    private Vector3 RestrictPosition(Vector3 pos, float maxDistance, float minDistance)
-    { //If distance is not high enough dont move the camera
-        if (inputs.GetShiftAlt() > 0)
-            return cameraOrbitPoint.position;
+    //Annoying chunk of pointlessness
 
-        if (StaticHelpers.Vector3Distance(transform.position, pos) < minDistance) 
-        {
-            return transform.position;
-        }
-        
-        //X
-        if (pos.x > transform.position.x + maxDistance)
-            pos.x = transform.position.x + maxDistance;
-        else if(pos.x < transform.position.x - maxDistance)
-            pos.x = transform.position.x - maxDistance;
+    //if (yInterceptPlane.Raycast(cameraRay, out float distance)) {
+    //    lerpPoint = cameraRay.GetPoint(distance);
+    //}
 
-        //No need to do for y as the points are on y = 0
+    //lerpPoint = RestrictPosition(lerpPoint, cameraMoveLimit, cameraMoveMinimum);
+    //lerpPoint = new Vector3(
+    //    (lerpPoint.x + transform.position.x) / 2,
+    //    (lerpPoint.y + transform.position.y) / 2,       //Halfway point between the restricted camera point and player position
+    //    (lerpPoint.z + transform.position.z) / 2);
 
-        //Z
-        if (pos.z > transform.position.z + maxDistance)
-            pos.z = transform.position.z + maxDistance;
-        else if (pos.z < transform.position.z - maxDistance)
-            pos.z = transform.position.z - maxDistance;
+    ////Stops camera from moving when mouse is close to screen centre
+    //private Vector3 RestrictPosition(Vector3 pos, float maxDistance, float minDistance)
+    //{ //If distance is not high enough dont move the camera
+    //    if (inputs.GetShiftAlt() > 0)
+    //        return cameraOrbitPoint.position;
 
-        return pos;
-    }
+    //    if (StaticHelpers.Vector3Distance(transform.position, pos) < minDistance) 
+    //    {
+    //        return transform.position;
+    //    }
+
+    //    //X
+    //    if (pos.x > transform.position.x + maxDistance)
+    //        pos.x = transform.position.x + maxDistance;
+    //    else if(pos.x < transform.position.x - maxDistance)
+    //        pos.x = transform.position.x - maxDistance;
+
+    //    //No need to do for y as the points are on y = 0
+
+    //    //Z
+    //    if (pos.z > transform.position.z + maxDistance)
+    //        pos.z = transform.position.z + maxDistance;
+    //    else if (pos.z < transform.position.z - maxDistance)
+    //        pos.z = transform.position.z - maxDistance;
+
+    //    return pos;
+    //}
 }
