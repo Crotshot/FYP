@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using System;
+using NavMeshBuilder = UnityEngine.AI.NavMeshBuilder;
 
 public class MapBuilder : MonoBehaviour
 {
@@ -16,6 +18,12 @@ public class MapBuilder : MonoBehaviour
     const int OFFSET_X = 25, OFFSET_Y = 25, MAP_WIDTH = 8, MAP_LENGTH = 8;
     private bool generated;
 
+    List<NavMeshBuildSource> m_Sources = new List<NavMeshBuildSource>();
+    public Transform m_Tracked; //Center of build
+    public Vector3 m_Size = new Vector3(400.0f, 10.0f, 400.0f);// The size of the build bounds
+    NavMeshData m_NavMesh;
+    NavMeshDataInstance m_Instance;
+
 #if UNITY_EDITOR
     public bool testGeneration, destroyMap;
     private void Update() {
@@ -29,6 +37,15 @@ public class MapBuilder : MonoBehaviour
         }
     }
 #endif
+
+    private void Start() {
+        m_NavMesh = new NavMeshData();
+        m_Instance = NavMesh.AddNavMeshData(m_NavMesh);
+    }
+
+    private void OnDestroy() {
+        m_Instance.Remove();// Unload navmesh
+    }
 
     //Loop for width 8
     public void Generate() {
@@ -69,6 +86,23 @@ public class MapBuilder : MonoBehaviour
 
         GameObject SideTwo = Instantiate(SideOne, transform);
         SideTwo.transform.RotateAround(transform.position, Vector3.up, 180f);
+
+        m_Sources.Clear();
+        foreach (Transform mapSide in transform) {
+            foreach (Transform tile in mapSide) {
+                Mesh sMesh = tile.GetComponent<MeshFilter>().sharedMesh;
+                MeshFilter meshF = tile.GetComponent<MeshFilter>();
+                if (meshF == null || sMesh == null) continue;
+                var s = new NavMeshBuildSource {
+                    shape = NavMeshBuildSourceShape.Mesh,
+                    sourceObject = sMesh,
+                    transform = meshF.transform.localToWorldMatrix,
+                    area = 0
+                };
+                m_Sources.Add(s);
+            }
+        }
+        UpdateNavMesh();
         generated = true;
     }
 
@@ -77,6 +111,20 @@ public class MapBuilder : MonoBehaviour
         Destroy(transform.GetChild(0).gameObject);
         Destroy(transform.GetChild(1).gameObject);
     }
+
+    void UpdateNavMesh() {
+        var defaultBuildSettings = NavMesh.GetSettingsByID(0);
+        var center = m_Tracked ? m_Tracked.position : transform.position;
+        NavMeshBuilder.UpdateNavMeshData(m_NavMesh, defaultBuildSettings, m_Sources, new Bounds(Quantize(center, 0.1f * m_Size), m_Size));
+    }
+
+    static Vector3 Quantize(Vector3 v, Vector3 quant) {
+        float x = quant.x * Mathf.Floor(v.x / quant.x);
+        float y = quant.y * Mathf.Floor(v.y / quant.y);
+        float z = quant.z * Mathf.Floor(v.z / quant.z);
+        return new Vector3(x, y, z);
+    }
+
 }
 /*
  * Map tiles are 50x50y units and are displaced by 25x25y units so that the grid is centred at 0,0 
