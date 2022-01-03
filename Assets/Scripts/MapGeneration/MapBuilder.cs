@@ -41,6 +41,12 @@ public class MapBuilder : MonoBehaviour
     private void Start() {
         m_NavMesh = new NavMeshData();
         m_Instance = NavMesh.AddNavMeshData(m_NavMesh);
+        StartCoroutine("MakeMapDelayed");
+    }
+
+    IEnumerator MakeMapDelayed() {
+        yield return new WaitForSeconds(1);
+        Generate();
     }
 
     private void OnDestroy() {
