@@ -11,7 +11,7 @@ public class Mouse_Pointer : NetworkBehaviour {
     Vector3 worldFocal = Vector3.zero;
 
     private void Start() {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer && !GetComponent<PlayerController>().getOfflineTest())
             Destroy(this);
         inputs = FindObjectOfType<Inputs>();
     }

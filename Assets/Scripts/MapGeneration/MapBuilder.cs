@@ -14,7 +14,7 @@ public class MapBuilder : MonoBehaviour
      * props
      * points
      */
-    [SerializeField] GameObjectVariants[] tiles, walls, buildings, props, points;
+    [SerializeField] GameObjectVariants[] tiles, walls, buildings, props, points, centralPoints, basePoints, sidePoints;
     const int OFFSET_X = 25, OFFSET_Y = 25, MAP_WIDTH = 8, MAP_LENGTH = 8;
     private bool generated;
 
@@ -45,7 +45,7 @@ public class MapBuilder : MonoBehaviour
     }
 
     IEnumerator MakeMapDelayed() {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.01f);
         Generate();
     }
 

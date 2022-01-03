@@ -14,7 +14,7 @@ public class RangedAttack : NetworkBehaviour {
     public UnityEvent weaponFired;
 
     void Start() {
-        if (!hasAuthority)
+        if (!hasAuthority  && !GetComponent<PlayerController>().getOfflineTest())
             Destroy(this);
 
         inputs = FindObjectOfType<Inputs>();
@@ -24,7 +24,13 @@ public class RangedAttack : NetworkBehaviour {
 
     void Update() {
         if (inputs.GetAttackInput() != 0 && fireRatetimer <= 0) {
-            CmdSpawnBullet(transform.TransformPoint(spawnPoint), transform.rotation); //Later update this to use the weapon.transform.rotation
+            if (GetComponent<PlayerController>().getOfflineTest()) {
+                GameObject newProj = Instantiate(projectilePrefab, transform.TransformPoint(spawnPoint), transform.rotation);
+                newProj.transform.parent = null;
+            }
+            else
+                CmdSpawnBullet(transform.TransformPoint(spawnPoint), transform.rotation); //Later update this to use the weapon.transform.rotation
+
             fireRatetimer = 60f / roundsPerMinute;
             weaponFired?.Invoke();
         }

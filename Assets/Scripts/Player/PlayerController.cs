@@ -9,9 +9,10 @@ public class PlayerController : NetworkBehaviour
     Inputs inputs;
     NavMeshAgent agent;
     Transform navTarget;
+    [SerializeField] bool offlineTest;
 
     private void Start() {
-        if (hasAuthority) {
+        if (hasAuthority || offlineTest) {
             navTarget = transform.GetChild(0).GetChild(1);
             //GetComponent<Respawn>().Setup();
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
@@ -28,6 +29,10 @@ public class PlayerController : NetworkBehaviour
     private void Update() {
         navTarget.localPosition = inputs.GetMovementInput();
         agent.destination = navTarget.position;
+    }
+
+    public bool getOfflineTest() {
+        return offlineTest;
     }
 }
 ////2D sprite mapped by the 3D object
