@@ -7,6 +7,13 @@ TagManager:
   - End
   - Stop
   - minion
+  - largeProp
+  - smallProp
+  - structure
+  - buildingPos
+  - propPos
+  - wallPos
+  - structurePos
   layers:
   - Default
   - TransparentFX

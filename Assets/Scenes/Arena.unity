@@ -17439,6 +17439,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 0_Rodger (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 605830872944974801, guid: d74e9a0d099186541b9f51cf6ab6017f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7292571058769649694, guid: d74e9a0d099186541b9f51cf6ab6017f, type: 3}
       propertyPath: sceneId
       value: 2684718742
