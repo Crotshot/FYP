@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static StaticHelpers;
+using Helpers = Crotty.Helpers.StaticHelpers;
 using Mirror;
 
 public class Mouse_Pointer : NetworkBehaviour {
@@ -30,8 +30,8 @@ public class Mouse_Pointer : NetworkBehaviour {
             Quaternion targetRot;
 
             //Swivel===========================================================================
-            opp = FloatDistance(swivel.x, focalLocal.x);
-            adj = FloatDistance(swivel.z, focalLocal.z);
+            opp = Helpers.FloatDistance(swivel.x, focalLocal.x);
+            adj = Helpers.FloatDistance(swivel.z, focalLocal.z);
             rot = Mathf.Rad2Deg * Mathf.Atan(opp / adj);// Angle between 0 and 90
             if (i == 2) {
                 Debug.DrawRay(pointers[i].swivel.position, pointers[i].swivel.forward, Color.green, 0.1f);
@@ -51,8 +51,8 @@ public class Mouse_Pointer : NetworkBehaviour {
             pointers[i].swivel.localRotation = Quaternion.Slerp(pointers[i].swivel.localRotation, targetRot, 0.1f);
 
             //Object===========================================================================
-            opp = FloatDistance(pointers[i].pointingObject.position.y, worldFocal.y);
-            adj = Vector2DistanceXZ(swivel, focalLocal);
+            opp = Helpers.FloatDistance(pointers[i].pointingObject.position.y, worldFocal.y);
+            adj = Helpers.Vector2DistanceXZ(swivel, focalLocal);
             rot = Mathf.Rad2Deg * Mathf.Atan(opp / adj);//Angle between 0 and 90
 
             if (pointers[i].pointingObject.position.y < worldFocal.y) { //Make negative if on local -x(left side)

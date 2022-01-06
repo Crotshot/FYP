@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 2832201692295904826}
   m_Layer: 0
   m_Name: largeProp_Position
-  m_TagString: buildingPos
+  m_TagString: largeProp
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -556,7 +556,7 @@ GameObject:
   - component: {fileID: 7928052523627515668}
   m_Layer: 0
   m_Name: largeProp_Position
-  m_TagString: buildingPos
+  m_TagString: largeProp
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -586,7 +586,7 @@ GameObject:
   - component: {fileID: 1130017618800776359}
   m_Layer: 0
   m_Name: largeProp_Position
-  m_TagString: buildingPos
+  m_TagString: largeProp
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1216,7 +1216,7 @@ GameObject:
   - component: {fileID: 9170082661226653902}
   m_Layer: 0
   m_Name: largeProp_Position
-  m_TagString: buildingPos
+  m_TagString: largeProp
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1546,7 +1546,7 @@ GameObject:
   - component: {fileID: 8709178404805240581}
   m_Layer: 0
   m_Name: smallProp_Position
-  m_TagString: propPos
+  m_TagString: smallProp
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

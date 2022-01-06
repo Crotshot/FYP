@@ -367,7 +367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  offlineTest: 1
+  offlineTest: 0
 --- !u!114 &5682415731109743248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,6 +541,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   team: 0
+  teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2307899858842341290
 GameObject:
   m_ObjectHideFlags: 0

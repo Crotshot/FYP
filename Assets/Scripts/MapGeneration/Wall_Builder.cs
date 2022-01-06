@@ -1,27 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Helpers = Crotty.Helpers.StaticHelpers;
 
 public class Wall_Builder : MonoBehaviour
 {
-    /* Tier 1
-     * Pick a random point and generate a wall end piece
-     * Wall pieces position to create another random wall piece out of 3 segements (Mid-50%, End-25%, Gap-25%)
-     * Create the next piece at tag "End"
-     * If child with "End" tag does not exist stop maing wall
-     * 
-     * Tier 2
-     * Check that "End" Piece is within the 20x20 area of Tile, if not rotate until it is 
-     * 
-     * Tier 3
-     * Wall end point and start point clean up -> For every child the does not have tag "End" or "Stop" make them child to wall builder else dleete them
-     * 
-     * Tier 4
-     * Optimise for any number of variant wall segments
-     * Forking walls
-     */
-
-    //Note - would no need to shift down all wall pieces if end and start points were at y 0
+ //OLD Wall building class, will probably be removed before long
 
     [SerializeField] bool recreateWall;
     [SerializeField] GameObject wall_End, wall_Mid, wall_Gap;
@@ -92,7 +76,7 @@ public class Wall_Builder : MonoBehaviour
                 }
                 else if (child.tag == "End")
                 {
-                    if (StaticHelpers.Vector3Distance(transform.TransformPoint(transform.position),transform.TransformPoint(child.position)) >= 50f)
+                    if (Helpers.Vector3Distance(transform.TransformPoint(transform.position),transform.TransformPoint(child.position)) >= 50f)
                     {
                         Transform currentParent = currentWall.transform.parent;
                         Destroy(currentWall);
