@@ -31,7 +31,7 @@ public class MapBuilder : MonoBehaviour
     NavMeshDataInstance m_Instance;
 
 #if UNITY_EDITOR
-    public bool testGeneration, destroyMap;
+    public bool testGeneration, destroyMap, side2, navMesh;
     private void Update() {
         if (testGeneration) {
             ChangeSeed(seed);
@@ -41,6 +41,16 @@ public class MapBuilder : MonoBehaviour
         else if (destroyMap) {
             destroyMap = false;
             DestroyMap();
+        }
+        else if (side2) {
+            GameObject SideTwo = Instantiate(transform.GetChild(2).gameObject, transform);
+            SideTwo.transform.RotateAround(transform.position, Vector3.up, 180f);
+            SideTwo.name = "Side_2";
+            side2 = false;
+        }
+        else if (navMesh) {
+
+            navMesh = false;
         }
     }
 #endif
@@ -61,7 +71,6 @@ public class MapBuilder : MonoBehaviour
         m_Instance.Remove();// Unload navmesh
     }
 
-    //Loop for width 8
     public void Generate() {
         if (generated) {
             Debug.LogWarning("Map is already created");
@@ -72,7 +81,7 @@ public class MapBuilder : MonoBehaviour
         SideOne.transform.parent = transform;
         SideOne.transform.position = Vector3.zero;
         SideOne.name = "Side_1";
-
+        #region MapTileInstantiating
         int index = 0; 
         //for MAP_W for MAP_LENGTH/2 make tiles, count index and check against array for different tiles
         for (int h = (MAP_LENGTH / 2) - 1; h > -1; h--) { // Tile pos x = 25 + (w * 50)   && z = 25 + (h * 50)
@@ -98,13 +107,17 @@ public class MapBuilder : MonoBehaviour
                 index++;
             }
         }
-
+        #endregion
 
         //Removing poorly placed Structures & Props
         foreach (Transform mapSide in transform) {
-            foreach (Transform tile in mapSide) {
+            foreach (Transform mapTile in mapSide) {
                 List<Transform> structurePositions = new List<Transform>();
-                foreach (Transform point in tile) {
+                List<Transform> largePropPositions = new List<Transform>();
+                List<Transform> smallPropPositions = new List<Transform>();
+
+                foreach (Transform point in mapTile) {
+                    #region DeletingBadPositions
                     //Removing Objects at edge of map
                     if(Mathf.Abs(point.position.x) >= 185f || Mathf.Abs(point.position.z) >= 185f || point.position.z < 0) {
                         Destroy(point.gameObject);
@@ -113,106 +126,235 @@ public class MapBuilder : MonoBehaviour
                     //Removing Objects within bases
                     if (Helpers.Vector2DistanceXZ(point.position, new Vector3(0,0,200)) <= 90f) {
                         Destroy(point.gameObject);
+                        continue;
                     }
                     //Removing Objects from Centre of map
                     if (Helpers.Vector2DistanceXZ(point.position, Vector3.zero) <= 27f) {
                         Destroy(point.gameObject);
+                        continue;
                     }
                     //Removing Objects inside Gate Walls
                     if (Helpers.Vector2DistanceXZ(point.position, new Vector3(-200,0,25)) <= 40f || Helpers.Vector2DistanceXZ(point.position, new Vector3(200, 0, -25)) <= 40f) {
                         Destroy(point.gameObject);
+                        continue;
                     }
                     //Removing Objects inside Angle Walls
                     if (Helpers.Vector2DistanceXZ(point.position, new Vector3(190, 0, 5)) <= 22f || Helpers.Vector2DistanceXZ(point.position, new Vector3(100, 0, 182.5f)) <= 22f || Helpers.Vector2DistanceXZ(point.position, new Vector3(-100, 0, 182.5f)) <= 22f) {
                         Destroy(point.gameObject);
+                        continue;
                     }
                     //Remove Objects off Side Points
                     if (Helpers.Vector2DistanceXZ(point.position, new Vector3(-125, 0, 75)) <= 12f || Helpers.Vector2DistanceXZ(point.position, new Vector3(125, 0, 25)) <= 12f)  {
                         Destroy(point.gameObject);
+                        continue;
                     }
-                    
+                    bool cont = false;
                     foreach(Path path in paths) {
                         if(Helpers.Vector2PerpendicularXZ(path.getPointA(), path.getPointB(), point.position, 8) <= 8) {
                             Destroy(point.gameObject);
+                            cont = true;
+                            break;
                         }
                     }
-
+                    if (cont)
+                        continue;
+                    #endregion
                     if (point.tag.Equals("structurePos")) {
                         structurePositions.Add(point);
+                    }
+                    else if (point.tag.Equals("largeProp")) {
+                        largePropPositions.Add(point);
+                    }
+                    else if (point.tag.Equals("smallProp")) {
+                        smallPropPositions.Add(point);
                     }
                 }
 
                 //Pick Random random building and place on random position
-                if(structurePositions.Count > 0) {
-                    int bIndex = 0;
-                    if (tile.name.Contains("Inner"))
-                        bIndex = 0;
+                Transform pickedPos;
+                GameObject pickedBuilding;
+                index = 0;
+                #region CapturableStructurePlacement
+                if (structurePositions.Count > 0) {
+                    
+                    if (mapTile.name.Contains("Inner"))
+                        index = 0;
                     else
-                        bIndex = 1;
-                    GameObject pickedBuilding = buildings[bIndex].getVariant(RandomPick(0, buildings[bIndex].VariantCount()-1));
-                    Transform pickedPos = structurePositions[RandomPick(0, structurePositions.Count-1)];
+                        index = 1;
+                    pickedBuilding = buildings[index].getVariant(RandomPick(0, buildings[index].VariantCount()-1));
+                    pickedPos = structurePositions[RandomPick(0, structurePositions.Count-1)];
                     Instantiate(pickedBuilding, pickedPos);
 
                     float angle = -90;
-                    if (Mathf.Abs(tile.position.z) == Mathf.Abs(tile.position.x)) {
-                        if (tile.position.x < 0)
+                    if (Mathf.Abs(mapTile.position.z) == Mathf.Abs(mapTile.position.x)) {
+                        if (mapTile.position.x < 0)
                             angle -= 135;
                         else
                             angle -= 45;
                     }
-                    else if (Mathf.Abs(tile.position.z) >= Mathf.Abs(tile.position.x)) {
+                    else if (Mathf.Abs(mapTile.position.z) >= Mathf.Abs(mapTile.position.x)) {
                         angle -= 90;
                     }
-                    else if (tile.position.x < 0) {
+                    else if (mapTile.position.x < 0) {
                         angle -= 180;
                     }
 
-                    if (tile.name.Contains("Outer"))
+                    if (mapTile.name.Contains("Outer"))
                         pickedPos.transform.eulerAngles = new Vector3(0, angle, 0);
 
                     foreach (Transform pos in structurePositions) {
                         if (pos != pickedPos)
                             Destroy(pos.gameObject);
                     }
-                    structurePositions.Clear();
+                    structurePositions.Clear();         //Clear out Structures and start large props
 
-                    foreach(Transform point in tile) {
-                        if (Helpers.Vector2DistanceXZ(pickedPos.position, point.position) <= 12f && point.childCount < 1 ) {
-                            Destroy(point.gameObject);
+                    foreach (Transform tile in mapSide) {
+                        foreach (Transform point in tile) {
+                            if (Helpers.Vector2DistanceXZ(pickedPos.position, point.position) <= 12f && point.childCount < 1) {
+                                Destroy(point.gameObject);
+                                continue;
+                            }
                         }
                     }
                 }
+                #endregion
+                #region LargePropPlacement
+                while(largePropPositions.Count > 0) {
+                    //Pick Large Prop type
+                    float totalWeight = 0; //Weigh odds of picking a large prop variant
+                    foreach (GameObjectVariants variants in largeProps) {
+                        totalWeight += variants.weight;
+                    }
+                    if (totalWeight == 0) { Debug.Log("No Large Prop variants"); break; } //No large props, break out of loop
+
+                    float type = RandomFloat(0, totalWeight), count = 0;
+                    index = 0;
+                    foreach (GameObjectVariants variants in largeProps) {
+                        count += variants.weight;
+                        if (count >= type) break; else index++;
+                    }
+                    totalWeight = 0;//Weigh odds of picking a prop from the selected variant
+                    //Pick variant
+                    GameObjectVariants variant = largeProps[index];
+                    foreach (float num in variant.getWeights()) {
+                        totalWeight += num;
+                    }
+                    if (totalWeight == 0) { Debug.Log("No Large Props in variant"); break; } //No props in this variant
+
+                    count = 0;
+                    type = RandomFloat(0, totalWeight);
+                    index = 0;
+                    foreach (float num in variant.getWeights()) {
+                        count += num;
+                        if (count >= type) break; else index++;
+                    }
+                    //Pick a place and spawn prop
+                    pickedPos = largePropPositions[RandomPick(0, largePropPositions.Count - 1)];
+                    GameObject obj = Instantiate(variant.getVariant(index), pickedPos);
+                    obj.transform.eulerAngles = new Vector3(0,RandomFloat(0f, 360f),0);
+                    Debug.Log("Instantiated large prop: " + variant.getVariant(index).name);
+                    largePropPositions.Remove(pickedPos); //Remove from list
+                    //Delete all propPositions in general area that have no children  ~~ 12m
+                    foreach (Transform point in mapTile) {
+                        if (point.tag.Equals("largeProp") && point != pickedPos && Helpers.Vector2DistanceXZ(pickedPos.position, point.position) <= 40f && point.childCount < 1) {// && point.childCount < 1) {
+                            Destroy(point.gameObject);
+                            continue;
+                        }
+                        else if (Helpers.Vector2DistanceXZ(pickedPos.position, point.position) <= 11f && point.childCount < 1) {
+                            Destroy(point.gameObject);
+                            continue;
+                        }
+                    }
+                }
+                #endregion
+                #region SmallPropPlacement
+                while (smallPropPositions.Count > 0) {
+                    //Pick Small Prop type
+                    float totalWeight = 0; //Weigh odds of picking a small prop variant
+                    foreach (GameObjectVariants variants in smallProps) {
+                        totalWeight += variants.weight;
+                    }
+                    if (totalWeight == 0) { Debug.Log("No Small Prop variants"); break; } //No small props, break out of loop
+
+                    float type = RandomFloat(0, totalWeight), count = 0;
+                    index = 0;
+                    foreach (GameObjectVariants variants in smallProps) {
+                        count += variants.weight;
+                        if (count >= type) break; else index++;
+                    }
+                    totalWeight = 0;//Weigh odds of picking a prop from the selected variant
+                    //Pick variant
+                    GameObjectVariants variant = smallProps[index];
+                    foreach (float num in variant.getWeights()) {
+                        totalWeight += num;
+                    }
+                    if (totalWeight == 0) { Debug.Log("No Small Props in variant"); break; } //No props in this variant
+
+                    count = 0;
+                    type = RandomFloat(0, totalWeight);
+                    index = 0;
+                    foreach (float num in variant.getWeights()) {
+                        count += num;
+                        if (count >= type) break; else index++;
+                    }
+                    //Pick a place and spawn prop
+                    pickedPos = smallPropPositions[RandomPick(0, smallPropPositions.Count - 1)];
+                    GameObject obj = Instantiate(variant.getVariant(index), pickedPos);
+                    obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
+                    Debug.Log("Instantiated small prop: " + variant.getVariant(index).name);
+                    smallPropPositions.Remove(pickedPos); //Remove from list
+                    //Delete all propPositions in close proximity that have no children  ~~ 3m
+                    foreach (Transform point in mapTile) {
+                        if (Helpers.Vector2DistanceXZ(pickedPos.position, point.position) <= 3f && point.childCount < 1) {
+                            Destroy(point.gameObject);
+                            continue;
+                        }
+                    }
+                }
+                #endregion
             }
         }
-
-        //MAP SIDE 2
-        //GameObject SideTwo = Instantiate(SideOne, transform);
-        //SideTwo.transform.RotateAround(transform.position, Vector3.up, 180f);
-        //SideTwo.name = "Side_2";
-
+        #region ChildExchange
+        //foreach (Transform mapSide in transform) {
+        //    foreach (Transform mapTile in mapSide) {
+        //        foreach (Transform pos in mapTile) {
+        //            foreach (Transform obj in pos) {
+        //                obj.parent = transform;
+        //            }
+        //            Destroy(pos.gameObject);
+        //        }
+        //    }
+        //}
+        #endregion
+        #region NavMesh Making
         m_Sources.Clear();
-        foreach (Transform mapSide in transform) {
-            foreach (Transform tile in mapSide) {
-                Mesh sMesh = tile.GetComponent<MeshFilter>().sharedMesh;
-                MeshFilter meshF = tile.GetComponent<MeshFilter>();
-                if (meshF == null || sMesh == null) continue;
-                var s = new NavMeshBuildSource {
-                    shape = NavMeshBuildSourceShape.Mesh,
-                    sourceObject = sMesh,
-                    transform = meshF.transform.localToWorldMatrix,
-                    area = 0
-                };
-                m_Sources.Add(s);
+        foreach (Transform tile in transform) {
+            Mesh sMesh = null;
+            if (tile.TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
+                if (mesh != null)
+                    sMesh = mesh.sharedMesh;
+                else
+                    continue;
             }
+            MeshFilter meshF = tile.GetComponent<MeshFilter>();
+            if (meshF == null || sMesh == null) continue;
+            var s = new NavMeshBuildSource {
+                shape = NavMeshBuildSourceShape.Mesh,
+                sourceObject = sMesh,
+                transform = meshF.transform.localToWorldMatrix,
+                area = 0
+            };
+            m_Sources.Add(s);
         }
         UpdateNavMesh();
         generated = true;
+        #endregion
     }
 
-    public void DestroyMap() {
+        public void DestroyMap() {
         generated = false;
-        Destroy(transform.GetChild(0).gameObject);
-        Destroy(transform.GetChild(1).gameObject);
+        Destroy(transform.GetChild(2).gameObject);
+        Destroy(transform.GetChild(3).gameObject);
     }
 
     void UpdateNavMesh() {
@@ -243,6 +385,10 @@ public class MapBuilder : MonoBehaviour
     private int RandomPick(int min, int max) {
         return (int)(min + Mathf.Floor((max - min + 1) * Shuffle() / (constant - 1)));
     }
+
+    private float RandomFloat(float min, float max) {
+        return min + (max - min) * Shuffle() / (constant - 1);
+    }
 }
 /*
  * NOTE: Cool little idea where the players load in as a high up static camera, and then we build 
@@ -252,7 +398,7 @@ public class MapBuilder : MonoBehaviour
 class GameObjectVariants {
     [SerializeField] private GameObject[] variants;
     [SerializeField] private float[] weights; //Weight of each variant
-    [SerializeField] private float weight; //Weight of being selected 
+    [SerializeField] public float weight; //Weight of being selected 
     public GameObject[] getVariants() {
         return variants;
     }
