@@ -18,8 +18,8 @@ public class MapBuilder : MonoBehaviour
      * buildings
      * props
      * points
-     */
-    [SerializeField] GameObjectVariants[] tiles, walls, buildings, props, points, centralPoints, basePoints, sidePoints;
+     */                                 
+    [SerializeField] GameObjectVariants[] tiles, buildings, largeProps, smallProps, centralPoints, basePoints, sidePoints;
     [SerializeField] Path[] paths;
     const int OFFSET_X = 25, OFFSET_Y = 25, MAP_WIDTH = 8, MAP_LENGTH = 8;
     private bool generated;
@@ -174,6 +174,13 @@ public class MapBuilder : MonoBehaviour
                         if (pos != pickedPos)
                             Destroy(pos.gameObject);
                     }
+                    structurePositions.Clear();
+
+                    foreach(Transform point in tile) {
+                        if (Helpers.Vector2DistanceXZ(pickedPos.position, point.position) <= 12f && point.childCount < 1 ) {
+                            Destroy(point.gameObject);
+                        }
+                    }
                 }
             }
         }
@@ -244,13 +251,22 @@ public class MapBuilder : MonoBehaviour
 [System.Serializable]
 class GameObjectVariants {
     [SerializeField] private GameObject[] variants;
-
+    [SerializeField] private float[] weights; //Weight of each variant
+    [SerializeField] private float weight; //Weight of being selected 
     public GameObject[] getVariants() {
         return variants;
     }
 
     public GameObject getVariant(int index) {
         return variants[index];
+    }
+
+    public float[] getWeights() {
+        return weights;
+    }
+
+    public float getWeight(int index) {
+        return weights[index];
     }
 
     public int VariantCount() {

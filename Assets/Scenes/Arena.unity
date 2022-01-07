@@ -15706,24 +15706,175 @@ MonoBehaviour:
   tiles:
   - variants:
     - {fileID: 1203602855248801368, guid: d4c02be3f7bf9fc44931b1a5155d1faf, type: 3}
+    weights:
+    - 1
+    weight: 1
   - variants:
     - {fileID: 6100819701618648611, guid: cb779bb42e03f684ebd06c21d01a108f, type: 3}
+    weights: []
+    weight: 1
   - variants:
     - {fileID: 2345673976067595094, guid: a45409e0000f3c74986fbdb9bbd13ff8, type: 3}
+    weights:
+    - 1
+    weight: 1
   - variants:
     - {fileID: 1201900825604036668, guid: 316428c0b6534dc40a54bdda5fbba495, type: 3}
+    weights:
+    - 1
+    weight: 1
   - variants:
     - {fileID: 4762553262885041616, guid: 040092f7e9735bb40b915aa1cb90a898, type: 3}
-  walls: []
+    weights:
+    - 1
+    weight: 1
   buildings:
   - variants:
     - {fileID: 5940282992638037070, guid: eeeb7134e2da4e446ad07d8a41f5557c, type: 3}
     - {fileID: 8142856223614906384, guid: 640367dabe8a7bf43943e9c862064b5d, type: 3}
+    weights:
+    - 0.5
+    - 0.5
+    weight: 1
   - variants:
     - {fileID: 6851996113406364194, guid: d2f58448575ebbf4eb3a45ecdbc3c60f, type: 3}
     - {fileID: 1933658793992876863, guid: 00e441ca9a8002540a436828b25069fd, type: 3}
-  props: []
-  points: []
+    weights:
+    - 0.5
+    - 0.5
+    weight: 1
+  largeProps:
+  - variants:
+    - {fileID: 7331793595969961381, guid: 89f6026a8d0973c48afa9802170d3dbf, type: 3}
+    - {fileID: 5299962477736156189, guid: b39229f12de5cfa4690d1de9c49277e8, type: 3}
+    - {fileID: 1683572236384758043, guid: c9f3d943d3ad31f4b94b783d41a5d466, type: 3}
+    weights:
+    - 0.3
+    - 0.3
+    - 0.4
+    weight: 1
+  smallProps:
+  - variants:
+    - {fileID: 1562030133799059944, guid: 80f25eac8af4b0d4ab4bf753da7f0e94, type: 3}
+    - {fileID: 4477899929730443510, guid: b435cebda29a67e44b9a037ba0143d0f, type: 3}
+    - {fileID: 7548167837217282416, guid: 2ed7e9ec4ffaf474abde3df257e9d0f4, type: 3}
+    - {fileID: 2150837229874337888, guid: 37f61de975698c14dbff52b385da8103, type: 3}
+    - {fileID: 1036514378290790216, guid: d37f1f24e11d8fb428db889f609d3df1, type: 3}
+    - {fileID: 7010794355538957475, guid: c407c46c34a4c5b4b93bcb1ed009fb3a, type: 3}
+    - {fileID: 2758874406972976937, guid: d64725ec2607d4c498a5a97481a328d3, type: 3}
+    - {fileID: 7990695184308320257, guid: 6896bb848993a1b46aa68a3051137f17, type: 3}
+    weights:
+    - 0.25
+    - 0.125
+    - 0.25
+    - 0.25
+    - 0.125
+    - 0.125
+    - 0.125
+    - 0.25
+    weight: 3
+  - variants:
+    - {fileID: 7565208476194545115, guid: 81ab45f8584d424498a919299179261f, type: 3}
+    - {fileID: 7802080925312859987, guid: e3abd0031e9c57a4ca14064d1eee666e, type: 3}
+    weights:
+    - 0.38
+    - 0.62
+    weight: 1
+  - variants:
+    - {fileID: 358804113594605729, guid: 739bbcb71f66397479a50d49a682bcf3, type: 3}
+    - {fileID: 8269751115378131323, guid: 49ba7cd3e77f746438769a04101e00a6, type: 3}
+    - {fileID: 6867813019583492194, guid: 89c7a78fef033d54c83b2b7dba3cc2c0, type: 3}
+    - {fileID: 377085964289245313, guid: b2f866239dad53a4bafacfa3c2a41a0e, type: 3}
+    - {fileID: 1738581774626082798, guid: f7fcb907b0a56d147b6944eb645d363a, type: 3}
+    - {fileID: 7491246206096726923, guid: 0f7a756c8c4c19148a7eff38107dfa06, type: 3}
+    - {fileID: 7944793221055336152, guid: f367435bf195dad4c9c220800e4362b7, type: 3}
+    weights:
+    - 2.8
+    - 2.8
+    - 2.8
+    - 1.4
+    - 0.52
+    - 0.26
+    - 0.13
+    weight: 1
+  - variants:
+    - {fileID: 8368633432685421079, guid: 02e54a3c92a7eda45acce198fbfa77b1, type: 3}
+    - {fileID: 5065386000346466776, guid: 2fe709c83ad19354f8b396a7d395b4bb, type: 3}
+    - {fileID: 7759772380653954827, guid: 23def6b649d97d444883ba757e77478d, type: 3}
+    weights:
+    - 0.33
+    - 0.33
+    - 0.33
+    weight: 0.2
+  - variants:
+    - {fileID: 6629849888783094792, guid: b1dd6209386f1bd4c9dc1f9751fd0b21, type: 3}
+    - {fileID: 7371413071560592824, guid: b0101267873c8d049bf7fd447e621236, type: 3}
+    - {fileID: 2106226678237123733, guid: 598f425125dc4f6449b1a64558bf5043, type: 3}
+    - {fileID: 1511252458906490775, guid: 370b5826ec7b833498c81c45327710d0, type: 3}
+    weights:
+    - 0.4
+    - 0.3
+    - 0.2
+    - 0.1
+    weight: 2
+  - variants:
+    - {fileID: 927554333261121653, guid: 5b19260cd57577047ba07ab53b8d53cb, type: 3}
+    - {fileID: 1964433312344449837, guid: da95865eaceb3504c8270d5521e2f6b4, type: 3}
+    - {fileID: 2455848423591466941, guid: 87cc77bb24da4344f847d6a0999656f7, type: 3}
+    weights:
+    - 0.1
+    - 0.2
+    - 0.5
+    weight: 0.5
+  - variants:
+    - {fileID: 245208844830763936, guid: 4dba7c0423156cd4fb3d35839e1ecf1c, type: 3}
+    - {fileID: 4077466984704250057, guid: a108a9133d47da2459470c6152fcfc2d, type: 3}
+    - {fileID: 8855069205935328444, guid: 2469942aeee6c7c41bce71d3d6f89b83, type: 3}
+    - {fileID: 5846308641314145952, guid: d6881f2c5392253418ddeaa63c0d1f82, type: 3}
+    - {fileID: 7054690796906881774, guid: b0c513dda03375b4f909b0447d9dd875, type: 3}
+    - {fileID: 6262026819945995777, guid: 18ffe6ced40ef4641b6fbadf80ad9728, type: 3}
+    - {fileID: 4870228737531636875, guid: 13b08ac979461974c954a3848e81c19d, type: 3}
+    - {fileID: 1521051048343782468, guid: 78cf448afb660184082c54c48b64a113, type: 3}
+    weights:
+    - 2
+    - 2
+    - 2
+    - 2
+    - 0.2
+    - 0.2
+    - 0.4
+    - 0.4
+    weight: 3
+  - variants:
+    - {fileID: 4247084392302556161, guid: da509a901025ee7459ea9105c3769dc6, type: 3}
+    - {fileID: 1054510146497122376, guid: 9093d3b4685d9ff438fc365ad3226e74, type: 3}
+    - {fileID: 295495641425382058, guid: 36997558d6b969848a65d5ce62c755bb, type: 3}
+    - {fileID: 882303049470446458, guid: d842516f6b1771546a55b4809bfd7374, type: 3}
+    - {fileID: 7280040650967490873, guid: 3fb126ef61301314cb3305efbd83a15d, type: 3}
+    - {fileID: 5290052534458499344, guid: f3f74dacbb89fa04c9554879f5083931, type: 3}
+    - {fileID: 7225918877660177412, guid: 2306a941630b8254ca9cf4d6dcc19f4e, type: 3}
+    - {fileID: 509623739319179984, guid: b8886c7486698fc4bb4621a73939a9e7, type: 3}
+    weights:
+    - 2
+    - 2
+    - 2
+    - 2
+    - 0.2
+    - 0.2
+    - 0.2
+    - 0.2
+    weight: 3
+  - variants:
+    - {fileID: 8099445749757909576, guid: be2d2745c44c8aa469844222b8a279af, type: 3}
+    - {fileID: 8514284715264560669, guid: acea5089e877d5a49a60c2ec44744764, type: 3}
+    - {fileID: 2737254835135574382, guid: 951c2899c80a7fc4bbd063e01241e132, type: 3}
+    - {fileID: 8660714937785048109, guid: 160bc7d9b3d85e24aa98292fdad5f35b, type: 3}
+    weights:
+    - 0.6
+    - 0.4
+    - 2
+    - 0.1
+    weight: 1
   centralPoints: []
   basePoints: []
   sidePoints: []
