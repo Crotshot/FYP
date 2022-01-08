@@ -327,27 +327,27 @@ public class MapBuilder : MonoBehaviour
         //}
         #endregion
         #region NavMesh Making
-        m_Sources.Clear();
-        foreach (Transform tile in transform) {
-            Mesh sMesh = null;
-            if (tile.TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
-                if (mesh != null)
-                    sMesh = mesh.sharedMesh;
-                else
-                    continue;
-            }
-            MeshFilter meshF = tile.GetComponent<MeshFilter>();
-            if (meshF == null || sMesh == null) continue;
-            var s = new NavMeshBuildSource {
-                shape = NavMeshBuildSourceShape.Mesh,
-                sourceObject = sMesh,
-                transform = meshF.transform.localToWorldMatrix,
-                area = 0
-            };
-            m_Sources.Add(s);
-        }
-        UpdateNavMesh();
-        generated = true;
+        //m_Sources.Clear();
+        //foreach (Transform tile in transform) {
+        //    Mesh sMesh = null;
+        //    if (tile.TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
+        //        if (mesh != null)
+        //            sMesh = mesh.sharedMesh;
+        //        else
+        //            continue;
+        //    }
+        //    MeshFilter meshF = tile.GetComponent<MeshFilter>();
+        //    if (meshF == null || sMesh == null) continue;
+        //    var s = new NavMeshBuildSource {
+        //        shape = NavMeshBuildSourceShape.Mesh,
+        //        sourceObject = sMesh,
+        //        transform = meshF.transform.localToWorldMatrix,
+        //        area = 0
+        //    };
+        //    m_Sources.Add(s);
+        //}
+        //UpdateNavMesh();
+        //generated = true;
         #endregion
     }
 

@@ -14,15 +14,13 @@ public class StructureCaptureState : MonoBehaviour
     [SerializeField] int minionsToCapture;
     [SerializeField] TMP_Text capturetext;
     [SerializeField] Image textBackground;
-    private int currentMinions, owningTeam;
+    private int charges = 0, currentTeam = 0;
     bool neutral = true;
 
     public UnityEvent<int> teamChanged;
 
     private void Start() {
         transform.GetChild(0).GetComponent<EntryTrigger>().entryTouched.AddListener(MinionEntered);
-        currentMinions = 0;
-
         if (teamChanged == null)
             teamChanged = new UnityEvent<int>();
     }
@@ -32,45 +30,54 @@ public class StructureCaptureState : MonoBehaviour
         Color col = minion.GetComponent<Team>().GetTeamColor();
 
         if (neutral) {
-            if(currentMinions == 0) {
-                owningTeam = team;
-                currentMinions++;
-                Destroy(minion);
-            }
-            else if(team == owningTeam) {
-                currentMinions++;
-                if (currentMinions == minionsToCapture) {
-                    neutral = false;
+            if (team == currentTeam) {
+                if (charges < minionsToCapture) {
+                    charges++;
+                    Destroy(minion);
+                    if (charges == minionsToCapture) {
+                        neutral = false;
+                    }
                 }
-                Destroy(minion);
             }
             else {
-                currentMinions--;
+                charges--;
                 Destroy(minion);
-                if (currentMinions == 0) {
+                if (charges <= 0) {
+                    charges *= -1;
+                    currentTeam = team;
+                    if (charges == 0)
+                        textBackground.color = Color.white;
+                    else
+                        textBackground.color = col;
                 }
             }
         }
-        else if(team == owningTeam && currentMinions < minionsToCapture) {
-            Destroy(minion);
-            currentMinions++;
-        }
-        else if(team != owningTeam){
-            currentMinions--;
-            Destroy(minion);
-            if (currentMinions == 0) {
-                neutral = true;
+        else {
+            if (team == currentTeam) {
+                if (charges < minionsToCapture) {
+                    charges++;
+                    Destroy(minion);
+                    if (charges == minionsToCapture) {
+                        neutral = false;
+                    }
+                }
+            }
+            else {
+                charges--;
+                Destroy(minion);
+                if (charges == 0) {
+                    neutral = true;
+                    currentTeam = 0;
+                }
             }
         }
 
-        capturetext.SetText(currentMinions.ToString());
-        if (currentMinions == 0)
+        if (charges == 0)
             textBackground.color = Color.white;
-        else
-            textBackground.color = col;
+        capturetext.SetText(charges.ToString());
     }
 
     public int getOwningTeam() {
-        return owningTeam;
+        return currentTeam;
     }
 }
