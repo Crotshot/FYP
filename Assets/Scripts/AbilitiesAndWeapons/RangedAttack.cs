@@ -6,7 +6,7 @@ using Mirror;
 
 public class RangedAttack : NetworkBehaviour {
     [SerializeField] float roundsPerMinute = 60f;
-    [SerializeField] Vector3 spawnPoint;
+    [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject projectilePrefab;
     Inputs inputs;
     float fireRatetimer;
@@ -25,11 +25,11 @@ public class RangedAttack : NetworkBehaviour {
     void Update() {
         if (inputs.GetAttackInput() != 0 && fireRatetimer <= 0) {
             if (GetComponent<PlayerController>().getOfflineTest()) {
-                GameObject newProj = Instantiate(projectilePrefab, transform.TransformPoint(spawnPoint), transform.rotation);
+                GameObject newProj = Instantiate(projectilePrefab, spawnPoint);
                 newProj.transform.parent = null;
             }
             else
-                CmdSpawnBullet(transform.TransformPoint(spawnPoint), transform.rotation); //Later update this to use the weapon.transform.rotation
+                Shoot();
 
             fireRatetimer = 60f / roundsPerMinute;
             weaponFired?.Invoke();
@@ -44,11 +44,20 @@ public class RangedAttack : NetworkBehaviour {
         return projectilePrefab;
     }
 
+    private void Shoot() {
+        if (isServer) {
+            GameObject newProj = Instantiate(projectilePrefab, spawnPoint);
+            NetworkServer.Spawn(newProj);
+            newProj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
+            newProj.transform.parent = null;
+        }
+        else {
+            CmdSpawnBullet();
+        }
+    }
+
     [Command]
-    void CmdSpawnBullet(Vector3 pos, Quaternion rot, NetworkConnectionToClient sender = null) {
-        GameObject newProj = Instantiate(projectilePrefab, pos, rot);
-        NetworkServer.Spawn(newProj, sender);
-       
-        newProj.transform.parent = null;
+    void CmdSpawnBullet() {
+        Shoot();
     }
 }

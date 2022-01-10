@@ -18,7 +18,7 @@ public class BasicShell :  NetworkBehaviour
         foreach (Vector3 direction in directions) {
             Debug.DrawRay(transform.position + transform.TransformDirection(rayOrigin), transform.TransformDirection(direction) * rayLength, Color.blue/*, 0.1f*/);
             Ray ray = new Ray(transform.position + transform.TransformDirection(rayOrigin), transform.TransformDirection(direction));
-            if (Physics.Raycast(ray, out RaycastHit hit, rayLength)) {
+            if (Physics.Raycast(ray, out RaycastHit hit, rayLength) && hit.collider.isTrigger == false) {
                 RayCollision(hit.collider.transform);
             }
         }
@@ -26,8 +26,12 @@ public class BasicShell :  NetworkBehaviour
 
     private void RayCollision(Transform hit) {
         if (isServer) {
-            if (hit.TryGetComponent(out NetworkIdentity networkIdentity)) {
-                if (networkIdentity.connectionToClient == connectionToClient)
+            //if (hit.TryGetComponent(out NetworkIdentity networkIdentity)) {
+            //    if (networkIdentity.connectionToClient == connectionToClient)
+            //        return;
+            //}
+            if (hit.TryGetComponent(out Team t)) {
+                if (t.GetTeam() == GetComponent<Team>().GetTeam())
                     return;
             }
             if (hit.TryGetComponent(out Health health)) {

@@ -19,4 +19,12 @@ public class Team : NetworkBehaviour
     public Color GetTeamColor() {
         return teamColor;
     }
+
+    public void SetTeam(int t) {
+        team = t;
+    }
+
+    public void SetTeamColor(Color color) { //Might need to be converted to 4 floats for network transport
+        teamColor = color;
+    }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.AI;
 using Mirror;
 
@@ -11,6 +12,8 @@ public class PlayerController : NetworkBehaviour
     Transform navTarget;
     [SerializeField] bool offlineTest;
 
+    public UnityEvent ab1, ab2, ab3;
+
     private void Start() {
         if (hasAuthority || offlineTest) {
             navTarget = transform.GetChild(0).GetChild(1);
@@ -19,6 +22,13 @@ public class PlayerController : NetworkBehaviour
             inputs = FindObjectOfType<Inputs>();
             agent = GetComponent<NavMeshAgent>();
             GetComponent<Team>().AssignTeam();
+
+            if (ab1 == null)
+                ab1 = new UnityEvent();
+            if (ab2 == null)
+                ab2 = new UnityEvent();
+            if (ab3 == null)
+                ab3 = new UnityEvent();
         }
         else{
             Destroy(transform.GetChild(0).gameObject);
@@ -29,6 +39,16 @@ public class PlayerController : NetworkBehaviour
     private void Update() {
         navTarget.localPosition = inputs.GetMovementInput();
         agent.destination = navTarget.position;
+
+        if(inputs.GetAbility1Input() > 0) {
+            ab1?.Invoke();
+        }
+        if (inputs.GetAbility2Input() > 0) {
+            ab2?.Invoke();
+        }
+        if (inputs.GetAbility3Input() > 0) {
+            ab3?.Invoke();
+        }
     }
 
     public bool getOfflineTest() {

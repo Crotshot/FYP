@@ -5,7 +5,7 @@ using UnityEngine;
 public class Camera_Follower : MonoBehaviour
 {
     Transform player, cameraOrbitPoint, playerCamera;
-    [SerializeField] float mouseModifier, cameraMoveLimit = 12f, cameraMoveMinimum = 8f, cameraSpeedModifier = 4f;
+    [SerializeField] float mouseModifier, /*cameraMoveLimit = 12f, cameraMoveMinimum = 8f,*/ cameraSpeedModifier = 4f;
 
     Inputs inputs;
     public void Setup()
