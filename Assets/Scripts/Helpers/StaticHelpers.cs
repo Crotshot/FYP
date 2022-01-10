@@ -71,5 +71,25 @@ namespace Crotty.Helpers {
             bot = Mathf.Sqrt(Mathf.Pow(x2 - x1,2) + Mathf.Pow(y2 - y1, 2));
             return top / bot;
         }
+
+
+        /// <summary>
+        /// Returns a point on a line that is no more than maxDistance from a in the direction of b, if the distance between b and a is less than max distance it returns b else it returns a
+        /// point along the line a b at the point of max distance from in b's direction from a
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// /// <param name="maxDistance"></param>
+        /// <returns></returns>
+        public static Vector3 Vector3PointAlongLine(Vector3 a, Vector3 b, float maxDistance) {
+            float dist = Vector3Distance(a, b);
+            if (dist <= maxDistance) {
+                return b;
+            }
+            //Difference between x y z and multiply by maxdist/dist added to point a
+            Vector3 difference = new Vector3(b.x - a.x, b.y - a.y, b.z - a.z);
+
+            return a + difference * (maxDistance/dist);
+        }
     }
 }

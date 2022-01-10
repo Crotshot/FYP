@@ -21,7 +21,6 @@ public class PlayerController : NetworkBehaviour
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
             inputs = FindObjectOfType<Inputs>();
             agent = GetComponent<NavMeshAgent>();
-            GetComponent<Team>().AssignTeam();
 
             if (ab1 == null)
                 ab1 = new UnityEvent();

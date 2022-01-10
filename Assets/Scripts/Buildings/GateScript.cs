@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class GateScript : MonoBehaviour
+public class GateScript : NetworkBehaviour
 {
     [SerializeField] ControlPoint[] points;
     [SerializeField] float openDelay, openTime, openDegrees, inverseFPS;
 
     private void Start() {
+        if (!isServer)
+            Destroy(this);
+
         if(points.Length > 0)
             foreach (ControlPoint point in points) {
                 point.captured.AddListener(OpenCheck);

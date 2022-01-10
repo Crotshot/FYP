@@ -18,7 +18,8 @@ public class Mouse_Pointer : NetworkBehaviour {
 
     private void Update() {
         Ray cameraRay = playerCam.ScreenPointToRay(inputs.GetMousePosition());
-        if (Physics.Raycast(cameraRay, out RaycastHit hit)) {
+        int layer = 1 << LayerMask.NameToLayer("Default");
+        if (Physics.Raycast(cameraRay, out RaycastHit hit, 999f, layer, QueryTriggerInteraction.Ignore)) {
             worldFocal = hit.point;                                            //Mouse position in World Space
         }
 
@@ -67,6 +68,10 @@ public class Mouse_Pointer : NetworkBehaviour {
             targetRot = Quaternion.Euler(rot, pointers[i].pointingObject.localRotation.eulerAngles.y, pointers[i].pointingObject.localRotation.eulerAngles.z);
             pointers[i].pointingObject.localRotation = Quaternion.Slerp(pointers[i].pointingObject.localRotation, targetRot, 0.1f);
         }
+    }
+
+    public Vector3 GetWorldFocal(){
+        return worldFocal;
     }
 }
 

@@ -3,53 +3,69 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Mirror;
 
-public class ControlPoint : MonoBehaviour
+public class ControlPoint : NetworkBehaviour
 {
     [SerializeField] private float chargesToCapture;
     [SerializeField] Image captureFillImage;
     [SerializeField] bool basePoint;
-    //TEMP Serialized for testing//////////////////
-    [SerializeField]private float charges;
-    [SerializeField]int currentTeam = 0;
-    ///////////////////////////////////////////////
+
+    [SerializeField] private float charges;
+    [SerializeField] int currentTeam = 0;
+    [SerializeField] Color fillColor;
+
     List<Transform> trackedTransforms = new List<Transform>();
     List<int> teams = new List<int>();
-    Color color;
     private enum TeamState { Neutral, Captured}
     TeamState capState = TeamState.Neutral;
 
     public UnityEvent captured;
-
     private void Start() {
-        if (captured == null)
+        if (isServer && captured == null)
             captured = new UnityEvent();
     }
 
     private void FixedUpdate() {
-        float teamCharges = 0;
-        int teamLean = 0;
-        foreach (Transform form in trackedTransforms) {
-            if (form == null) {
-                trackedTransforms.Remove(form);
-                continue;
-            }
+        if (isServer) {
+            float teamCharges = 0;
+            int teamLean = 0;
+            foreach (Transform form in trackedTransforms) {
+                if (form == null) {
+                    trackedTransforms.Remove(form);
+                    continue;
+                }
 
-            if ( form.GetComponent<Team>().GetTeam() == teamLean) {
-                if (form.tag.Equals("Player")) teamCharges += 10f * Time.deltaTime; else teamCharges += 1f * Time.deltaTime;
-            }
-            else {
-                if (form.tag.Equals("Player")) teamCharges -= 10f * Time.deltaTime; else teamCharges -= 1f * Time.deltaTime;
-                if(teamCharges <= 0) {
-                    teamCharges *= -1;
-                    teamLean = form.GetComponent<Team>().GetTeam();
-                    color = form.GetComponent<Team>().GetTeamColor();
+                if (form.GetComponent<Team>().GetTeam() == teamLean) {
+                    if (form.tag.Equals("Player")) teamCharges += 10f * Time.deltaTime; else teamCharges += 1f * Time.deltaTime;
+                }
+                else {
+                    if (form.tag.Equals("Player")) teamCharges -= 10f * Time.deltaTime; else teamCharges -= 1f * Time.deltaTime;
+                    if (teamCharges <= 0) {
+                        teamCharges *= -1;
+                        teamLean = form.GetComponent<Team>().GetTeam();
+                        fillColor = form.GetComponent<Team>().GetTeamColor();
+                    }
                 }
             }
+            if (teamCharges == 0)
+                return;
+            Capturing(teamCharges, teamLean, fillColor);
+            RPCReflectFill(charges);
         }
-        if (teamCharges == 0)
-            return;
-       Capturing(teamCharges, teamLean, color);
+    }
+
+    [ClientRpc]
+    private void RPCReflectFill(float serverCharges) {
+        charges = serverCharges;
+        captureFillImage.fillAmount = charges / chargesToCapture;
+    }
+
+    [ClientRpc]
+    private void RPCReflectOwnerShip(int team, float r, float g, float b, float a) {
+        fillColor = new Color(r,g,b,a);
+        captureFillImage.color = fillColor;
+        currentTeam = team;
     }
 
     private void Capturing(float teamC, int team, Color col) {
@@ -72,6 +88,7 @@ public class ControlPoint : MonoBehaviour
                     charges *= -1;
                     currentTeam = team;
                     captureFillImage.color = col;
+                    RPCReflectOwnerShip(team, col.r, col.g, col.b, col.a);
                 }
             }
         }
@@ -92,6 +109,7 @@ public class ControlPoint : MonoBehaviour
                     capState = TeamState.Neutral;
                     currentTeam = team;
                     captureFillImage.color = col;
+                     RPCReflectOwnerShip(team, col.r, col.g, col.b, col.a);
                     if (basePoint) {
                         print("Team: " + currentTeam + " has won the match!");
                     }

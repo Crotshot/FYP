@@ -5,12 +5,8 @@ using Mirror;
 
 public class Team : NetworkBehaviour
 {
-    [SerializeField] int team;
-    [SerializeField] Color teamColor;
-
-    public void AssignTeam() {
-        team = Random.Range(-10000000,10000000);
-    }
+    [SerializeField][SyncVar] int team;
+    [SerializeField][SyncVar] Color teamColor;
 
     public int GetTeam() {
         return team;
@@ -24,7 +20,7 @@ public class Team : NetworkBehaviour
         team = t;
     }
 
-    public void SetTeamColor(Color color) { //Might need to be converted to 4 floats for network transport
-        teamColor = color;
+    public void SetTeamColor(float r, float g, float b, float a) { //Might need to be converted to 4 floats for network transport
+        teamColor = new Color(r,g,b,a);
     }
 }

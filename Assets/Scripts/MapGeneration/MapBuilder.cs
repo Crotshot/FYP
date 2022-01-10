@@ -73,7 +73,7 @@ public class MapBuilder : MonoBehaviour
 
     public void Generate() {
         if (generated) {
-            Debug.LogWarning("Map is already created");
+            //Debug.LogWarning("Map is already created");
             return;
         }
         //Make child object
@@ -225,7 +225,7 @@ public class MapBuilder : MonoBehaviour
                     foreach (GameObjectVariants variants in largeProps) {
                         totalWeight += variants.weight;
                     }
-                    if (totalWeight == 0) { Debug.Log("No Large Prop variants"); break; } //No large props, break out of loop
+                    if (totalWeight == 0) { /*Debug.Log("No Large Prop variants");*/ break; } //No large props, break out of loop
 
                     float type = RandomFloat(0, totalWeight), count = 0;
                     index = 0;
@@ -239,7 +239,7 @@ public class MapBuilder : MonoBehaviour
                     foreach (float num in variant.getWeights()) {
                         totalWeight += num;
                     }
-                    if (totalWeight == 0) { Debug.Log("No Large Props in variant"); break; } //No props in this variant
+                    if (totalWeight == 0) { /*Debug.Log("No Large Props in variant");*/ break; } //No props in this variant
 
                     count = 0;
                     type = RandomFloat(0, totalWeight);
@@ -252,7 +252,7 @@ public class MapBuilder : MonoBehaviour
                     pickedPos = largePropPositions[RandomPick(0, largePropPositions.Count - 1)];
                     GameObject obj = Instantiate(variant.getVariant(index), pickedPos);
                     obj.transform.eulerAngles = new Vector3(0,RandomFloat(0f, 360f),0);
-                    Debug.Log("Instantiated large prop: " + variant.getVariant(index).name);
+                    //Debug.Log("Instantiated large prop: " + variant.getVariant(index).name);
                     largePropPositions.Remove(pickedPos); //Remove from list
                     //Delete all propPositions in general area that have no children  ~~ 12m
                     foreach (Transform point in mapTile) {
@@ -274,7 +274,7 @@ public class MapBuilder : MonoBehaviour
                     foreach (GameObjectVariants variants in smallProps) {
                         totalWeight += variants.weight;
                     }
-                    if (totalWeight == 0) { Debug.Log("No Small Prop variants"); break; } //No small props, break out of loop
+                    if (totalWeight == 0) { /*Debug.Log("No Small Prop variants"); */break; } //No small props, break out of loop
 
                     float type = RandomFloat(0, totalWeight), count = 0;
                     index = 0;
@@ -288,7 +288,7 @@ public class MapBuilder : MonoBehaviour
                     foreach (float num in variant.getWeights()) {
                         totalWeight += num;
                     }
-                    if (totalWeight == 0) { Debug.Log("No Small Props in variant"); break; } //No props in this variant
+                    if (totalWeight == 0) { /*Debug.Log("No Small Props in variant"); */break; } //No props in this variant
 
                     count = 0;
                     type = RandomFloat(0, totalWeight);
@@ -301,7 +301,7 @@ public class MapBuilder : MonoBehaviour
                     pickedPos = smallPropPositions[RandomPick(0, smallPropPositions.Count - 1)];
                     GameObject obj = Instantiate(variant.getVariant(index), pickedPos);
                     obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
-                    Debug.Log("Instantiated small prop: " + variant.getVariant(index).name);
+                    //Debug.Log("Instantiated small prop: " + variant.getVariant(index).name);
                     smallPropPositions.Remove(pickedPos); //Remove from list
                     //Delete all propPositions in close proximity that have no children  ~~ 3m
                     foreach (Transform point in mapTile) {
@@ -351,10 +351,10 @@ public class MapBuilder : MonoBehaviour
         #endregion
     }
 
-        public void DestroyMap() {
-        generated = false;
-        Destroy(transform.GetChild(2).gameObject);
-        Destroy(transform.GetChild(3).gameObject);
+    public void DestroyMap() {
+    generated = false;
+    Destroy(transform.GetChild(2).gameObject);
+    Destroy(transform.GetChild(3).gameObject);
     }
 
     void UpdateNavMesh() {

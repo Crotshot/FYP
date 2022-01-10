@@ -529,9 +529,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   input: 3
-  coolDown: 10
-  mortarShell: {fileID: 0}
+  coolDown: 1
+  mortarShell: {fileID: 7512147332270784733, guid: 449c72d7b0316bf428c0c7dd0029eb86, type: 3}
   secondShotDelay: 0.5
+  maxDistance: 50
   spawnPoint1: {fileID: 2756355969368091066}
   spawnPoint2: {fileID: 4173589798950288074}
 --- !u!114 &2035555923
