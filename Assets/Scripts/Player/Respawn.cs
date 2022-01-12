@@ -1,41 +1,67 @@
 //using System.Collections;
 //using System.Collections.Generic;
 //using UnityEngine;
+//using UnityEngine.AI;
 //using Mirror;
 
-//public class Respawn : NetworkBehaviour
-//{
-//    List<GameObject> spawnPoints = new List<GameObject>();
-//    Health health;
+//public class Respawn : NetworkBehaviour {
+//    [SerializeField] Vector3 spawnPoint;
+//    [SerializeField] float respawnTime;
+//    [SerializeField] PlayerController pC;
+//    [SerializeField] NavMeshAgent aI;
 
 //    public void Setup() {
-//        health = GetComponent<Health>();
-//        health.Dead += RespawnPlayer;
-
-//        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Respawn"))
-//            spawnPoints.Add(obj);
-//        RespawnPlayer();
-//    }
-
-//    public void OnDestroy() {
-//        health.Dead -= RespawnPlayer;
-//    }
-
-//    void RespawnPlayer() {
 //        if (isServer) {
-//            health.ResetHealth();
-//            transform.position = spawnPoints[Random.Range(0, spawnPoints.Count)].transform.position;
+//            GameObject[] points = GameObject.FindGameObjectsWithTag("Respawn");
+//            foreach (GameObject obj in points) {
+//                if (obj.GetComponent<Team>().GetTeam() == GetComponent<Team>().GetTeam()) {
+//                    spawnPoint = obj.transform.position;
+//                    RpcSpawnSetup(spawnPoint);
+//                    break;
+//                }
+//            }
 //        }
 //        else {
-//            CmdRespawnPlayer();
+//            CmdSetup();
 //        }
 //    }
 
 //    [Command]
-//    void CmdRespawnPlayer() {
+//    void CmdSetup() {
+//        Setup();
+//    }
+
+//    [ClientRpc]
+//    void RpcSpawnSetup(Vector3 point) {
+//        spawnPoint = point;
+//        pC = GetComponent<PlayerController>();
+//        aI = GetComponent<NavMeshAgent>();
+//    }
+
+//    public void RespawnPlayer() {
+//        if (isServer) {
+//            RPCRespawnPlayer();
+//        }
+//        else {
+//            if (aI != null && pC != null) {
+//                aI.enabled = false;
+//                pC.enabled = false;
+//                transform.position = spawnPoint + Vector3.down * 20f;
+//                StartCoroutine("RespawnDelay");
+//            }
+//        }
+//    }
+
+//    IEnumerator RespawnDelay() {
+//        yield return new WaitForSeconds(respawnTime);
+//        transform.position = spawnPoint;
+//        aI.enabled = true;
+//        pC.enabled = true;
+//        GetComponent<Health>().ResetHealth();
+//    }
+
+//    [ClientRpc]
+//    void RPCRespawnPlayer() {
 //        RespawnPlayer();
 //    }
 //}
-
-////Current temporary code is using multiple spawn points placed in the arena and then moving players to these locations for sapwning
-////In later versions this will be rmeoved from the players and added to the Game Manager

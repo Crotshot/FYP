@@ -7,108 +7,40 @@ using System;
 
 public class Health : NetworkBehaviour
 {
-    [SerializeField] float maxHealth;//, regenDelay;
-    //[Range(0, 1)]
-    //[SerializeField] float regenPercentPerSec;
-    //float regenTimer;
-    [SyncVar(hook = nameof(HealthChanged))][SerializeField] private float currentHealth;
-    
+    [SerializeField]protected float maxHealth;
+    [SerializeField]protected float currentHealth;
     public event Action<float> Damaged;
-    public event Action Dead;
-    Vector3 spawnPoint;
-
-    private void Start() {
-        Setup();
-    }
-
-    private void Setup() {
-        if (isServer) {
-            GameObject[] points = GameObject.FindGameObjectsWithTag("Respawn");
-            foreach(GameObject obj in points) {
-                if(obj.GetComponent<Team>().GetTeam() == GetComponent<Team>().GetTeam()) {
-                    spawnPoint = obj.transform.position;
-                    RpcSpawnPoint(spawnPoint);
-                    break;
-                }
-            }
-            ResetHealth();
-        }
-        else {
-            CmdSetup();
-        }
-    }
-
-    [Command]
-    void CmdSetup() {
-        Setup();
-    }
-
-    [ClientRpc]
-    void RpcSpawnPoint(Vector3 point) {
-        spawnPoint = point;
-    }
-
-
-    void HealthChanged(float oldHealth, float newHealth) {
-        if (newHealth >= oldHealth)
-            return;
-        if (currentHealth > 0) {
-            Damaged?.Invoke(currentHealth);
-            return;
-        }
-        Respawn();
-    }
+    bool dead;
 
     public void Damage(float damage) {
         if (isServer) {
+            RpcDamage(damage);
+        }
+        else {
             currentHealth -= damage;
-        }
-        else {
-            CmdDamage(damage);
-        }
-    }
-
-    [Command]
-    void CmdDamage(float damage) {
-        Damage(damage);
-    }
-
-    void Respawn() {
-        if (isServer) {
-            RPCRespawn();
-        }
-        else {
-            Dead?.Invoke();
-            ResetHealth();
-            transform.position = spawnPoint;
+            if(currentHealth <= 0) {
+                dead = true;
+            }
         }
     }
 
     [ClientRpc]
-    void RPCRespawn() {
-        Dead?.Invoke();
-        ResetHealth();
-        transform.position = spawnPoint;
+    void RpcDamage(float damage) {
+        Damage(damage);
     }
 
     public void ResetHealth() {
-        currentHealth = maxHealth;
+        if (isServer) {
+            RpcResetHealth();
+        }
+        else {
+            currentHealth = maxHealth;
+            dead = false;
+        }
+    }
+
+    [ClientRpc]
+    private void RpcResetHealth() {
+        ResetHealth();
     }
 }
-
-//private void Update() {
-//    if (regenTimer > 0) {
-//        regenTimer -= Time.deltaTime;
-//    }
-//    else {
-//        RegenerateHealth();
-//    }
-//}
-
-//[Server]
-//public void RegenerateHealth() {
-//    if (currentHealth < maxHealth) {
-//        currentHealth += regenPercentPerSec * Time.deltaTime;
-//        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-//    }
-//}

@@ -540,6 +540,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &69176520
 GameObject:
@@ -1250,6 +1251,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &106523039
 GameObject:
@@ -1782,6 +1784,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &171260344
 GameObject:
@@ -2130,6 +2133,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &188856005
 GameObject:
@@ -3070,6 +3074,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &254099395
 GameObject:
@@ -3505,6 +3510,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &284444657
 GameObject:
@@ -3689,6 +3695,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &331650391
 GameObject:
@@ -4613,6 +4620,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &424962596
 GameObject:
@@ -5359,6 +5367,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &503881273
 GameObject:
@@ -6633,6 +6642,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &643323282
 GameObject:
@@ -8443,6 +8453,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &827040519
 GameObject:
@@ -8791,6 +8802,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!4 &853992862 stripped
 Transform:
@@ -9080,6 +9092,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &888596228
 GameObject:
@@ -9346,6 +9359,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &978927383
 GameObject:
@@ -9724,6 +9738,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1005417527
 GameObject:
@@ -10075,6 +10090,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1001 &1032523543
 PrefabInstance:
@@ -12072,6 +12088,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1194273885
 GameObject:
@@ -12309,6 +12326,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1204356787
 GameObject:
@@ -12523,6 +12541,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1257468110
 GameObject:
@@ -14351,6 +14370,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1473591528
 GameObject:
@@ -14881,6 +14901,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1520225062
 GameObject:
@@ -16132,6 +16153,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1654007847
 GameObject:
@@ -17448,6 +17470,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1800163781
 GameObject:
@@ -17632,6 +17655,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1813685714
 GameObject:
@@ -18384,6 +18408,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1001 &1874569461
 PrefabInstance:
@@ -19022,6 +19047,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1904482692
 GameObject:
@@ -19446,6 +19472,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1 &1928108107
 GameObject:
@@ -21053,6 +21080,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  isPlayer: 0
   currentHealth: 100
 --- !u!1001 &2128679797
 PrefabInstance:

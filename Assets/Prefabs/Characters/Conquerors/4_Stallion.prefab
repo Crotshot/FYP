@@ -207,10 +207,10 @@ GameObject:
   - component: {fileID: 944520220049556890}
   - component: {fileID: 4164639570971787632}
   - component: {fileID: 868429874163125294}
-  - component: {fileID: 6780333881931173789}
+  - component: {fileID: 4045469539251853331}
+  - component: {fileID: 6000214944580376321}
   - component: {fileID: 8955659098585444802}
   - component: {fileID: 6535265368243992406}
-  - component: {fileID: 6000214944580376321}
   m_Layer: 0
   m_Name: 4_Stallion
   m_TagString: Player
@@ -343,7 +343,7 @@ MonoBehaviour:
   syncInterval: 0.1
   pointers: []
   playerCam: {fileID: 7184915173712974350}
---- !u!114 &6780333881931173789
+--- !u!114 &4045469539251853331
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -352,13 +352,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 2814933875791984564}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54f534eca639df440bac3fb728b32f30, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d14ccf2c4e3efb4d9c2bdafb94e140f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  maxHealth: 0
-  currentHealth: 0
+  maxHealth: 100
+  currentHealth: 100
+--- !u!114 &6000214944580376321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2814933875791984564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d176c04518f33b0448d99b9927f4efab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  team: 0
+  teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &8955659098585444802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,22 +410,6 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
---- !u!114 &6000214944580376321
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2814933875791984564}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d176c04518f33b0448d99b9927f4efab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  team: 0
-  teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2814933876262695979
 GameObject:
   m_ObjectHideFlags: 0

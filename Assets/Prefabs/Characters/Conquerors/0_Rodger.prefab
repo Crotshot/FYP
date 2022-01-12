@@ -274,7 +274,7 @@ GameObject:
   - component: {fileID: 6780511925096497911}
   - component: {fileID: 793785213778548600}
   - component: {fileID: 5106697110751912112}
-  - component: {fileID: 2035555923}
+  - component: {fileID: 1548324949471568594}
   - component: {fileID: 6351804243656272699}
   - component: {fileID: 7292571058769649694}
   - component: {fileID: 4815264820297841319}
@@ -535,7 +535,7 @@ MonoBehaviour:
   maxDistance: 50
   spawnPoint1: {fileID: 2756355969368091066}
   spawnPoint2: {fileID: 4173589798950288074}
---- !u!114 &2035555923
+--- !u!114 &1548324949471568594
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -544,13 +544,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 605830872944974801}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54f534eca639df440bac3fb728b32f30, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d14ccf2c4e3efb4d9c2bdafb94e140f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
-  currentHealth: 0
+  currentHealth: 100
 --- !u!114 &6351804243656272699
 MonoBehaviour:
   m_ObjectHideFlags: 0

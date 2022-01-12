@@ -292,10 +292,10 @@ GameObject:
   - component: {fileID: 1162532057002466742}
   - component: {fileID: 3391108486048606632}
   - component: {fileID: 2203677914305903875}
-  - component: {fileID: 1269393645022179733}
+  - component: {fileID: 1658816953824612189}
+  - component: {fileID: 8130704732544905366}
   - component: {fileID: 7380687977253756971}
   - component: {fileID: 7327668436225318198}
-  - component: {fileID: 8130704732544905366}
   - component: {fileID: 207195300181792997}
   m_Layer: 0
   m_Name: 1_Bert
@@ -432,7 +432,7 @@ MonoBehaviour:
     objectLimitMin: 30
     objectLimitMax: 30
   playerCam: {fileID: 4765286850794434072}
---- !u!114 &1269393645022179733
+--- !u!114 &1658816953824612189
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -441,13 +441,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 3394059884701148311}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54f534eca639df440bac3fb728b32f30, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d14ccf2c4e3efb4d9c2bdafb94e140f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  maxHealth: 0
-  currentHealth: 0
+  maxHealth: 100
+  currentHealth: 100
+--- !u!114 &8130704732544905366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394059884701148311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d176c04518f33b0448d99b9927f4efab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  team: 0
+  teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &7380687977253756971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,22 +499,6 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
---- !u!114 &8130704732544905366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3394059884701148311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d176c04518f33b0448d99b9927f4efab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  team: 0
-  teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &207195300181792997
 MonoBehaviour:
   m_ObjectHideFlags: 0

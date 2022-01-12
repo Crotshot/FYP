@@ -62,18 +62,8 @@ public class PlayerConstructor : NetworkBehaviour
             playerSpawned.GetComponent<Team>().SetTeam(2);
             playerSpawned.GetComponent<Team>().SetTeamColor(0.1f, 0.1f, 0.9f, 1);
         }
-
-        playerSpawned.GetComponent<NavMeshAgent>().enabled = true;
-        RpcEnableNavAgent();
     }
 
-    [ClientRpc]
-    private void RpcEnableNavAgent() {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach(GameObject player in players) {
-            player.GetComponent<NavMeshAgent>().enabled = true;
-        }
-    }
 
     [Command (requiresAuthority = false)]
     public void CmdReadyUp(string name) {

@@ -23,7 +23,6 @@ public class GasCloud : NetworkBehaviour
                 continue;
             }
             hp.Damage(damagePerSecond * Time.deltaTime); //Maybe move to only call every .1 seconds
-            Debug.Log("Uhh ohh Stinkee");
         }
 
         if(expansionTimer >= 0) {
@@ -40,19 +39,12 @@ public class GasCloud : NetworkBehaviour
 
     //Player, minion
     private void OnTriggerEnter(Collider other) {
-        Debug.Log("Stinky Cloud touched");
         if (other.tag.Equals("minion") || other.tag.Equals("Player")) {
-            Debug.Log("Minion or player");
             if (other.TryGetComponent(out Health health)) {
-                Debug.Log("Health acquired");
                 if (health.GetComponent<Team>().GetTeam() != GetComponent<Team>().GetTeam()) {
-                    Debug.Log("Time to stink");
                     trackedHealth.Add(health);
                 }
                 
-            }
-            else {
-                Debug.Log("Did not grab health script");
             }
         }
     }

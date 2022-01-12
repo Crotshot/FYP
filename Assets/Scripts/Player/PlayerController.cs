@@ -17,7 +17,7 @@ public class PlayerController : NetworkBehaviour
     private void Start() {
         if (hasAuthority || offlineTest) {
             navTarget = transform.GetChild(0).GetChild(1);
-            //GetComponent<Respawn>().Setup();
+            GetComponent<NavMeshAgent>().enabled = true;
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
             inputs = FindObjectOfType<Inputs>();
             agent = GetComponent<NavMeshAgent>();
@@ -55,6 +55,7 @@ public class PlayerController : NetworkBehaviour
         return offlineTest;
     }
 }
+
 ////2D sprite mapped by the 3D object
 //Inputs inputs;
 //NavMeshAgent agent;
