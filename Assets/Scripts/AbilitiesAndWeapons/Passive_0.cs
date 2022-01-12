@@ -9,8 +9,8 @@ public class Passive_0 : NetworkBehaviour
     GameObject projectilePrefab;
 
     private void Start() {
-        if (!hasAuthority && !GetComponent<PlayerController>().getOfflineTest())
-            Destroy(this);
+        //if (!hasAuthority && !GetComponent<PlayerController>().getOfflineTest())
+        //    Destroy(this);
         
         if(TryGetComponent(out RangedAttack atk)) {
             if(atk != null) {

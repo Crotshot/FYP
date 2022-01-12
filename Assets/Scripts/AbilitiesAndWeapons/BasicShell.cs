@@ -10,10 +10,13 @@ public class BasicShell :  NetworkBehaviour
     [SerializeField] Vector3[] directions;
 
     private void Start() {
-        Invoke(nameof(DestroySelf), deleteTime);
+        if(isServer)
+            Invoke(nameof(DestroySelf), deleteTime);
     }
 
     void Update() {
+        if (!isServer)
+            return;
         transform.Translate(Vector3.forward * Time.deltaTime * shellSpeed, Space.Self);
         foreach (Vector3 direction in directions) {
             Debug.DrawRay(transform.position + transform.TransformDirection(rayOrigin), transform.TransformDirection(direction) * rayLength, Color.blue/*, 0.1f*/);
@@ -25,28 +28,14 @@ public class BasicShell :  NetworkBehaviour
     }
 
     private void RayCollision(Transform hit) {
-        if (isServer) {
-            //if (hit.TryGetComponent(out NetworkIdentity networkIdentity)) {
-            //    if (networkIdentity.connectionToClient == connectionToClient)
-            //        return;
-            //}
-            if (hit.TryGetComponent(out Team t)) {
-                if (t.GetTeam() == GetComponent<Team>().GetTeam())
-                    return;
-            }
-            if (hit.TryGetComponent(out Health health)) {
-                health.Damage(damage);
-            }
-            DestroySelf();
+        if (hit.TryGetComponent(out Team t)) {
+            if (t.GetTeam() == GetComponent<Team>().GetTeam())
+                return;
         }
-        else {
-            CmdRayCollision(hit);
+        if (hit.TryGetComponent(out Health health)) {
+            health.Damage(damage);
         }
-    }
-
-    [Command]
-    void CmdRayCollision(Transform h) {
-        RayCollision(h);
+        DestroySelf();
     }
 
     private void DestroySelf() {

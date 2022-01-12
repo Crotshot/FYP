@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4885997552126375261}
   m_Layer: 0
   m_Name: Shroom_2
-  m_TagString: Untagged
+  m_TagString: navExempt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

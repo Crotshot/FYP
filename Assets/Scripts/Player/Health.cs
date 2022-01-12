@@ -15,13 +15,7 @@ public class Health : NetworkBehaviour
     
     public event Action<float> Damaged;
     public event Action Dead;
-
-    List<GameObject> spawnPoints = new List<GameObject>(); //Temp respawn code
-
-
-    //TEST
-    public bool die;
-    //
+    Vector3 spawnPoint;
 
     private void Start() {
         Setup();
@@ -29,19 +23,29 @@ public class Health : NetworkBehaviour
 
     private void Setup() {
         if (isServer) {
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Respawn"))
-                spawnPoints.Add(obj);
+            GameObject[] points = GameObject.FindGameObjectsWithTag("Respawn");
+            foreach(GameObject obj in points) {
+                if(obj.GetComponent<Team>().GetTeam() == GetComponent<Team>().GetTeam()) {
+                    spawnPoint = obj.transform.position;
+                    RpcSpawnPoint(spawnPoint);
+                    break;
+                }
+            }
+            ResetHealth();
         }
         else {
             CmdSetup();
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Respawn"))
-                spawnPoints.Add(obj);
         }
     }
 
     [Command]
     void CmdSetup() {
         Setup();
+    }
+
+    [ClientRpc]
+    void RpcSpawnPoint(Vector3 point) {
+        spawnPoint = point;
     }
 
 
@@ -76,7 +80,7 @@ public class Health : NetworkBehaviour
         else {
             Dead?.Invoke();
             ResetHealth();
-            transform.position = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Count)].transform.position;
+            transform.position = spawnPoint;
         }
     }
 
@@ -84,7 +88,7 @@ public class Health : NetworkBehaviour
     void RPCRespawn() {
         Dead?.Invoke();
         ResetHealth();
-        transform.position = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Count)].transform.position;
+        transform.position = spawnPoint;
     }
 
     public void ResetHealth() {

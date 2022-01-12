@@ -92,6 +92,7 @@ public class LobbyUI : MonoBehaviour
         lobbyPanel.SetActive(true);
 
         lobbyText.text = "Waiting for opponent . . .";
+        NetworkManager.singleton.networkAddress = "localhost";
         NetworkManager.singleton.StartHost();
     }
 

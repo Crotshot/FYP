@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject GetConqueror(string conqName) { // Can pass 10_ for an id or Bert for a name
         foreach (GameObject obj in conquerorPrefabs) {
-            if (obj.name.Contains(conqName) || obj.name.Equals(conqName)) { //Equals might no tbe necessary
+            if (obj.name.Contains(conqName) || obj.name.Equals(conqName)) {
                 return obj;
             }
         }

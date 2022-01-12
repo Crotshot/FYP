@@ -37,7 +37,8 @@ public class PlayerController : NetworkBehaviour
 
     private void Update() {
         navTarget.localPosition = inputs.GetMovementInput();
-        agent.destination = navTarget.position;
+        if(agent.enabled)
+            agent.destination = navTarget.position;
 
         if(inputs.GetAbility1Input() > 0) {
             ab1?.Invoke();

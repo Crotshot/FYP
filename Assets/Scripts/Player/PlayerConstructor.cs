@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Mirror;
 
 public class PlayerConstructor : NetworkBehaviour
@@ -24,8 +25,34 @@ public class PlayerConstructor : NetworkBehaviour
 
     [Command (requiresAuthority = false)]
     public void CmdCreateConqueror(NetworkConnectionToClient sender = null) {
-        GameObject playerSpawned = Instantiate(FindObjectOfType<GameManager>().GetConqueror(conquerorName), Vector3.zero, Quaternion.identity);
+        int teamNum = 0;
+        if (connectionToClient.connectionId == 0) 
+            teamNum = 1;
+        else //When the server calls this it is 0 as there is no connection and any othe number can be team 2
+            teamNum = 2;
+
+        Vector3 pos = Vector3.zero;
+        Quaternion rotation = Quaternion.identity;
+        foreach (GameObject respawn in GameObject.FindGameObjectsWithTag("Respawn")) {
+            if (respawn.GetComponent<Team>().GetTeam() == teamNum) {
+                pos = respawn.transform.position;
+                break;
+            }
+        }
+
+        if(pos.z > 0) {
+            rotation.eulerAngles = new Vector3(0, 180, 0);
+        }
+
+        GameObject playerSpawned = Instantiate(FindObjectOfType<GameManager>().GetConqueror(conquerorName), pos, rotation);
         NetworkServer.Spawn(playerSpawned, sender);
+
+        if (teamNum == 1) {
+            playerSpawned.GetComponent<Team>().SetTeamColor(0.9f, 0.1f, 0.1f, 1);
+        }
+        else {
+            playerSpawned.GetComponent<Team>().SetTeamColor(0.1f, 0.1f, 0.9f, 1);
+        }
 
         if (connectionToClient.connectionId == 0) { //When the server calls this it is 0 as there is no connection and any othe number can be team 2
             playerSpawned.GetComponent<Team>().SetTeam(1);
@@ -34,6 +61,17 @@ public class PlayerConstructor : NetworkBehaviour
         else {
             playerSpawned.GetComponent<Team>().SetTeam(2);
             playerSpawned.GetComponent<Team>().SetTeamColor(0.1f, 0.1f, 0.9f, 1);
+        }
+
+        playerSpawned.GetComponent<NavMeshAgent>().enabled = true;
+        RpcEnableNavAgent();
+    }
+
+    [ClientRpc]
+    private void RpcEnableNavAgent() {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach(GameObject player in players) {
+            player.GetComponent<NavMeshAgent>().enabled = true;
         }
     }
 

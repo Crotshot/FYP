@@ -329,7 +329,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3394059884701148311}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 1.7
   m_Speed: 12
@@ -401,6 +401,15 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   offlineTest: 0
+  ab1:
+    m_PersistentCalls:
+      m_Calls: []
+  ab2:
+    m_PersistentCalls:
+      m_Calls: []
+  ab3:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2203677914305903875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,7 +448,6 @@ MonoBehaviour:
   syncInterval: 0.1
   maxHealth: 0
   currentHealth: 0
-  die: 0
 --- !u!114 &7380687977253756971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -783,8 +791,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseModifier: 300
-  cameraMoveLimit: 20
-  cameraMoveMinimum: 20
   cameraSpeedModifier: 3
 --- !u!1 &8187637999484823839
 GameObject:

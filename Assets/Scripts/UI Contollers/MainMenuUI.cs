@@ -33,7 +33,7 @@ public class MainMenuUI : MonoBehaviour
         {
             mainPanel.SetActive(true);
             settingsPanel.SetActive(false);
-            title.text = "Overlord Arena";
+            title.text = "Subjugation";
             showingSettings = false;
         }
 

@@ -14,6 +14,7 @@ TagManager:
   - propPos
   - wallPos
   - structurePos
+  - navExempt
   layers:
   - Default
   - TransparentFX

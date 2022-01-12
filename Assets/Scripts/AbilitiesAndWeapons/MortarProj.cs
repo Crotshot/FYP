@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Helpers = Crotty.Helpers.StaticHelpers;
 
-public class MortarProj : MonoBehaviour
+public class MortarProj : NetworkBehaviour
 {
     private Vector3 targetPos;
     [SerializeField] GameObject spawnOnCollision;
     [SerializeField] float trackDelay;
     float trackTimer;
     Rigidbody rb;
+
+    private void Start() {
+        if (!isServer)
+            Destroy(this);
+    }
 
     private void FixedUpdate() {
         if (targetPos == null)

@@ -40,4 +40,12 @@ public class Ability : NetworkBehaviour
         }
         return false;
     }
+
+    protected void AbilityDamage(Transform form, float damageToDeal) {
+        if (form.TryGetComponent<Health>(out Health health) && form.TryGetComponent<Team>(out Team team)) {
+            if (team.GetTeam() != GetComponent<Team>().GetTeam()) {
+                health.Damage(damageToDeal);
+            }
+        }
+    }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using UnityEngine.AI;
 
 public class GameNetworkManager : NetworkManager
 {
@@ -63,11 +64,10 @@ public class GameNetworkManager : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
+        Debug.Log( $">Scene Change to {newSceneName}");
         readyPlayers = 0;
-        if (sM.GetSceneName() == "Lobby" && newSceneName.StartsWith("Selection"))
-        {
-            for (int i = RoomPlayers.Count - 1; i >= 0; i--)
-            {
+        if (sM.GetSceneName() == "Lobby" && newSceneName.StartsWith("Selection")) {
+            for (int i = RoomPlayers.Count - 1; i >= 0; i--) {
                 var conn = RoomPlayers[i].connectionToClient;
                 var gameplayerInstance = Instantiate(gamePlayerPrefab);
                 gameplayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
@@ -76,7 +76,7 @@ public class GameNetworkManager : NetworkManager
                 NetworkServer.ReplacePlayerForConnection(conn, gameplayerInstance.gameObject);
             }
         }
-        else if(sM.GetSceneName() == "Selection" && newSceneName.StartsWith("Arena")) {
+        else if (sM.GetSceneName() == "Selection") {
 
         }
         base.ServerChangeScene(newSceneName);

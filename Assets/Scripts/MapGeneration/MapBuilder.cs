@@ -9,29 +9,26 @@ using Helpers = Crotty.Helpers.StaticHelpers;
  * Linear Congruential Generator https://en.wikipedia.org/wiki/Linear_congruential_generator
  */
 
-public class MapBuilder : MonoBehaviour
-{
+public class MapBuilder : MonoBehaviour {
+    //Random generator
     float currentSeed, multiplier = 257321, increment = 802997, modulus = 689101, state = 123456, constant = 84327;
     [SerializeField] int seed = 874326894;
-    /* tiles 0-Green 1-Yellow 2-White 3-Blue 4-Purple
-     * walls
-     * buildings
-     * props
-     * points
-     */                                 
-    [SerializeField] GameObjectVariants[] tiles, buildings, largeProps, smallProps, centralPoints, basePoints, sidePoints;
+
+    //Prefabs
+    [SerializeField] GameObjectVariants[] tiles, buildings, largeProps, smallProps;//, centralPoints, basePoints, sidePoints; ->Maybe later add different aesthetic points
     [SerializeField] Path[] paths;
-    const int OFFSET_X = 25, OFFSET_Y = 25, MAP_WIDTH = 8, MAP_LENGTH = 8;
+    const int MAP_WIDTH = 8, MAP_LENGTH = 8;
     private bool generated;
 
+    //Nav mesh baking
     List<NavMeshBuildSource> m_Sources = new List<NavMeshBuildSource>();
-    public Transform m_Tracked; //Center of build
-    public Vector3 m_Size = new Vector3(400.0f, 10.0f, 400.0f);// The size of the build bounds
+    private Transform m_Tracked; //Center of build
+    private Vector3 m_Size = new Vector3(400.0f, 10.0f, 400.0f);// The size of the build bounds
     NavMeshData m_NavMesh;
     NavMeshDataInstance m_Instance;
 
 #if UNITY_EDITOR
-    public bool testGeneration, destroyMap, side2, navMesh;
+    public bool testGeneration, destroyMap, navMesh;
     private void Update() {
         if (testGeneration) {
             ChangeSeed(seed);
@@ -41,12 +38,6 @@ public class MapBuilder : MonoBehaviour
         else if (destroyMap) {
             destroyMap = false;
             DestroyMap();
-        }
-        else if (side2) {
-            GameObject SideTwo = Instantiate(transform.GetChild(2).gameObject, transform);
-            SideTwo.transform.RotateAround(transform.position, Vector3.up, 180f);
-            SideTwo.name = "Side_2";
-            side2 = false;
         }
         else if (navMesh) {
 
@@ -82,16 +73,16 @@ public class MapBuilder : MonoBehaviour
         SideOne.transform.position = Vector3.zero;
         SideOne.name = "Side_1";
         #region MapTileInstantiating
-        int index = 0; 
+        int index = 0;
         //for MAP_W for MAP_LENGTH/2 make tiles, count index and check against array for different tiles
         for (int h = (MAP_LENGTH / 2) - 1; h > -1; h--) { // Tile pos x = 25 + (w * 50)   && z = 25 + (h * 50)
             for (int w = -MAP_WIDTH / 2; w < MAP_WIDTH / 2; w++) {
                 GameObject tile, prefab;
-                if(index < 2 || index > 5 && index < 9 || index > 14 && index < 17 || index == 23 || index == 31) { //WHITE TILES
+                if (index < 2 || index > 5 && index < 9 || index > 14 && index < 17 || index == 23 || index == 31) { //WHITE TILES
                     //TODO add random selection of tile variants
                     prefab = tiles[2].getVariant(0);
                 }
-                else if(index > 1 && index < 6 || index > 9 && index < 14 || index == 17 || index > 26 && index < 29 || index == 30) { //GREEN TILES
+                else if (index > 1 && index < 6 || index > 9 && index < 14 || index == 17 || index > 26 && index < 29 || index == 30) { //GREEN TILES
                     prefab = tiles[0].getVariant(0);
                 }
                 else if (index == 24 || index == 26) { //PURPLE TILES
@@ -100,7 +91,7 @@ public class MapBuilder : MonoBehaviour
                 else if (index > 19 && index < 22) { //BLUE TILES
                     prefab = tiles[3].getVariant(0);
                 }
-                else{ //YELLOW TILESw
+                else { //YELLOW TILESw
                     prefab = tiles[1].getVariant(0);
                 }
                 tile = Instantiate(prefab, new Vector3(25 + (w * 50), 0, 25 + (h * 50)), Quaternion.identity, SideOne.transform);
@@ -119,12 +110,12 @@ public class MapBuilder : MonoBehaviour
                 foreach (Transform point in mapTile) {
                     #region DeletingBadPositions
                     //Removing Objects at edge of map
-                    if(Mathf.Abs(point.position.x) >= 185f || Mathf.Abs(point.position.z) >= 185f || point.position.z < 0) {
+                    if (Mathf.Abs(point.position.x) >= 185f || Mathf.Abs(point.position.z) >= 185f || point.position.z < 0) {
                         Destroy(point.gameObject);
                         continue;
                     }
                     //Removing Objects within bases
-                    if (Helpers.Vector2DistanceXZ(point.position, new Vector3(0,0,200)) <= 90f) {
+                    if (Helpers.Vector2DistanceXZ(point.position, new Vector3(0, 0, 200)) <= 90f) {
                         Destroy(point.gameObject);
                         continue;
                     }
@@ -134,7 +125,7 @@ public class MapBuilder : MonoBehaviour
                         continue;
                     }
                     //Removing Objects inside Gate Walls
-                    if (Helpers.Vector2DistanceXZ(point.position, new Vector3(-200,0,25)) <= 40f || Helpers.Vector2DistanceXZ(point.position, new Vector3(200, 0, -25)) <= 40f) {
+                    if (Helpers.Vector2DistanceXZ(point.position, new Vector3(-200, 0, 25)) <= 40f || Helpers.Vector2DistanceXZ(point.position, new Vector3(200, 0, -25)) <= 40f) {
                         Destroy(point.gameObject);
                         continue;
                     }
@@ -144,13 +135,13 @@ public class MapBuilder : MonoBehaviour
                         continue;
                     }
                     //Remove Objects off Side Points
-                    if (Helpers.Vector2DistanceXZ(point.position, new Vector3(-125, 0, 75)) <= 12f || Helpers.Vector2DistanceXZ(point.position, new Vector3(125, 0, 25)) <= 12f)  {
+                    if (Helpers.Vector2DistanceXZ(point.position, new Vector3(-125, 0, 75)) <= 12f || Helpers.Vector2DistanceXZ(point.position, new Vector3(125, 0, 25)) <= 12f) {
                         Destroy(point.gameObject);
                         continue;
                     }
                     bool cont = false;
-                    foreach(Path path in paths) {
-                        if(Helpers.Vector2PerpendicularXZ(path.getPointA(), path.getPointB(), point.position, 8) <= 8) {
+                    foreach (Path path in paths) {
+                        if (Helpers.Vector2PerpendicularXZ(path.getPointA(), path.getPointB(), point.position, 8) <= 8) {
                             Destroy(point.gameObject);
                             cont = true;
                             break;
@@ -176,13 +167,13 @@ public class MapBuilder : MonoBehaviour
                 index = 0;
                 #region CapturableStructurePlacement
                 if (structurePositions.Count > 0) {
-                    
+
                     if (mapTile.name.Contains("Inner"))
                         index = 0;
                     else
                         index = 1;
-                    pickedBuilding = buildings[index].getVariant(RandomPick(0, buildings[index].VariantCount()-1));
-                    pickedPos = structurePositions[RandomPick(0, structurePositions.Count-1)];
+                    pickedBuilding = buildings[index].getVariant(RandomPick(0, buildings[index].VariantCount() - 1));
+                    pickedPos = structurePositions[RandomPick(0, structurePositions.Count - 1)];
                     Instantiate(pickedBuilding, pickedPos);
 
                     float angle = -90;
@@ -219,7 +210,7 @@ public class MapBuilder : MonoBehaviour
                 }
                 #endregion
                 #region LargePropPlacement
-                while(largePropPositions.Count > 0) {
+                while (largePropPositions.Count > 0) {
                     //Pick Large Prop type
                     float totalWeight = 0; //Weigh odds of picking a large prop variant
                     foreach (GameObjectVariants variants in largeProps) {
@@ -251,7 +242,7 @@ public class MapBuilder : MonoBehaviour
                     //Pick a place and spawn prop
                     pickedPos = largePropPositions[RandomPick(0, largePropPositions.Count - 1)];
                     GameObject obj = Instantiate(variant.getVariant(index), pickedPos);
-                    obj.transform.eulerAngles = new Vector3(0,RandomFloat(0f, 360f),0);
+                    obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
                     //Debug.Log("Instantiated large prop: " + variant.getVariant(index).name);
                     largePropPositions.Remove(pickedPos); //Remove from list
                     //Delete all propPositions in general area that have no children  ~~ 12m
@@ -314,51 +305,145 @@ public class MapBuilder : MonoBehaviour
                 #endregion
             }
         }
-        #region ChildExchange
-        //foreach (Transform mapSide in transform) {
-        //    foreach (Transform mapTile in mapSide) {
-        //        foreach (Transform pos in mapTile) {
-        //            foreach (Transform obj in pos) {
-        //                obj.parent = transform;
-        //            }
-        //            Destroy(pos.gameObject);
-        //        }
-        //    }
-        //}
+        StartCoroutine("SideTwoDelay");
+    }
+
+    IEnumerator SideTwoDelay() {
+        yield return new WaitForSeconds(0.01f);
+        SideTwo();
+    }
+
+    private void SideTwo() {
+        GameObject SideTwo = Instantiate(transform.GetChild(1).gameObject, transform);
+        SideTwo.transform.eulerAngles = new Vector3(0, 180f, 0);
+        SideTwo.name = "Side_2";
+        StartCoroutine("BakeDelay");
+    }
+
+    IEnumerator BakeDelay() {
+        yield return new WaitForSeconds(0.01f);
+        BakeMap();
+    }
+
+
+    private void BakeMap() {
+        m_Sources.Clear();
+        foreach (Transform wall in transform.GetChild(0)) {
+            Mesh sMesh = null;
+            if (wall.TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
+                if (mesh != null)
+                    sMesh = mesh.sharedMesh;
+                else
+                    continue;
+            }
+            MeshFilter meshF = wall.GetComponent<MeshFilter>();
+            if (meshF == null || sMesh == null) continue;
+            var s = new NavMeshBuildSource {
+                shape = NavMeshBuildSourceShape.Mesh,
+                sourceObject = sMesh,
+                transform = meshF.transform.localToWorldMatrix,
+                area = 0
+            };
+            m_Sources.Add(s);
+        }
+        #region  Tiles
+        foreach (Transform tile in transform.GetChild(1)) {
+            Mesh sMesh = null;
+            if (tile.TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
+                if (mesh != null)
+                    sMesh = mesh.sharedMesh;
+                else
+                    continue;
+            }
+            MeshFilter meshF = tile.GetComponent<MeshFilter>();
+            if (meshF == null || sMesh == null) continue;
+            var s = new NavMeshBuildSource {
+                shape = NavMeshBuildSourceShape.Mesh,
+                sourceObject = sMesh,
+                transform = meshF.transform.localToWorldMatrix,
+                area = 0
+            };
+            m_Sources.Add(s);
+        }
+        foreach (Transform tile in transform.GetChild(2)) {
+            Mesh sMesh = null;
+            if (tile.TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
+                if (mesh != null)
+                    sMesh = mesh.sharedMesh;
+                else
+                    continue;
+            }
+            MeshFilter meshF = tile.GetComponent<MeshFilter>();
+            if (meshF == null || sMesh == null) continue;
+            var s = new NavMeshBuildSource {
+                shape = NavMeshBuildSourceShape.Mesh,
+                sourceObject = sMesh,
+                transform = meshF.transform.localToWorldMatrix,
+                area = 0
+            };
+            m_Sources.Add(s);
+        }
         #endregion
-        #region NavMesh Making
-        //m_Sources.Clear();
-        //foreach (Transform tile in transform) {
-        //    Mesh sMesh = null;
-        //    if (tile.TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
-        //        if (mesh != null)
-        //            sMesh = mesh.sharedMesh;
-        //        else
-        //            continue;
-        //    }
-        //    MeshFilter meshF = tile.GetComponent<MeshFilter>();
-        //    if (meshF == null || sMesh == null) continue;
-        //    var s = new NavMeshBuildSource {
-        //        shape = NavMeshBuildSourceShape.Mesh,
-        //        sourceObject = sMesh,
-        //        transform = meshF.transform.localToWorldMatrix,
-        //        area = 0
-        //    };
-        //    m_Sources.Add(s);
-        //}
-        //UpdateNavMesh();
-        //generated = true;
+        #region Props and Structures
+        foreach (Transform tile in transform.GetChild(1)) {
+            foreach (Transform structurePos in tile) {
+                if (structurePos.GetChild(0).tag.Equals("navExempt"))
+                    continue;
+                Mesh sMesh = null;
+                if (structurePos.GetChild(0).TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
+                    if (mesh != null)
+                        sMesh = mesh.sharedMesh;
+                    else
+                        continue;
+                }
+                MeshFilter meshF = structurePos.GetChild(0).GetComponent<MeshFilter>();
+                if (meshF == null || sMesh == null) continue;
+                var s = new NavMeshBuildSource {
+                    shape = NavMeshBuildSourceShape.Mesh,
+                    sourceObject = sMesh,
+                    transform = meshF.transform.localToWorldMatrix,
+                    area = 0
+                };
+                m_Sources.Add(s);
+            }
+        }
+        foreach (Transform tile in transform.GetChild(2)) {
+            foreach (Transform structurePos in tile) {
+                if (structurePos.GetChild(0).tag.Equals("navExempt"))
+                    continue;
+                Mesh sMesh = null;
+                if (structurePos.GetChild(0).TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
+                    if (mesh != null)
+                        sMesh = mesh.sharedMesh;
+                    else
+                        continue;
+                }
+                MeshFilter meshF = structurePos.GetChild(0).GetComponent<MeshFilter>();
+                if (meshF == null || sMesh == null) continue;
+                var s = new NavMeshBuildSource {
+                    shape = NavMeshBuildSourceShape.Mesh,
+                    sourceObject = sMesh,
+                    transform = meshF.transform.localToWorldMatrix,
+                    area = 0
+                };
+                m_Sources.Add(s);
+            }
+        }
         #endregion
+        UpdateNavMesh();
+        Debug.Log("Making nav mesh");
+        generated = true;
     }
 
     public void DestroyMap() {
-    generated = false;
-    Destroy(transform.GetChild(2).gameObject);
-    Destroy(transform.GetChild(3).gameObject);
+        generated = false;
+        Destroy(transform.GetChild(2).gameObject);
+        Destroy(transform.GetChild(3).gameObject);
     }
 
     void UpdateNavMesh() {
         var defaultBuildSettings = NavMesh.GetSettingsByID(0);
+        defaultBuildSettings.agentRadius = 0.5f;
         var center = m_Tracked ? m_Tracked.position : transform.position;
         NavMeshBuilder.UpdateNavMeshData(m_NavMesh, defaultBuildSettings, m_Sources, new Bounds(Quantize(center, 0.1f * m_Size), m_Size));
     }
@@ -432,3 +517,23 @@ class Path {
         return pointA.position;
     }
 }
+
+
+//foreach (Transform tile in transform) {
+//    Mesh sMesh = null;
+//    if (tile.TryGetComponent<MeshFilter>(out MeshFilter mesh)) {
+//        if (mesh != null)
+//            sMesh = mesh.sharedMesh;
+//        else
+//            continue;
+//    }
+//    MeshFilter meshF = tile.GetComponent<MeshFilter>();
+//    if (meshF == null || sMesh == null) continue;
+//    var s = new NavMeshBuildSource {
+//        shape = NavMeshBuildSourceShape.Mesh,
+//        sourceObject = sMesh,
+//        transform = meshF.transform.localToWorldMatrix,
+//        area = 0
+//    };
+//    m_Sources.Add(s);
+//}

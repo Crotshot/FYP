@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8812493909766816555}
   m_Layer: 0
   m_Name: Flower_Yellow
-  m_TagString: Untagged
+  m_TagString: navExempt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

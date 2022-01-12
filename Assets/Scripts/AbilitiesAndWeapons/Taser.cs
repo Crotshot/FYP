@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 using StaticHelpers = Crotty.Helpers.StaticHelpers;
 
 public class Taser : Ability {
@@ -26,11 +27,11 @@ public class Taser : Ability {
                 Debug.Log("Taser hit Object: " + hit.collider.name + " at position" + hit.point);
                 halfDist = StaticHelpers.Vector3Distance(hit.point, spawnPoint.position) / 2.0f;
 
-                //DEAL DAMAGE & STUN
-
-
-
-                //
+                if (hit.collider.TryGetComponent(out Health health) && hit.collider.TryGetComponent(out Team team)) {
+                    if(team.GetTeam() != GetComponent<Team>().GetTeam()) {
+                        health.Damage(damage);
+                    }
+                }
             }
             else
                 Debug.Log("Taser miss");
@@ -38,8 +39,29 @@ public class Taser : Ability {
             var shape = pS.shape;
             shape.radius = halfDist;                //Set Radius to 1/2 dist of hit.point and spawnPoint
             shape.position = new Vector3(0, 0, halfDist);
-            //Play burst
             pS.Play();
+
+            if (isServer)
+                RPCTaserEffect(halfDist);
+            else
+                CmdTaserEffect(halfDist);
         }
+    }
+
+    [ClientRpc]
+    private void RPCTaserEffect(float dist) {
+        var shape = pS.shape;
+        shape.radius = dist;
+        shape.position = new Vector3(0, 0, dist);
+        pS.Play();
+    }
+
+
+    [Command]
+    private void CmdTaserEffect(float dist) {
+        var shape = pS.shape;
+        shape.radius = dist;
+        shape.position = new Vector3(0, 0, dist);
+        pS.Play();
     }
 }

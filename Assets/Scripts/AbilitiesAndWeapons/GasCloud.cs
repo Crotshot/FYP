@@ -3,30 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GasCloud : MonoBehaviour
+public class GasCloud : NetworkBehaviour
 {
-    [SerializeField] float duration, damagePerSecond, finalScale, expansionTime;
+    [SerializeField] float duration, damagePerSecond, finalScale, expansionTime, minTime;
     float expansionTimer;
 
-    List<Transform> trackedTransforms = new List<Transform>();
+    List<Health> trackedHealth = new List<Health>();
 
     private void Start() {
+        if (!isServer)
+            Destroy(this);
         expansionTimer = expansionTime;
     }
 
     private void FixedUpdate() {
-        foreach (Transform form in trackedTransforms) {
-            if (form == null) {
-                trackedTransforms.Remove(form);
+        foreach (Health hp in trackedHealth) {
+            if (hp == null) {
+                trackedHealth.Remove(hp);
                 continue;
             }
-
-            //Damage tracked targets
+            hp.Damage(damagePerSecond * Time.deltaTime); //Maybe move to only call every .1 seconds
+            Debug.Log("Uhh ohh Stinkee");
         }
 
         if(expansionTimer >= 0) {
             expansionTimer -= Time.deltaTime;
-            transform.localScale = Vector3.one * (finalScale * ((expansionTime - expansionTimer) / expansionTime));
+            transform.localScale = Vector3.one * (finalScale * ((expansionTime - expansionTimer + minTime) / (expansionTime + minTime)));
         }
         duration -= Time.deltaTime;
 
@@ -38,16 +40,31 @@ public class GasCloud : MonoBehaviour
 
     //Player, minion
     private void OnTriggerEnter(Collider other) {
-        if (other.tag.Equals("minion") || other.tag.Equals("Player") && !trackedTransforms.Contains(other.transform)) {
-            if (GetComponent<Team>().GetTeam() != other.GetComponent<Team>().GetTeam()) {
-                trackedTransforms.Add(other.transform);
+        Debug.Log("Stinky Cloud touched");
+        if (other.tag.Equals("minion") || other.tag.Equals("Player")) {
+            Debug.Log("Minion or player");
+            if (other.TryGetComponent(out Health health)) {
+                Debug.Log("Health acquired");
+                if (health.GetComponent<Team>().GetTeam() != GetComponent<Team>().GetTeam()) {
+                    Debug.Log("Time to stink");
+                    trackedHealth.Add(health);
+                }
+                
+            }
+            else {
+                Debug.Log("Did not grab health script");
             }
         }
     }
 
     private void OnTriggerExit(Collider other) {
-        if (other.tag.Equals("minion") || other.tag.Equals("Player") && trackedTransforms.Contains(other.transform)) {
-            trackedTransforms.Remove(other.transform);
+        if (other.tag.Equals("minion") || other.tag.Equals("Player")) {
+            if (TryGetComponent(out Health health)) {
+                if (trackedHealth.Contains(health)) {
+                    trackedHealth.Remove(health);
+                }
+
+            }
         }
     }
 }

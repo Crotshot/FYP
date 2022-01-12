@@ -326,7 +326,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 605830872944974801}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 1.61
   m_Speed: 12
@@ -551,7 +551,6 @@ MonoBehaviour:
   syncInterval: 0.1
   maxHealth: 100
   currentHealth: 0
-  die: 0
 --- !u!114 &6351804243656272699
 MonoBehaviour:
   m_ObjectHideFlags: 0
