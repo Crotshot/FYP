@@ -2,34 +2,19 @@ using System;
 
 namespace Mirror
 {
-    /// <summary>
-    /// Provides profiling information from mirror
-    /// A profiler can subscribe to these events and
-    /// present the data in a friendly way to the user
-    /// </summary>
+    /// <summary>Profiling statistics for tool to subscribe to (profiler etc.)</summary>
     public static class NetworkDiagnostics
     {
-        /// <summary>
-        /// Describes an outgoing message
-        /// </summary>
+        /// <summary>Describes an outgoing message</summary>
         public readonly struct MessageInfo
         {
-            /// <summary>
-            /// The message being sent
-            /// </summary>
+            /// <summary>The message being sent</summary>
             public readonly NetworkMessage message;
-            /// <summary>
-            /// channel through which the message was sent
-            /// </summary>
+            /// <summary>channel through which the message was sent</summary>
             public readonly int channel;
-            /// <summary>
-            /// how big was the message (does not include transport headers)
-            /// </summary>
+            /// <summary>how big was the message (does not include transport headers)</summary>
             public readonly int bytes;
-            /// <summary>
-            /// How many connections was the message sent to
-            /// If an object has a lot of observers this count could be high
-            /// </summary>
+            /// <summary>How many connections was the message sent to.</summary>
             public readonly int count;
 
             internal MessageInfo(NetworkMessage message, int channel, int bytes, int count)
@@ -41,12 +26,19 @@ namespace Mirror
             }
         }
 
-        #region Out messages
-        /// <summary>
-        /// Event that gets raised when Mirror sends a message
-        /// Subscribe to this if you want to diagnose the network
-        /// </summary>
+        /// <summary>Event for when Mirror sends a message. Can be subscribed to.</summary>
         public static event Action<MessageInfo> OutMessageEvent;
+
+        /// <summary>Event for when Mirror receives a message. Can be subscribed to.</summary>
+        public static event Action<MessageInfo> InMessageEvent;
+
+        // RuntimeInitializeOnLoadMethod -> fast playmode without domain reload
+        [UnityEngine.RuntimeInitializeOnLoadMethod]
+        static void ResetStatics()
+        {
+            InMessageEvent = null;
+            OutMessageEvent = null;
+        }
 
         internal static void OnSend<T>(T message, int channel, int bytes, int count)
             where T : struct, NetworkMessage
@@ -57,15 +49,6 @@ namespace Mirror
                 OutMessageEvent?.Invoke(outMessage);
             }
         }
-        #endregion
-
-        #region In messages
-
-        /// <summary>
-        /// Event that gets raised when Mirror receives a message
-        /// Subscribe to this if you want to profile the network
-        /// </summary>
-        public static event Action<MessageInfo> InMessageEvent;
 
         internal static void OnReceive<T>(T message, int channel, int bytes)
             where T : struct, NetworkMessage
@@ -76,7 +59,5 @@ namespace Mirror
                 InMessageEvent?.Invoke(inMessage);
             }
         }
-
-        #endregion
     }
 }

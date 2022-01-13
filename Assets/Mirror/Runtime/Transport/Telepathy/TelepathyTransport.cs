@@ -63,50 +63,10 @@ namespace Mirror
 
         void Awake()
         {
-            // create client & server
-            client = new Telepathy.Client(clientMaxMessageSize);
-            server = new Telepathy.Server(serverMaxMessageSize);
-
             // tell Telepathy to use Unity's Debug.Log
             Telepathy.Log.Info = Debug.Log;
             Telepathy.Log.Warning = Debug.LogWarning;
             Telepathy.Log.Error = Debug.LogError;
-
-            // client hooks
-            // other systems hook into transport events in OnCreate or
-            // OnStartRunning in no particular order. the only way to avoid
-            // race conditions where telepathy uses OnConnected before another
-            // system's hook (e.g. statistics OnData) was added is to wrap
-            // them all in a lambda and always call the latest hook.
-            // (= lazy call)
-            client.OnConnected = () => OnClientConnected.Invoke();
-            client.OnData = (segment) => OnClientDataReceived.Invoke(segment, Channels.DefaultReliable);
-            client.OnDisconnected = () => OnClientDisconnected.Invoke();
-
-            // client configuration
-            client.NoDelay = NoDelay;
-            client.SendTimeout = SendTimeout;
-            client.ReceiveTimeout = ReceiveTimeout;
-            client.SendQueueLimit = clientSendQueueLimit;
-            client.ReceiveQueueLimit = clientReceiveQueueLimit;
-
-            // server hooks
-            // other systems hook into transport events in OnCreate or
-            // OnStartRunning in no particular order. the only way to avoid
-            // race conditions where telepathy uses OnConnected before another
-            // system's hook (e.g. statistics OnData) was added is to wrap
-            // them all in a lambda and always call the latest hook.
-            // (= lazy call)
-            server.OnConnected = (connectionId) => OnServerConnected.Invoke(connectionId);
-            server.OnData = (connectionId, segment) => OnServerDataReceived.Invoke(connectionId, segment, Channels.DefaultReliable);
-            server.OnDisconnected = (connectionId) => OnServerDisconnected.Invoke(connectionId);
-
-            // server configuration
-            server.NoDelay = NoDelay;
-            server.SendTimeout = SendTimeout;
-            server.ReceiveTimeout = ReceiveTimeout;
-            server.SendQueueLimit = serverSendQueueLimitPerConnection;
-            server.ReceiveQueueLimit = serverReceiveQueueLimitPerConnection;
 
             // allocate enabled check only once
             enabledCheck = () => enabled;
@@ -121,18 +81,51 @@ namespace Mirror
         }
 
         // client
-        public override bool ClientConnected() => client.Connected;
-        public override void ClientConnect(string address) => client.Connect(address, port);
+        private void CreateClient() 
+        {
+            // create client
+            client = new Telepathy.Client(clientMaxMessageSize);
+            // client hooks
+            // other systems hook into transport events in OnCreate or
+            // OnStartRunning in no particular order. the only way to avoid
+            // race conditions where telepathy uses OnConnected before another
+            // system's hook (e.g. statistics OnData) was added is to wrap
+            // them all in a lambda and always call the latest hook.
+            // (= lazy call)
+            client.OnConnected = () => OnClientConnected.Invoke();
+            client.OnData = (segment) => OnClientDataReceived.Invoke(segment, Channels.Reliable);
+            client.OnDisconnected = () => OnClientDisconnected.Invoke();
+
+            // client configuration
+            client.NoDelay = NoDelay;
+            client.SendTimeout = SendTimeout;
+            client.ReceiveTimeout = ReceiveTimeout;
+            client.SendQueueLimit = clientSendQueueLimit;
+            client.ReceiveQueueLimit = clientReceiveQueueLimit;
+        }
+        public override bool ClientConnected() => client != null && client.Connected;
+        public override void ClientConnect(string address) 
+        {
+            CreateClient();
+            client.Connect(address, port);
+        }
+
         public override void ClientConnect(Uri uri)
         {
+            CreateClient();
             if (uri.Scheme != Scheme)
                 throw new ArgumentException($"Invalid url {uri}, use {Scheme}://host:port instead", nameof(uri));
 
             int serverPort = uri.IsDefaultPort ? port : uri.Port;
             client.Connect(uri.Host, serverPort);
         }
-        public override void ClientSend(int channelId, ArraySegment<byte> segment) => client.Send(segment);
-        public override void ClientDisconnect() => client.Disconnect();
+        public override void ClientSend(ArraySegment<byte> segment, int channelId) => client?.Send(segment);
+        public override void ClientDisconnect() 
+        {
+            client?.Disconnect();
+            client = null;
+        }
+
         // messages should always be processed in early update
         public override void ClientEarlyUpdate()
         {
@@ -144,7 +137,7 @@ namespace Mirror
             // process a maximum amount of client messages per tick
             // IMPORTANT: check .enabled to stop processing immediately after a
             //            scene change message arrives!
-            client.Tick(clientMaxReceivesPerTick, enabledCheck);
+            client?.Tick(clientMaxReceivesPerTick, enabledCheck);
         }
 
         // server
@@ -156,15 +149,40 @@ namespace Mirror
             builder.Port = port;
             return builder.Uri;
         }
-        public override bool ServerActive() => server.Active;
-        public override void ServerStart() => server.Start(port);
-        public override void ServerSend(int connectionId, int channelId, ArraySegment<byte> segment) => server.Send(connectionId, segment);
-        public override bool ServerDisconnect(int connectionId) => server.Disconnect(connectionId);
+        public override bool ServerActive() => server != null && server.Active;
+        public override void ServerStart() 
+        {
+            // create server
+            server = new Telepathy.Server(serverMaxMessageSize);
+            
+            // server hooks
+            // other systems hook into transport events in OnCreate or
+            // OnStartRunning in no particular order. the only way to avoid
+            // race conditions where telepathy uses OnConnected before another
+            // system's hook (e.g. statistics OnData) was added is to wrap
+            // them all in a lambda and always call the latest hook.
+            // (= lazy call)
+            server.OnConnected = (connectionId) => OnServerConnected.Invoke(connectionId);
+            server.OnData = (connectionId, segment) => OnServerDataReceived.Invoke(connectionId, segment, Channels.Reliable);
+            server.OnDisconnected = (connectionId) => OnServerDisconnected.Invoke(connectionId);
+
+            // server configuration
+            server.NoDelay = NoDelay;
+            server.SendTimeout = SendTimeout;
+            server.ReceiveTimeout = ReceiveTimeout;
+            server.SendQueueLimit = serverSendQueueLimitPerConnection;
+            server.ReceiveQueueLimit = serverReceiveQueueLimitPerConnection;
+            
+            server.Start(port);
+        }
+
+        public override void ServerSend(int connectionId, ArraySegment<byte> segment, int channelId) => server?.Send(connectionId, segment);
+        public override void ServerDisconnect(int connectionId) => server?.Disconnect(connectionId);
         public override string ServerGetClientAddress(int connectionId)
         {
             try
             {
-                return server.GetClientAddress(connectionId);
+                return server?.GetClientAddress(connectionId);
             }
             catch (SocketException)
             {
@@ -179,7 +197,12 @@ namespace Mirror
                 return "unknown";
             }
         }
-        public override void ServerStop() => server.Stop();
+        public override void ServerStop() 
+        {
+            server?.Stop();
+            server = null;
+        }
+
         // messages should always be processed in early update
         public override void ServerEarlyUpdate()
         {
@@ -191,15 +214,17 @@ namespace Mirror
             // process a maximum amount of server messages per tick
             // IMPORTANT: check .enabled to stop processing immediately after a
             //            scene change message arrives!
-            server.Tick(serverMaxReceivesPerTick, enabledCheck);
+            server?.Tick(serverMaxReceivesPerTick, enabledCheck);
         }
 
         // common
         public override void Shutdown()
         {
             Debug.Log("TelepathyTransport Shutdown()");
-            client.Disconnect();
-            server.Stop();
+            client?.Disconnect();
+            client = null;
+            server?.Stop();
+            server = null;
         }
 
         public override int GetMaxPacketSize(int channelId)
@@ -209,7 +234,7 @@ namespace Mirror
 
         public override string ToString()
         {
-            if (server.Active && server.listener != null)
+            if (server != null && server.Active && server.listener != null)
             {
                 // printing server.listener.LocalEndpoint causes an Exception
                 // in UWP + Unity 2019:
@@ -219,11 +244,11 @@ namespace Mirror
                 //   incompatible with the requested protocol was used at
                 //   System.Net.Sockets.Socket.get_LocalEndPoint ()
                 // so let's use the regular port instead.
-                return "Telepathy Server port: " + port;
+                return $"Telepathy Server port: {port}";
             }
-            else if (client.Connecting || client.Connected)
+            else if (client != null && (client.Connecting || client.Connected))
             {
-                return "Telepathy Client port: " + port;
+                return $"Telepathy Client port: {port}";
             }
             return "Telepathy (inactive/disconnected)";
         }

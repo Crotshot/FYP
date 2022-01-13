@@ -17,21 +17,19 @@ namespace Mirror
     public delegate void UnSpawnDelegate(GameObject spawned);
 
     // invoke type for Cmd/Rpc
-    public enum MirrorInvokeType
-    {
-        Command,
-        ClientRpc
-    }
+    public enum MirrorInvokeType { Command, ClientRpc }
 
-    public enum Version
-    {
-        Current = 1
-    }
-
+    // channels are const ints instead of an enum so people can add their own
+    // channels (can't extend an enum otherwise).
+    //
+    // note that Mirror is slowly moving towards quake style networking which
+    // will only require reliable for handshake, and unreliable for the rest.
+    // so eventually we can change this to an Enum and transports shouldn't
+    // add custom channels anymore.
     public static class Channels
     {
-        public const int DefaultReliable = 0;
-        public const int DefaultUnreliable = 1;
+        public const int Reliable = 0;   // ordered
+        public const int Unreliable = 1; // unordered
     }
 
     // -- helpers for float conversion without allocations --
@@ -84,18 +82,57 @@ namespace Mirror
         public static bool IsPrefab(GameObject obj)
         {
 #if UNITY_EDITOR
-    #if UNITY_2018_3_OR_NEWER
             return UnityEditor.PrefabUtility.IsPartOfPrefabAsset(obj);
-    #elif UNITY_2018_2_OR_NEWER
-            return UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(obj) == null &&
-                   UnityEditor.PrefabUtility.GetPrefabObject(obj) != null;
-    #else
-            return UnityEditor.PrefabUtility.GetPrefabParent(obj) == null &&
-                   UnityEditor.PrefabUtility.GetPrefabObject(obj) != null;
-    #endif
 #else
             return false;
 #endif
+        }
+
+        public static bool IsSceneObjectWithPrefabParent(GameObject gameObject, out GameObject prefab)
+        {
+            prefab = null;
+
+#if UNITY_EDITOR
+            if (!UnityEditor.PrefabUtility.IsPartOfPrefabInstance(gameObject))
+            {
+                return false;
+            }
+            prefab = UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
+#endif
+
+            if (prefab == null)
+            {
+                Debug.LogError($"Failed to find prefab parent for scene object [name:{gameObject.name}]");
+                return false;
+            }
+            return true;
+        }
+
+        // is a 2D point in screen? (from ummorpg)
+        // (if width = 1024, then indices from 0..1023 are valid (=1024 indices)
+        public static bool IsPointInScreen(Vector2 point) =>
+            0 <= point.x && point.x < Screen.width &&
+            0 <= point.y && point.y < Screen.height;
+
+        // universal .spawned function
+        public static NetworkIdentity GetSpawnedInServerOrClient(uint netId)
+        {
+            // server / host mode: use the one from server.
+            // host mode has access to all spawned.
+            if (NetworkServer.active)
+            {
+                NetworkServer.spawned.TryGetValue(netId, out NetworkIdentity entry);
+                return entry;
+            }
+
+            // client
+            if (NetworkClient.active)
+            {
+                NetworkClient.spawned.TryGetValue(netId, out NetworkIdentity entry);
+                return entry;
+            }
+
+            return null;
         }
     }
 }

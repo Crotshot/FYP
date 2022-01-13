@@ -178,9 +178,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: _app
       objectReference: {fileID: 0}
-    - target: {fileID: 7301926600564523956, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}
-      propertyPath: sceneId
-      value: 1813939904
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}
