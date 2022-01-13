@@ -22,9 +22,6 @@ public class Ability : NetworkBehaviour
             GetComponent<PlayerController>().ab3.AddListener(cast);
             Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
         }
-        else {
-            Destroy(this);
-        }
     }
 
     protected void CoolDown(float time) {

@@ -8,39 +8,39 @@ using System;
 public class Health : NetworkBehaviour
 {
     [SerializeField]protected float maxHealth;
-    [SerializeField]protected float currentHealth;
+    [SerializeField][SyncVar]protected float currentHealth;
     public event Action<float> Damaged;
-    bool dead;
+    protected bool dead;
 
-    public void Damage(float damage) {
-        if (isServer) {
-            RpcDamage(damage);
+    public virtual void Damage(float damage) {
+        if (!isServer) {
+            CmdDamage(damage);
+            return;
         }
-        else {
-            currentHealth -= damage;
-            if(currentHealth <= 0) {
-                dead = true;
-            }
+        Debug.Log("GameObject: " + gameObject.name + " took: " + damage + " damage");
+        currentHealth -= damage;
+        if(currentHealth <= 0) {
+            dead = true;
         }
     }
 
-    [ClientRpc]
-    void RpcDamage(float damage) {
+    [Command]
+    void CmdDamage(float damage) {
         Damage(damage);
     }
 
     public void ResetHealth() {
-        if (isServer) {
-            RpcResetHealth();
+        if (!isServer) {
+            CmdResetHealth();
+            return;
         }
-        else {
-            currentHealth = maxHealth;
-            dead = false;
-        }
+        currentHealth = maxHealth;
+        dead = false;
+        Debug.Log("GameObject: " + gameObject.name + " health reset to: " + currentHealth);
     }
 
-    [ClientRpc]
-    private void RpcResetHealth() {
+    [Command]
+    private void CmdResetHealth() {
         ResetHealth();
     }
 }

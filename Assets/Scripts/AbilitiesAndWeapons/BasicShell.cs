@@ -10,13 +10,13 @@ public class BasicShell :  NetworkBehaviour
     [SerializeField] Vector3[] directions;
 
     private void Start() {
-        if(isServer)
+        if (!isServer)
+            Destroy(this);
+        else
             Invoke(nameof(DestroySelf), deleteTime);
     }
 
     void Update() {
-        if (!isServer)
-            return;
         transform.Translate(Vector3.forward * Time.deltaTime * shellSpeed, Space.Self);
         foreach (Vector3 direction in directions) {
             Debug.DrawRay(transform.position + transform.TransformDirection(rayOrigin), transform.TransformDirection(direction) * rayLength, Color.blue/*, 0.1f*/);

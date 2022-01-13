@@ -9,6 +9,9 @@ public class Rush : Ability {
     float boostTimer, ogSpeed;
 
     private void Start() {
+        if (!hasAuthority)
+            Destroy(this); //This one does not need to exist outside of its owner
+
         SetUp(Cast);
         ogSpeed = GetComponent<NavMeshAgent>().speed;
     }

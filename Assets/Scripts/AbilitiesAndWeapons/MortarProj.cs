@@ -22,7 +22,8 @@ public class MortarProj : NetworkBehaviour
             return;
 
         if(trackTimer <= 0) {
-            rb.AddForce(transform.forward * 100f);
+            if (rb != null)
+                rb.AddForce(transform.forward * 100f);
         }
         else {
             trackTimer -= Time.deltaTime;
@@ -35,7 +36,6 @@ public class MortarProj : NetworkBehaviour
             }
         }
     }
-
 
     public void SetTargetPos(Vector3 pos) {
         targetPos = pos;
