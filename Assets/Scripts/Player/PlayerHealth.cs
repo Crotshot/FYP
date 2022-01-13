@@ -32,10 +32,11 @@ public class PlayerHealth : Health { //Class for managin player health
     public void RpcDeath() {
         if (TryGetComponent(out NavMeshAgent aI))
             aI.enabled = false;
-        if(TryGetComponent(out PlayerController pC))
+        if (TryGetComponent(out PlayerController pC))
             pC.enabled = false;
         transform.position = spawnPoint + Vector3.down * 20f;
-        CmdSetPos(transform.position);
+        if(hasAuthority)
+            CmdSetPos(transform.position);
         Invoke("RespawnPlayer", respawnTime);
     }
 
@@ -45,10 +46,13 @@ public class PlayerHealth : Health { //Class for managin player health
     }
 
     public void RespawnPlayer() {
-        GetComponent<NavMeshAgent>().enabled = true;
-        GetComponent<PlayerController>().enabled = true;
-        transform.position = spawnPoint;
-        CmdSetPos(transform.position);
+        if (TryGetComponent(out NavMeshAgent aI))
+            aI.enabled = true;
+        if (TryGetComponent(out PlayerController pC))
+            pC.enabled = true;
+        transform.position = spawnPoint + Vector3.down;
+        if (hasAuthority)
+            CmdSetPos(transform.position);
         ResetHealth();
     }
 }

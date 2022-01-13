@@ -7,9 +7,9 @@ using Mirror;
 
 public class LobbyUI : MonoBehaviour
 {
-    [SerializeField] GameObject mainPanel, lobbyPanel, joinPanel;
-    [SerializeField] TMP_Text title, joinText, lobbyText;
-    [SerializeField] TMP_InputField inputIP, inputName;
+    [SerializeField] GameObject mainPanel, lobbyPanel, joinPanel, hostPanel;
+    [SerializeField] TMP_Text title, joinText, lobbyText, hostText;
+    [SerializeField] TMP_InputField inputIP, inputName, hostIP;
     [SerializeField] Button startButton, hostButton, joinButton;
 
     private _SceneManager sM;
@@ -88,11 +88,22 @@ public class LobbyUI : MonoBehaviour
     #region UI Buttons
     public void B_Host()
     {
+        hostPanel.SetActive(true);
         mainPanel.SetActive(false);
+        hostText.text = "Enter IP to host a lobby";
+    }
+
+    public void B_HostLobby() {
+        hostPanel.SetActive(false);
         lobbyPanel.SetActive(true);
 
         lobbyText.text = "Waiting for opponent . . .";
-        NetworkManager.singleton.networkAddress = "localhost";
+
+        string address = hostIP.text;
+        if (address == "")
+            address = "localhost";
+
+        NetworkManager.singleton.networkAddress = address;
         NetworkManager.singleton.StartHost();
     }
 
@@ -116,12 +127,14 @@ public class LobbyUI : MonoBehaviour
     {
         mainPanel.SetActive(true);
         joinPanel.SetActive(false);
+        hostPanel.SetActive(false);
     }
 
     public void B_LeaveLobby()
     {
         mainPanel.SetActive(true);
         lobbyPanel.SetActive(false);
+        hostPanel.SetActive(false);
 
         if (NetworkServer.active && NetworkClient.isConnected)
             NetworkManager.singleton.StopHost();

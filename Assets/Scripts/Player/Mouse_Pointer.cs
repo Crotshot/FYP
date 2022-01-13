@@ -11,12 +11,14 @@ public class Mouse_Pointer : NetworkBehaviour {
     Vector3 worldFocal = Vector3.zero;
 
     private void Start() {
-        if (!hasAuthority && !GetComponent<PlayerController>().getOfflineTest())
-            Destroy(this);
+        if (!hasAuthority)
+            return;
         inputs = FindObjectOfType<Inputs>();
     }
 
     private void Update() {
+        if (!hasAuthority)
+            return;
         Ray cameraRay = playerCam.ScreenPointToRay(inputs.GetMousePosition());
         int layer = 1 << LayerMask.NameToLayer("Default");
         if (Physics.Raycast(cameraRay, out RaycastHit hit, 999f, layer, QueryTriggerInteraction.Ignore)) {
@@ -34,10 +36,6 @@ public class Mouse_Pointer : NetworkBehaviour {
             opp = Helpers.FloatDistance(swivel.x, focalLocal.x);
             adj = Helpers.FloatDistance(swivel.z, focalLocal.z);
             rot = Mathf.Rad2Deg * Mathf.Atan(opp / adj);// Angle between 0 and 90
-            if (i == 2) {
-                Debug.DrawRay(pointers[i].swivel.position, pointers[i].swivel.forward, Color.green, 0.1f);
-                Debug.DrawRay(pointers[i].pointingObject.position, pointers[i].pointingObject.forward * 20f, Color.red, 0.1f);
-            }
             if (focalLocal.z < swivel.z) {
                 // Angle between 90 and 180
                     rot = 180 - rot;
@@ -67,7 +65,16 @@ public class Mouse_Pointer : NetworkBehaviour {
             rot = Mathf.Clamp(rot, pointers[i].objectLimitMin, pointers[i].objectLimitMax);
             targetRot = Quaternion.Euler(rot, pointers[i].pointingObject.localRotation.eulerAngles.y, pointers[i].pointingObject.localRotation.eulerAngles.z);
             pointers[i].pointingObject.localRotation = Quaternion.Slerp(pointers[i].pointingObject.localRotation, targetRot, 0.1f);
+
+            if (!isServer)
+                CmdUpdateRotations(i, pointers[i].swivel.localEulerAngles, pointers[i].pointingObject.localEulerAngles);
         }
+    }
+
+    [Command]
+    private void CmdUpdateRotations(int index, Vector3 swivel, Vector3 pointer) {
+        pointers[index].swivel.localRotation = Quaternion.Euler(swivel);
+        pointers[index].pointingObject.localRotation = Quaternion.Euler(pointer);
     }
 
     public Vector3 GetWorldFocal(){

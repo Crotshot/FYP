@@ -29,7 +29,7 @@ public class SmokeBomb : Ability {
                     newProj.GetComponent<MortarProj>().SetTargetPos(Helpers.Vector3PointAlongLine(transform.position, GetComponent<Mouse_Pointer>().GetWorldFocal(), maxDistance));
                 }
                 else {
-                    CmdSpawnProj(spawnPoint1.position, spawnPoint1.eulerAngles, GetComponent<Mouse_Pointer>().GetWorldFocal());
+                    CmdSpawnProj(spawnPoint2.position, spawnPoint2.eulerAngles, GetComponent<Mouse_Pointer>().GetWorldFocal());
                 }
             }
         }
