@@ -10,13 +10,28 @@ public class PlayerHealth : Health { //Class for managin player health
     private float respawnTimer = 0;
 
     public void Start() {
-        if (hasAuthority) {
-            GameObject[] points = GameObject.FindGameObjectsWithTag("Respawn");
-            foreach (GameObject obj in points) {
-                if (obj.GetComponent<Team>().GetTeam() == GetComponent<Team>().GetTeam()) {
-                    spawnPoint = obj.transform.position;
-                    break;
-                }
+        if (isServer)
+            SetSpawnPoint();
+        else
+            CmdSetSpawnPoint();
+    }
+
+    [Command]
+    public void CmdSetSpawnPoint() {
+        SetSpawnPoint();
+    }
+
+    [ClientRpc]
+    public void SetClientSpawnPoint(Vector3 point) {
+        spawnPoint = point;
+    }
+
+    public void SetSpawnPoint() {
+        GameObject[] points = GameObject.FindGameObjectsWithTag("Respawn");
+        foreach (GameObject obj in points) {
+            if (obj.GetComponent<Team>().GetTeam() == GetComponent<Team>().GetTeam()) {
+                SetClientSpawnPoint(obj.transform.position);
+                spawnPoint = obj.transform.position;
             }
         }
     }

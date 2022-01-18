@@ -79,4 +79,10 @@ public class Ability : NetworkBehaviour
             return 0;
         return coolDownTimer / coolDown;
     }
+
+    public float GetCoolDownTimer() {
+        if (coolDownTimer <= 0)
+            return 0;
+        return coolDownTimer;
+    }
 }

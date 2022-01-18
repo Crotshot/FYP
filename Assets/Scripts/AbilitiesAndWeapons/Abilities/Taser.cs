@@ -31,6 +31,7 @@ public class Taser : Ability {
 
                 if (hit.collider.TryGetComponent(out Health health) && hit.collider.TryGetComponent(out Team team)) {
                     if(team.GetTeam() != GetComponent<Team>().GetTeam()) {
+                        Debug.Log("Damaging enemy");
                         health.Damage(damage);
                     }
                 }
@@ -42,7 +43,6 @@ public class Taser : Ability {
     public void TriggerEffect(float dist) {
         if (isServer) {
             RpcEffect(dist);
-            Effect(dist);
         }
         else {
             CmdEffect(dist);

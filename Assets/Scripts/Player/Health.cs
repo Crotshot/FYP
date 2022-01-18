@@ -34,7 +34,7 @@ public class Health : NetworkBehaviour
         HealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
-    [Command]
+    [Command (requiresAuthority = false)]
     void CmdDamage(float damage) {
         Damage(damage);
     }
