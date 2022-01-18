@@ -7,9 +7,12 @@ using TMPro;
 public class UI : MonoBehaviour
 {
     [SerializeField] Image healthBar, a1_Icon, a2_Icon, a3_Icon, a1_Fill, a2_Fill, a3_Fill, player_Icon, player_Fill;
-    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp;
+    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp, shiniesCount;
+    [SerializeField] GameObject tabPanel;
+
     private PlayerHealth playerHp;
     private Ability ab1, ab2, ab3;
+    private Inputs inputs;
     float uiTimer = 0;
     private bool set = false;
 
@@ -31,6 +34,7 @@ public class UI : MonoBehaviour
         }
         //Health bar & Respawn
         playerHp = hp;
+        inputs = FindObjectOfType<Inputs>();
         set = true;
     }
 
@@ -82,6 +86,13 @@ public class UI : MonoBehaviour
             a1_Fill.fillAmount = ab1.GetCoolDownRatio();
             a2_Fill.fillAmount = ab2.GetCoolDownRatio();
             a3_Fill.fillAmount = ab3.GetCoolDownRatio();
+
+            if(inputs.GetCtrlTab() < 0) {
+                tabPanel.SetActive(true);
+            }
+            else {
+                tabPanel.SetActive(false);
+            }
         }
         else {
             uiTimer += Time.deltaTime;

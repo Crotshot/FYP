@@ -15,7 +15,7 @@ public class Inputs : MonoBehaviour
     public Vector2 GetMouseMovement() { return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); }
 
     public float GetShiftAlt() { return Input.GetAxisRaw("ShiftAlt"); }
-
+    public float GetCtrlTab() { return Input.GetAxisRaw("CtrlTab"); }
 
     public float GetAttackInput() { return Input.GetAxisRaw("Attack"); }
     public float GetAbility1Input() { return Input.GetAxisRaw("Ability1"); }
