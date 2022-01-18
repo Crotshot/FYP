@@ -46,8 +46,9 @@ public class MortarProj : NetworkBehaviour
 
 
     private void OnCollisionEnter(Collision collision) {
-        GameObject newCloud = Instantiate(spawnOnCollision, transform);
+        GameObject newCloud = Instantiate(spawnOnCollision, transform.position, Quaternion.identity);
         NetworkServer.Spawn(newCloud);//Spawn mortar with mouse pos as target
+        newCloud.transform.position = transform.position;
         newCloud.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
         newCloud.transform.parent = null;
         NetworkServer.Destroy(gameObject);

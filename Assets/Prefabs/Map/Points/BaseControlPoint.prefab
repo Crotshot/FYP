@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 48883643853072201}
   - component: {fileID: 3390407184810277678}
   - component: {fileID: 4966987779268217321}
+  - component: {fileID: 5210046811566618405}
   m_Layer: 0
   m_Name: BaseControlPoint
   m_TagString: Untagged
@@ -134,14 +135,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e96b6d422a9c2a04891405b31554f544, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   chargesToCapture: 3
   captureFillImage: {fileID: 8898325773920815708}
   basePoint: 1
   charges: 0
   currentTeam: 0
+  fillColor: {r: 0, g: 0, b: 0, a: 0}
   captured:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5210046811566618405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2754763163506118667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 8a1588cec2617264091b14066ab5db0a
+  hasSpawned: 0
 --- !u!1 &3398113828572020549
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +303,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -10
   m_TargetDisplay: 0
 --- !u!114 &8003335056298135701
 MonoBehaviour:

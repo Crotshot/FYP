@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "com.rlabrecque.steamworks.net": {
-      "version": "https://github.com/rlabrecque/Steamworks.NET.git?path=/com.rlabrecque.steamworks.net",
+      "version": "https://github.com/rlabrecque/Steamworks.NET.git?path=/com.rlabrecque.steamworks.net#20.0.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "27b1a1561c9b9ace7de1f8da17454d29547a63f7"
+      "hash": "4dafa26fbd032c83c1970298cc93d66f47edfb59"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

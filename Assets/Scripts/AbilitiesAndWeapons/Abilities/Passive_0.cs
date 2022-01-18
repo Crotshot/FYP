@@ -9,9 +9,6 @@ public class Passive_0 : NetworkBehaviour
     GameObject projectilePrefab;
 
     private void Start() {
-        //if (!hasAuthority && !GetComponent<PlayerController>().getOfflineTest())
-        //    Destroy(this);
-        
         if(TryGetComponent(out RangedAttack atk)) {
             if(atk != null) {
                 atk.weaponFired.AddListener(Shoot);
@@ -22,18 +19,22 @@ public class Passive_0 : NetworkBehaviour
 
     private void Shoot() {
         if (isServer) {
-            GameObject newProj = Instantiate(projectilePrefab, spawnPoint);
+
+            GameObject newProj = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
             NetworkServer.Spawn(newProj);
+            newProj.transform.position = spawnPoint.position;
+            newProj.transform.rotation = spawnPoint.rotation;
             newProj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
+            newProj.GetComponent<BasicShell>().TeamAssigned();
             newProj.transform.parent = null;
         }
         else {
-            cmdDoubleTap();
+            CmdDoubleTap();
         }
     }
 
     [Command]
-    private void cmdDoubleTap() {
+    private void CmdDoubleTap() {
         Shoot();
     }
 }

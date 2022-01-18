@@ -6,21 +6,30 @@ using Mirror;
 
 public class PlayerConstructor : NetworkBehaviour
 {
-    public string conquerorName;
-    public string[] minionNames; //Needs to be moved
+    public CharacterStats conqueror;
+    public CharacterStats[] minions;
+
+    private void Start() {
+        conqueror = new CharacterStats();
+        minions = new CharacterStats[4];
+
+        for(int i = 0; i < 4; i++) {
+            minions[i] = new CharacterStats();
+        }
+    }
 
     public override void OnStartLocalPlayer() {
         base.OnStartLocalPlayer();
         gameObject.name = "Local";
     }
 
-    public void SetConqueror(string name) {        //Grab player prefab from GameManager
-        conquerorName = name;
-        CmdReadyUp(name);
+    public void SetConqueror(CharacterStats stats) {        //Grab player prefab from GameManager
+        conqueror = stats;
+        CmdReadyUp(stats.name);
     }
 
-    public void SetMinionNames(string[] names) {
-        minionNames = names;
+    public void SetMinionNames(CharacterStats[] stats) {
+        minions = stats;
     }
 
     [Command (requiresAuthority = false)]
@@ -44,7 +53,7 @@ public class PlayerConstructor : NetworkBehaviour
             rotation.eulerAngles = new Vector3(0, 180, 0);
         }
 
-        GameObject playerSpawned = Instantiate(FindObjectOfType<GameManager>().GetConqueror(conquerorName), pos, rotation);
+        GameObject playerSpawned = Instantiate(FindObjectOfType<GameManager>().GetConqueror(conqueror.name), pos, rotation);
         NetworkServer.Spawn(playerSpawned, sender);
 
         if (teamNum == 1) {
@@ -67,7 +76,7 @@ public class PlayerConstructor : NetworkBehaviour
 
     [Command (requiresAuthority = false)]
     public void CmdReadyUp(string name) {
-        conquerorName = name;
+        conqueror.name = name;
         ((GameNetworkManager)NetworkManager.singleton).StartMatch();
     }
 }

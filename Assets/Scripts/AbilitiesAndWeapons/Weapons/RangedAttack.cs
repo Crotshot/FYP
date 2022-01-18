@@ -14,7 +14,7 @@ public class RangedAttack : NetworkBehaviour {
     public UnityEvent weaponFired;
 
     void Start() {
-        if (!hasAuthority)//  && !GetComponent<PlayerController>().getOfflineTest())
+        if (!hasAuthority)
             return;
 
         inputs = FindObjectOfType<Inputs>();
@@ -25,11 +25,6 @@ public class RangedAttack : NetworkBehaviour {
     void Update() {
         if(inputs != null) {
             if (inputs.GetAttackInput() != 0 && fireRatetimer <= 0 && hasAuthority) {
-                //if (GetComponent<PlayerController>().getOfflineTest()) {
-                //    GameObject newProj = Instantiate(projectilePrefab, spawnPoint);
-                //    newProj.transform.parent = null;
-                //}
-                //else
                 Shoot();
                 fireRatetimer = 60f / roundsPerMinute;
                 weaponFired?.Invoke();
@@ -47,9 +42,12 @@ public class RangedAttack : NetworkBehaviour {
 
     private void Shoot() {
         if (isServer) {
-            GameObject newProj = Instantiate(projectilePrefab, spawnPoint);
+            GameObject newProj = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
             NetworkServer.Spawn(newProj);
+            newProj.transform.position = spawnPoint.position;
+            newProj.transform.rotation = spawnPoint.rotation;
             newProj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
+            newProj.GetComponent<BasicShell>().TeamAssigned();
             newProj.transform.parent = null;
         }
         else {

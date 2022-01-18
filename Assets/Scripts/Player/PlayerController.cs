@@ -10,12 +10,11 @@ public class PlayerController : NetworkBehaviour
     Inputs inputs;
     NavMeshAgent agent;
     Transform navTarget;
-    [SerializeField] bool offlineTest;
 
     public UnityEvent ab1, ab2, ab3;
 
     private void Start() {
-        if (hasAuthority || offlineTest) {
+        if (hasAuthority) {
             navTarget = transform.GetChild(0).GetChild(1);
             GetComponent<NavMeshAgent>().enabled = true;
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
@@ -28,16 +27,20 @@ public class PlayerController : NetworkBehaviour
                 ab2 = new UnityEvent();
             if (ab3 == null)
                 ab3 = new UnityEvent();
+
+            Destroy(GetComponent<WorldSpaceHealthBar>());
+            FindObjectOfType<UI>().Setup(GetComponent<PlayerHealth>());
         }
         else{
             Destroy(transform.GetChild(0).gameObject);
+            GetComponent<WorldSpaceHealthBar>().SetupDelayed();
             Destroy(this);
         }
     }
 
     private void Update() {
         navTarget.localPosition = inputs.GetMovementInput();
-        if(agent.enabled)
+        if(agent.enabled && agent.isOnNavMesh)
             agent.destination = navTarget.position;
 
         if(inputs.GetAbility1Input() > 0) {
@@ -50,34 +53,4 @@ public class PlayerController : NetworkBehaviour
             ab3?.Invoke();
         }
     }
-
-    public bool getOfflineTest() {
-        return offlineTest;
-    }
 }
-
-////2D sprite mapped by the 3D object
-//Inputs inputs;
-//NavMeshAgent agent;
-//Transform navTarget;
-//[SerializeField] float agentSpeed, agentAngularSpeed;
-//[SerializeField] int team = 0;
-
-//private void Start()
-//{
-//    if (!isLocalPlayer) {
-//        Destroy(transform.GetChild(0).gameObject);
-//        Destroy(this);
-//        return;
-//    }
-//    agent = GetComponent<NavMeshAgent>();
-//    agent.speed = agentSpeed;
-//    agent.angularSpeed = agentAngularSpeed;
-//    
-//    navTarget = transform.GetChild(0).GetChild(1);
-//    inputs = FindObjectOfType<Inputs>();
-//}
-
-//public int GetTeam() {
-//    return team;
-//}

@@ -77,7 +77,7 @@ public class SelectionController : MonoBehaviour
         attackDamage.text = stats.attackDamage.ToString();
         attackSpeed.text = stats.attackSpeed.ToString();
         characterName.text = stats.name;
-        lockInScript.conqName = stats.name;
+        lockInScript.conqStats = stats;
 
         characterArt.sprite = stats.characterArt;
 
@@ -119,6 +119,7 @@ public class SelectionController : MonoBehaviour
         pressedButton.GetComponent<CardData>().disabledImage.enabled = true;
 
         selectedMinions[validMinionIndex].AssignMinion(pressedButton.GetComponent<CardData>().stats);
+        lockInScript.minionStats[validMinionIndex] = pressedButton.GetComponent<CardData>().stats;
     }
 
     public void MinionRemoved(CharacterStats removedStats)

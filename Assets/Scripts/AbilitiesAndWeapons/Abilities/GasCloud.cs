@@ -51,7 +51,7 @@ public class GasCloud : NetworkBehaviour
 
     private void OnTriggerExit(Collider other) {
         if (other.tag.Equals("minion") || other.tag.Equals("Player")) {
-            if (TryGetComponent(out Health health)) {
+            if (other.TryGetComponent(out Health health)) {
                 if (trackedHealth.Contains(health)) {
                     trackedHealth.Remove(health);
                 }

@@ -6,8 +6,10 @@ using StaticHelpers = Crotty.Helpers.StaticHelpers;
 
 public class Taser : Ability {
     [SerializeField] Transform spawnPoint;
-    ParticleSystem pS;
     [SerializeField] float range, damage, stunTime;
+    ParticleSystem pS;
+
+        
     private void Start() {
         SetUp(Cast);
         pS = spawnPoint.GetComponent<ParticleSystem>();
@@ -33,35 +35,34 @@ public class Taser : Ability {
                     }
                 }
             }
-            else
-                Debug.Log("Taser miss");
-            
-            var shape = pS.shape;
-            shape.radius = halfDist;                //Set Radius to 1/2 dist of hit.point and spawnPoint
-            shape.position = new Vector3(0, 0, halfDist);
-            pS.Play();
-
-            if (isServer)
-                RPCTaserEffect(halfDist);
-            else
-                CmdTaserEffect(halfDist);
+            TriggerEffect(halfDist);
         }
     }
 
-    [ClientRpc]
-    private void RPCTaserEffect(float dist) {
+    public void TriggerEffect(float dist) {
+        if (isServer) {
+            RpcEffect(dist);
+            Effect(dist);
+        }
+        else {
+            CmdEffect(dist);
+        }
+    }
+
+    private void Effect(float dist) {
         var shape = pS.shape;
         shape.radius = dist;
         shape.position = new Vector3(0, 0, dist);
         pS.Play();
     }
 
-
     [Command]
-    private void CmdTaserEffect(float dist) {
-        var shape = pS.shape;
-        shape.radius = dist;
-        shape.position = new Vector3(0, 0, dist);
-        pS.Play();
+    private void CmdEffect(float dist) {
+        TriggerEffect(dist);
+    }
+
+    [ClientRpc]
+    private void RpcEffect(float dist) {
+        Effect(dist);
     }
 }
