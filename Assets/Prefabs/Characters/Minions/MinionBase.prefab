@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7212588340153608805}
   m_Layer: 0
   m_Name: MinionBase
-  m_TagString: Untagged
+  m_TagString: minion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44,11 +44,11 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3393298794735004064}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 1
   m_Speed: 14
-  m_Acceleration: 8
+  m_Acceleration: 120
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -79,14 +79,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3393298794735004064}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f02c302297b72d41be7d11e244a4bc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strayDistance: 0
-  agentSpeed: 0
-  agentAngularSpeed: 0
+  syncMode: 0
+  syncInterval: 0.1
+  minionType: 
+  baseMinion: 0
+  minionSpeed: 0
+  minionAngularSpeed: 0
+  attackDistance: 0
 --- !u!114 &9198961231487344513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,7 +141,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: 74d359a1ed62fa94d91a6400aa72a987
   hasSpawned: 0
 --- !u!114 &7212588340153608805
 MonoBehaviour:

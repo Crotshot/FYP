@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Helpers = Crotty.Helpers.StaticHelpers;
 
-public class Strech : MonoBehaviour
+public class Stretch : MonoBehaviour
 {
     [SerializeField] Transform pointA, pointB;
     [SerializeField] float objectLength;

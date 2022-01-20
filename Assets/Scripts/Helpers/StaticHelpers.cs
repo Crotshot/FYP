@@ -91,5 +91,20 @@ namespace Crotty.Helpers {
 
             return a + difference * (maxDistance/dist);
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Vector3 Vector3Follow(Vector3 a, Vector3 b, float percent) {
+            float dist = Vector3Distance(a, b);
+            //Difference between x y z and multiply by maxdist/dist added to point a
+            Vector3 difference = new Vector3(b.x - a.x, b.y - a.y, b.z - a.z);
+
+            return a + difference * percent;
+        }
     }
 }

@@ -180,6 +180,43 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1160997060946955587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7056897241359415480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d3e597c9d3a2374f81f8ecbafcc57a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  attackTime: 0.1
+  attackCooldownTime: 1.2
+  animatedTimings:
+  - pos: {x: 0, y: 1.159, z: 0.181}
+    localEuler: {x: 7.72, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    time: 0
+  - pos: {x: 0, y: 0.767, z: 3.072}
+    localEuler: {x: 7.72, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    time: 0.1
+  - pos: {x: 0, y: 1.159, z: 0.181}
+    localEuler: {x: 7.72, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    time: 1.3
+  animatedWeapon: {fileID: 6893215968334767658}
+  damage: 20
+  rayLength: 1.1
+  directions:
+  - {x: 0, y: 0.4, z: 0.8}
+  - {x: 0, y: -0.4, z: 0.8}
+  - {x: 0.6, y: 0, z: 0.8}
+  - {x: -0.6, y: 0, z: 0.8}
 --- !u!1 &8790234341975820867
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +243,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8790234341975820867}
   m_LocalRotation: {x: 0.06731874, y: 0, z: 0, w: 0.99773157}
-  m_LocalPosition: {x: -0, y: 0.909, z: 2.022}
+  m_LocalPosition: {x: -0, y: 1.154, z: 0.215}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6764249261807875068}
@@ -351,8 +388,45 @@ PrefabInstance:
       propertyPath: m_Name
       value: Base_Melee_Minion
       objectReference: {fileID: 0}
+    - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: baseMinion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: minionType
+      value: Base_Melee
+      objectReference: {fileID: 0}
+    - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: minionSpeed
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: attackDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: minionAngularSpeed
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 9198961231487344513, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9198961231487344513, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: currentHealth
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+--- !u!1 &7056897241359415480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3393298794735004064, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+  m_PrefabInstance: {fileID: 5690379358210461976}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6764249261807875068 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1380134748945916644, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}

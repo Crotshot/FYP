@@ -13,7 +13,6 @@ public class MapBuilder : MonoBehaviour {
     //Random generator
     float currentSeed, multiplier = 257321, increment = 802997, modulus = 689101, state = 123456, constant = 84327;
     [SerializeField] int seed = 874326894;
-
     //Prefabs
     [SerializeField] GameObjectVariants[] tiles, buildings, largeProps, smallProps;//, centralPoints, basePoints, sidePoints; ->Maybe later add different aesthetic points
     [SerializeField] Path[] paths;
