@@ -10,6 +10,8 @@ public class Minion_Melee : Minion_Attack{
     [SerializeField] Vector3[] directions;
 
     private void Start() {
+        if (!isServer)
+            Destroy(this);
         animatedWeapon.localPosition = animatedTimings[0].pos;
         animatedWeapon.localScale = animatedTimings[0].scale;
         animatedWeapon.localEulerAngles = animatedTimings[0].localEuler;

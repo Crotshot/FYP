@@ -10,13 +10,14 @@ public class MinionController : NetworkBehaviour
     [SerializeField] string minionType;
     [SerializeField] bool baseMinion;
     [SerializeField] float minionSpeed, minionAngularSpeed, attackDistance;
-    [SerializeField] Transform target;
+    [SerializeField] Transform attackTarget, assignedPoint;
+    [SerializeField] List<Vector3> pathPoints = new List<Vector3>();
     Vector3 destination;
     NavMeshAgent agentC;
     Minion_Attack attackC;
 
     public enum MinionState { Idle, OnPath, Follower, Forward, Defender, Fighting, Recalling, Retreating }
-    MinionState minionState= MinionState.Idle;
+    public MinionState minionState= MinionState.Idle;
     /*
      Idle -> Default State, does nothing
      OnPath -> Minion is following a path, will fight enemies in way but will not hunt enemies off path
@@ -29,8 +30,7 @@ public class MinionController : NetworkBehaviour
      */
     //Minion Groups
 
-    public void Setup()
-    {
+    public void Setup() {
         if (isServer) {
             agentC = GetComponent<NavMeshAgent>();
             attackC = GetComponent<Minion_Attack>();
@@ -43,10 +43,9 @@ public class MinionController : NetworkBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        if(target != null) {
-            destination = target.position;
+    private void FixedUpdate() {
+        if(attackTarget != null) {
+            destination = attackTarget.position;
             agentC.destination = destination;
             if(Helpers.Vector3Distance(transform.position, destination) <= attackDistance) {
                 //ADD checks to see if has line of sight
@@ -56,19 +55,67 @@ public class MinionController : NetworkBehaviour
                 attackC.Attack();
             }
         }
+        else {//Check distance to current destination //If less than 5m move onto next target
+            if (pathPoints.Count > 0 && Helpers.Vector3Distance(transform.position, pathPoints[0]) <= 6f) {
+                if(pathPoints.Count < 2) {//If that was the last target turn into to defence State
+                    agentC.destination = pathPoints[0] + new Vector3( Random.Range(8f, -8f), 0, Random.Range(8f, -8f));
+                    pathPoints.Remove(pathPoints[0]);
+                    minionState = MinionState.Defender;
+                }
+                else { //Else proceed to next path
+                    pathPoints.Remove(pathPoints[0]); 
+                    agentC.destination = pathPoints[0];
+                }
+            }
+        }
     }
 
+    public void AddPathPoints(Transform[] pathPointsToAdd) {
+        foreach (Transform point in pathPointsToAdd) {
+            pathPoints.Add(point.position);
+        }
+        agentC.destination = pathPoints[0];
+    }
+
+    public void AssignControlPoint(Transform point) {
+        if(assignedPoint != null) {
+            assignedPoint.GetComponent<ControlPoint>().RemoveMinion(GetComponent<Team>().GetTeam());
+        }
+        assignedPoint = point;
+        assignedPoint.GetComponent<ControlPoint>().AddMinion(GetComponent<Team>().GetTeam());
+    }
+
+    public Transform GetAssignedControlPoint() {
+        return assignedPoint;
+    }
+
+
+    public void MinionDeath() {
+        if (assignedPoint != null) {
+            assignedPoint.GetComponent<ControlPoint>().RemoveMinion(GetComponent<Team>().GetTeam());
+            assignedPoint = null;
+        }
+        //Other stuff to do here aswell
+    }
 
     public void SetDestination(Vector3 dest) {
         destination = dest;
         agentC.destination = destination;
     }
 
-    public void SetTarget(Transform targ) {
-        target = targ;
+    public void SetattackTarget(Transform targ) {
+        attackTarget = targ;
     }
 
     public string GetMinionType() {
         return minionType;
+    }
+
+    public Transform GetMinionTarget() {
+        return attackTarget;
+    }
+
+    public bool isBaseMinion() {
+        return baseMinion;
     }
 }

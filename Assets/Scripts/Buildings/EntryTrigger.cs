@@ -14,8 +14,10 @@ public class EntryTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "minion") {
-            entryTouched?.Invoke(other.gameObject);
-            Debug.Log("Entry Triggered");
+            if (!other.GetComponent<MinionController>().isBaseMinion()) {
+                entryTouched?.Invoke(other.gameObject);
+                Debug.Log("Entry Triggered");
+            }
         }
     }
 }

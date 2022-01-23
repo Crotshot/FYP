@@ -388,6 +388,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Base_Melee_Minion
       objectReference: {fileID: 0}
+    - target: {fileID: 5795049616598599552, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: teamAccents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795049616598599552, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: teamAccents.Array.data[0]
+      value: 
+      objectReference: {fileID: 8790234341975820867}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -402,7 +410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: minionSpeed
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: attackDistance
@@ -410,7 +418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: minionAngularSpeed
-      value: 120
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 9198961231487344513, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: maxHealth

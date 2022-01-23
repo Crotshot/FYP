@@ -8,16 +8,21 @@ using Helpers = Crotty.Helpers.StaticHelpers;
 public class MinionSpawner : NetworkBehaviour
 {
     [SerializeField] GameObject minion_melee, minion_ranged; //1 = Melee & also player purchased, 2 = Ranged
-    [SerializeField] Transform firstWaypoint, spawnPoint, releasePoint;
+    [SerializeField] Transform spawnPoint, releasePoint;
+    [SerializeField] Transform[] path; //Assigned control point is last path point
+
     private MinionPool pool;
+    private MinionManager mm;
     int melee, ranged;
 
     private void Start() {
         if (!isServer)
             //Destroy(this); 
             Debug.Log("Nuffin");
-        else
+        else {
             pool = FindObjectOfType<MinionPool>();
+            mm = FindObjectOfType<MinionManager>();
+        }
     }
 
     //TEST CODE
@@ -26,7 +31,7 @@ public class MinionSpawner : NetworkBehaviour
         if (spawnWave) {
             if (isServer) {
                 spawnWave = false;
-                SpawnWave(10, 0);
+                SpawnWave(6, 4);
             }
             else {
                 spawnWave = false;
@@ -57,8 +62,11 @@ public class MinionSpawner : NetworkBehaviour
                 yield return new WaitForSeconds(0.03f);
             }
             minion.GetComponent<NavMeshAgent>().enabled = true;
-            minion.GetComponent<MinionController>().enabled = true;
-            minion.GetComponent<MinionController>().SetDestination(firstWaypoint.position);
+            MinionController mc = minion.GetComponent<MinionController>();
+            mc.enabled = true;
+            mc.AddPathPoints(path);
+            mc.AssignControlPoint(path[path.Length - 1]);
+            mm.AddMinion(mc);
         }
         while (ranged > 0) {
             GameObject minion = SpawnMinion("Base_Ranged");
@@ -70,21 +78,29 @@ public class MinionSpawner : NetworkBehaviour
                 yield return new WaitForSeconds(0.03f);
             }
             minion.GetComponent<NavMeshAgent>().enabled = true;
-            minion.GetComponent<MinionController>().enabled = true;
-            minion.GetComponent<MinionController>().SetDestination(firstWaypoint.position);
+            MinionController mc = minion.GetComponent<MinionController>();
+            mc.enabled = true;
+            mc.AddPathPoints(path);
+            mc.AssignControlPoint(path[path.Length -1]);
+            mm.AddMinion(mc);
         }
     }
 
     public GameObject SpawnMinion(string type) {
         GameObject freshMinion = pool.FindMinionOfType(type);
         if (freshMinion == null) {
-            freshMinion = Instantiate(minion_ranged, spawnPoint);
+            if (type.Equals("Base_Melee"))
+                freshMinion = Instantiate(minion_melee, spawnPoint);
+            else
+                freshMinion = Instantiate(minion_ranged, spawnPoint);
             NetworkServer.Spawn(freshMinion);
         }
         freshMinion.transform.parent = null;
         freshMinion.transform.position = spawnPoint.position;
         freshMinion.transform.rotation = spawnPoint.rotation;
         freshMinion.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
+        Color c = GetComponent<Team>().GetTeamColor();
+        freshMinion.GetComponent<Team>().SetTeamColor(c.r, c.g, c.b, c.a);
         freshMinion.GetComponent<MinionController>().Setup();
         return freshMinion;
     }

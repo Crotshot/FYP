@@ -160,6 +160,7 @@ MonoBehaviour:
   - {fileID: 610386076131778533, guid: d7b754b381598284e9a603ca0a5c0d71, type: 3}
   - {fileID: 7512147332270784733, guid: 449c72d7b0316bf428c0c7dd0029eb86, type: 3}
   - {fileID: 7056897241359415480, guid: a95f9251c0fa3fa49b0e861a55cbc62a, type: 3}
+  - {fileID: 6276850478000177189, guid: 180a5ced5207f784aa50a9499cce0215, type: 3}
   playerRoomPrefab: {fileID: -6223738119716034043, guid: 5cddf750ba5922a4585935014e7d9241, type: 3}
   gamePlayerPrefab: {fileID: 473611523937665362, guid: 77b6c797498fd464d8a19e8d81e98e45, type: 3}
   readyPlayers: 0
@@ -219,3 +220,5 @@ MonoBehaviour:
   enemyConqCol: {r: 0.764151, g: 0.1920455, b: 0, a: 1}
   minionCol: {r: 0.32484868, g: 0.9433962, b: 0.7032166, a: 1}
   enemyMinionCol: {r: 0.9245283, g: 0.6105741, b: 0.13519046, a: 1}
+  team1: {fileID: 2100000, guid: 68d7aa4ae429d224687fc683d4030573, type: 2}
+  team2: {fileID: 2100000, guid: 51a146f4b123a6147ade1c4ca58ffd84, type: 2}

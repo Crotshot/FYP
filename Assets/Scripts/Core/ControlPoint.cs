@@ -7,6 +7,9 @@ using Mirror;
 
 public class ControlPoint : NetworkBehaviour
 {
+
+    [SerializeField] private int assignedMinions_1, assignedMinions_2, maxAssignedMinions = 10;
+
     [SerializeField] private float chargesToCapture;
     [SerializeField] Image captureFillImage;
     [SerializeField] bool basePoint;
@@ -148,5 +151,43 @@ public class ControlPoint : NetworkBehaviour
 
     public bool GetBasePoint() {
         return basePoint;
+    }
+
+    public int GetCurrentMinions(int team) {
+        if (team == 1) {
+            return assignedMinions_1;
+        }
+        else if (team == 2) {
+            return assignedMinions_2;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public int GetMaxMinions() {
+        return maxAssignedMinions;
+    }
+
+    public void SetMaxMinions(int newMax) {
+        maxAssignedMinions = newMax;
+    }
+
+    public void AddMinion(int team) {
+        if(team == 1) {
+            assignedMinions_1++;
+        }
+        else if(team == 2) {
+            assignedMinions_2++;
+        }
+    }
+
+    public void RemoveMinion(int team) {
+        if (team == 1) {
+            assignedMinions_1--;
+        }
+        else if (team == 2) {
+            assignedMinions_2--;
+        }
     }
 }

@@ -7,6 +7,7 @@ public class GateScript : NetworkBehaviour
 {
     [SerializeField] ControlPoint[] points;
     [SerializeField] float openDelay, openTime, openDegrees, inverseFPS;
+    [SerializeField] string gateName;
 
     private void Start() {
         if (!isServer)
@@ -48,6 +49,8 @@ public class GateScript : NetworkBehaviour
             transform.GetChild(1).localEulerAngles = new Vector3(0, 180.0f - openDegrees * (openDelay / openTime), 0);
             yield return new WaitForSeconds(inverseFPS);
         }
+        if(gateName.Length > 0)
+            FindObjectOfType<MinionManager>().OpenGate(gateName);
         Destroy(this);
     }
 }

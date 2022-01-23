@@ -17,9 +17,9 @@ public class Minion_Attack : NetworkBehaviour
 
     protected void AnimatedAttack(Action act) {
         if (attacking) { //Atacking
-            float percentage = (animatedTimings[index].time - (animatedTimings[index].time - attackTimer)) / (animatedTimings[index].time - animatedTimings[index - 1].time);
-            if (percentage > 1)
-                percentage = 1;
+            float W = animatedTimings[index].time - animatedTimings[index - 1].time;
+            float percentage = (attackTimer - animatedTimings[index-1].time) / W;
+
             if (animatedTimings[index].pos != animatedTimings[index - 1].pos) {
                 animatedWeapon.localPosition = Helpers.Vector3Follow(animatedTimings[index - 1].pos, animatedTimings[index].pos, percentage);
             }
@@ -47,9 +47,8 @@ public class Minion_Attack : NetworkBehaviour
             attackTimer += Time.deltaTime;
             if (animatedTimings[index].time <= attackTimer) {
                 index++;
-                if (index == animatedTimings.Length) {
+                if (index >= animatedTimings.Length)
                     attacking = false;
-                }
             }
         }
     }
