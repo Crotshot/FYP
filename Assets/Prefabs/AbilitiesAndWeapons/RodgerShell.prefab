@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1579003791174478072}
   - component: {fileID: 5150865115784443024}
   m_Layer: 0
-  m_Name: BasicShell
+  m_Name: RodgerShell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
   syncInterval: 0.1
   shellSpeed: 60
   deleteTime: 10
-  damage: 20
+  damage: 30
   rayLength: 1.3
   rayOrigin: {x: 0, y: 0, z: 0.5}
   directions:

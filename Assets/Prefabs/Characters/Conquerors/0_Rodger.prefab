@@ -330,7 +330,7 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 1.61
-  m_Speed: 12
+  m_Speed: 15
   m_Acceleration: 200
   avoidancePriority: 99
   m_AngularSpeed: 120
@@ -549,8 +549,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 250
+  currentHealth: 250
   HealthChanged:
     m_PersistentCalls:
       m_Calls: []

@@ -46,7 +46,6 @@ public class MinionController : NetworkBehaviour
     }
     
     RaycastHit[] hits;
-    float distance;
     private void FixedUpdate() {
         Debug.DrawRay(transform.position, transform.forward * awarnessDistance, Color.white);
         if (minionState != MinionState.Fighting) {
@@ -54,11 +53,11 @@ public class MinionController : NetworkBehaviour
             if (hits.Length > 0) {
                 foreach (RaycastHit hit in hits) {
                     if (hit.collider.TryGetComponent(out Team team) && hit.collider.TryGetComponent(out Health hp)) { //Get health cmpt as bullets and such have team comps
-                        distance = Helpers.Vector3Distance(hit.transform.position, transform.position);
                         if(team.GetTeam() != GetComponent<Team>().GetTeam()) {
                             attackTarget = hit.transform;
                             returningState = minionState;
                             minionState = MinionState.Fighting;
+                            agentC.speed = minionSpeed;
                             break;
                         }
                     }
@@ -69,8 +68,14 @@ public class MinionController : NetworkBehaviour
             if (Helpers.Vector3Distance(attackTarget.position, transform.position) > awarnessDistance * 1.1f) {
                 attackTarget = null;
                 minionState = returningState;
-                if (pathPoints.Count < 2) {
-                    agentC.destination = pathPoints[0] + new Vector3(Random.Range(8f, -8f), 0, Random.Range(8f, -8f));
+                if(minionState == MinionState.OnPath) {
+                    agentC.speed = 8;
+                }
+                if (pathPoints.Count < 1) {
+                    agentC.destination = assignedPoint.position + new Vector3(Random.Range(8f, -8f), 0, Random.Range(8f, -8f));
+                }
+                else {
+                    agentC.destination = pathPoints[0];
                 }
             }
         }
@@ -93,6 +98,7 @@ public class MinionController : NetworkBehaviour
                     pathPoints.Remove(pathPoints[0]);
                     minionState = MinionState.Defender;
                     returningState = MinionState.Defender;
+                    agentC.speed = minionSpeed;
                 }
                 else { //Else proceed to next path
                     pathPoints.Remove(pathPoints[0]); 
@@ -112,6 +118,7 @@ public class MinionController : NetworkBehaviour
         }
         else {
             minionState = MinionState.OnPath;
+            agentC.speed = 8;
         }
     }
 
@@ -129,6 +136,9 @@ public class MinionController : NetworkBehaviour
 
 
     public void MinionDeath() {
+        attackTarget = null;
+        returningState = MinionState.Idle;
+        minionState = MinionState.Idle;
         if (assignedPoint != null) {
             assignedPoint.GetComponent<ControlPoint>().RemoveMinion(GetComponent<Team>().GetTeam());
             assignedPoint = null;
