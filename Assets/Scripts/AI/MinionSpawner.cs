@@ -17,8 +17,7 @@ public class MinionSpawner : NetworkBehaviour
 
     private void Start() {
         if (!isServer)
-            //Destroy(this); 
-            Debug.Log("Nuffin");
+            Destroy(this); 
         else {
             pool = FindObjectOfType<MinionPool>();
             mm = FindObjectOfType<MinionManager>();
@@ -95,6 +94,8 @@ public class MinionSpawner : NetworkBehaviour
                 freshMinion = Instantiate(minion_ranged, spawnPoint);
             NetworkServer.Spawn(freshMinion);
         }
+        else
+            Debug.Log("Reusing minion from pool instead of making a new one !!!!!");
         freshMinion.transform.parent = null;
         freshMinion.transform.position = spawnPoint.position;
         freshMinion.transform.rotation = spawnPoint.rotation;
@@ -102,6 +103,7 @@ public class MinionSpawner : NetworkBehaviour
         Color c = GetComponent<Team>().GetTeamColor();
         freshMinion.GetComponent<Team>().SetTeamColor(c.r, c.g, c.b, c.a);
         freshMinion.GetComponent<MinionController>().Setup();
+        freshMinion.GetComponent<MinionHealth>().ResetHealth();
         return freshMinion;
     }
 }

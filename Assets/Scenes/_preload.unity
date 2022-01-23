@@ -178,13 +178,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: _app
       objectReference: {fileID: 0}
-    - target: {fileID: 2277960445811590527, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}
-      propertyPath: spawnPrefabs.Array.size
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 2277960445811590527, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}
-      propertyPath: spawnPrefabs.Array.data[10]
-      value: 
-      objectReference: {fileID: 6276850478000177189, guid: 180a5ced5207f784aa50a9499cce0215, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}

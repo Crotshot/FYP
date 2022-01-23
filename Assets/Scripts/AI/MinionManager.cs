@@ -19,11 +19,11 @@ public class MinionManager : NetworkBehaviour {
 
     private void Start() {
         if (!isServer)
-            return;
+            Destroy(gameObject);
         timer = waveTimer;
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         if (timer > 0)
             timer -= Time.deltaTime;
         else {

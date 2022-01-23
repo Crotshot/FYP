@@ -6,7 +6,7 @@ using Mirror;
 public class Team : NetworkBehaviour
 {
     [SerializeField][SyncVar] int team;
-    [SerializeField][SyncVar] Color teamColor;
+    [SerializeField] Color teamColor;
     [SerializeField] GameObject[] teamAccents;
 
     public int GetTeam() {
@@ -21,10 +21,23 @@ public class Team : NetworkBehaviour
         team = t;
     }
 
-    public void SetTeamColor(float r, float g, float b, float a) { //Might need to be converted to 4 floats for network transport
+    public void SetTeamColor(float r, float g, float b, float a) {
         teamColor = new Color(r,g,b,a);
 
         Material mat = FindObjectOfType<Colors>().GetTeamMaterial(team);
+        foreach (GameObject accent in teamAccents) {
+            accent.GetComponent<Renderer>().material = mat;
+        }
+
+        if (isServer)
+            RpcSetTeamColour(r,g,b,a, team);
+    }
+
+    [ClientRpc]
+    public void RpcSetTeamColour(float r, float g, float b, float a, int t) {
+        teamColor = new Color(r, g, b, a);
+
+        Material mat = FindObjectOfType<Colors>().GetTeamMaterial(t);
         foreach (GameObject accent in teamAccents) {
             accent.GetComponent<Renderer>().material = mat;
         }

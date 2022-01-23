@@ -18,4 +18,8 @@ public class MinionPool : NetworkBehaviour
         }
         return returnedMinion;
     }
+
+    public void AddMinionToPool(GameObject minion) {
+        inactiveMinions.Add(minion);
+    }
 }

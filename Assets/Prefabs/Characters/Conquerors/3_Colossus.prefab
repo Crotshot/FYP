@@ -994,7 +994,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8888298963108967615}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2221741096789890093}
@@ -1020,7 +1020,7 @@ NavMeshAgent:
   m_Radius: 3.59
   m_Speed: 12
   m_Acceleration: 200
-  avoidancePriority: 50
+  avoidancePriority: 99
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
@@ -1086,7 +1086,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  offlineTest: 0
   ab1:
     m_PersistentCalls:
       m_Calls: []
@@ -1128,6 +1127,10 @@ MonoBehaviour:
   syncInterval: 0.1
   maxHealth: 100
   currentHealth: 100
+  HealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  respawnTime: 0
 --- !u!114 &3865846391064021616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1144,6 +1147,7 @@ MonoBehaviour:
   syncInterval: 0.1
   team: 0
   teamColor: {r: 0, g: 0, b: 0, a: 0}
+  teamAccents: []
 --- !u!114 &8786043009800750095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1159,7 +1163,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: 9e040520db93a354db35fe7b182ffe3d
   hasSpawned: 0
 --- !u!114 &2954844805932747137
 MonoBehaviour:
@@ -1176,9 +1180,25 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   clientAuthority: 1
-  localPositionSensitivity: 0.01
-  localRotationSensitivity: 0.01
-  localScaleSensitivity: 0.01
+  sendInterval: 0.05
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 0
+  bufferTimeMultiplier: 1
+  bufferSizeLimit: 64
+  catchupThreshold: 4
+  catchupMultiplier: 0.1
+  onlySyncOnChange: 1
+  bufferResetMultiplier: 5
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
 --- !u!1 &8888298964633051822
 GameObject:
   m_ObjectHideFlags: 0
