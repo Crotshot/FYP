@@ -22,7 +22,7 @@ public class Health : NetworkBehaviour
             CmdDamage(damage);
             return;
         }
-        Debug.Log("GameObject: " + gameObject.name + " took: " + damage + " damage");
+        //Debug.Log("GameObject: " + gameObject.name + " took: " + damage + " damage");
         currentHealth -= damage;
         
         if(currentHealth <= 0) {
@@ -46,7 +46,7 @@ public class Health : NetworkBehaviour
         }
         currentHealth = maxHealth;
         dead = false;
-        Debug.Log("GameObject: " + gameObject.name + " health reset to: " + currentHealth);
+        //Debug.Log("GameObject: " + gameObject.name + " health reset to: " + currentHealth);
     }
 
     [Command]

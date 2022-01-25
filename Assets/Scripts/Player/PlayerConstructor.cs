@@ -66,10 +66,14 @@ public class PlayerConstructor : NetworkBehaviour
         if (connectionToClient.connectionId == 0) { //When the server calls this it is 0 as there is no connection and any othe number can be team 2
             playerSpawned.GetComponent<Team>().SetTeam(1);
             playerSpawned.GetComponent<Team>().SetTeamColor(0.9f,0.1f,0.1f,1);
+            GetComponent<Team>().SetTeam(1);
+            GetComponent<Team>().SetTeamColor(0.9f, 0.1f, 0.1f, 1);
         }
         else {
             playerSpawned.GetComponent<Team>().SetTeam(2);
             playerSpawned.GetComponent<Team>().SetTeamColor(0.1f, 0.1f, 0.9f, 1);
+            GetComponent<Team>().SetTeam(2);
+            GetComponent<Team>().SetTeamColor(0.1f, 0.1f, 0.9f, 1);
         }
     }
 

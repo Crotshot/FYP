@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +25,10 @@ namespace Crotty.Helpers {
             return Mathf.Sqrt((Mathf.Pow(a.x - b.x, 2) + Mathf.Pow(a.z - b.z, 2)));
         }
 
+        public static Vector3 RandomVector3XZ(float v) {
+            Vector2 xz = UnityEngine.Random.insideUnitCircle * v;
+            return new Vector3(xz.x,0, xz.y);
+        }
         /// <summary>
         /// Gets the distance between 2 floats
         /// </summary>

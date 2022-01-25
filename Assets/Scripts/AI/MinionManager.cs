@@ -19,7 +19,7 @@ public class MinionManager : NetworkBehaviour {
 
     private void Start() {
         if (!isServer)
-            Destroy(gameObject);
+            Destroy(this);
         timer = waveTimer;
     }
 

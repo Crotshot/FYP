@@ -30,7 +30,7 @@ public class MinionSpawner : NetworkBehaviour
         if (spawnWave) {
             if (isServer) {
                 spawnWave = false;
-                SpawnWave(6, 4);
+                SpawnWave(1, 0);
             }
             else {
                 spawnWave = false;
@@ -41,7 +41,7 @@ public class MinionSpawner : NetworkBehaviour
 
     [Command (requiresAuthority = false)]
     public void CmdSpawnWave() {
-        SpawnWave(10, 0);
+        SpawnWave(1, 0);
     }
     //
     public void SpawnWave(int melee, int ranged) {
@@ -56,16 +56,20 @@ public class MinionSpawner : NetworkBehaviour
             melee--;
             float timer = 0.66f;
             while (timer > 0) {
+                if (minion == null)
+                    break;
                 minion.transform.position = Helpers.Vector3Follow(spawnPoint.position, releasePoint.position, (0.66f - timer) / 0.66f);
                 timer -= 0.03f;
                 yield return new WaitForSeconds(0.03f);
             }
-            minion.GetComponent<NavMeshAgent>().enabled = true;
-            MinionController mc = minion.GetComponent<MinionController>();
-            mc.enabled = true;
-            mc.AddPathPoints(path);
-            mc.AssignControlPoint(path[path.Length - 1]);
-            mm.AddMinion(mc);
+            if(minion != null) {
+                minion.GetComponent<NavMeshAgent>().enabled = true;
+                MinionController mc = minion.GetComponent<MinionController>();
+                mc.enabled = true;
+                mc.AddPathPoints(path);
+                mc.AssignControlPoint(path[path.Length - 1]);
+                mm.AddMinion(mc);
+            }
         }
         while (ranged > 0) {
             GameObject minion = SpawnMinion("Base_Ranged");

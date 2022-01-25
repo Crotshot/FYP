@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8376510589140045694
+--- !u!1 &804572699945505395
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,25 +8,25 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8376510589140045695}
-  - component: {fileID: 127889511072718945}
-  - component: {fileID: 473611523937665362}
-  - component: {fileID: 614574089574789351}
-  - component: {fileID: 7201763596977671254}
+  - component: {fileID: 5072179978298707721}
+  - component: {fileID: 3279843614700303615}
+  - component: {fileID: 5397134330533552901}
+  - component: {fileID: 6111662576604269550}
+  - component: {fileID: 6606740679729637880}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Multishot
   m_TagString: Untagged
-  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8376510589140045695
+--- !u!4 &5072179978298707721
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8376510589140045694}
+  m_GameObject: {fileID: 804572699945505395}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -34,13 +34,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &127889511072718945
+--- !u!114 &3279843614700303615
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8376510589140045694}
+  m_GameObject: {fileID: 804572699945505395}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
@@ -49,45 +49,75 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 77b6c797498fd464d8a19e8d81e98e45
+  m_AssetId: 82bb070daacef4d429b091a177e5b4e4
   hasSpawned: 0
---- !u!114 &473611523937665362
+--- !u!114 &5397134330533552901
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8376510589140045694}
+  m_GameObject: {fileID: 804572699945505395}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9aed243e3ca4beb44a3cbe2806dfbe4a, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e60dcc0576f0ba4a816c4cc05967bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
---- !u!114 &614574089574789351
+  damage: 0
+  archHeight: 0
+  range: 0
+  airTime: 0
+  directions: []
+  rayLength: 0
+  expRad: 0
+  explosive: 0
+  particles: {fileID: 0}
+  actualProjectile: {fileID: 6276850478000177189, guid: 82cd9d36ef65cb64cba548f03912b103, type: 3}
+  count: 5
+  inaccuracy: 8
+--- !u!114 &6111662576604269550
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8376510589140045694}
+  m_GameObject: {fileID: 804572699945505395}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61e3f518f385d694981f3c222a16a8a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  conqueror: {fileID: 0}
-  minions: []
---- !u!114 &7201763596977671254
+  clientAuthority: 0
+  sendInterval: 0.05
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 0
+  bufferTimeMultiplier: 1
+  bufferSizeLimit: 64
+  catchupThreshold: 4
+  catchupMultiplier: 0.1
+  onlySyncOnChange: 1
+  bufferResetMultiplier: 5
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+--- !u!114 &6606740679729637880
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8376510589140045694}
+  m_GameObject: {fileID: 804572699945505395}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d176c04518f33b0448d99b9927f4efab, type: 3}

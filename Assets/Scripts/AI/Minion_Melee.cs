@@ -27,15 +27,13 @@ public class Minion_Melee : Minion_Attack{
                 Debug.DrawRay(animatedWeapon.position, animatedWeapon.TransformDirection(direction) * rayLength, Color.green/*, 0.1f*/);
                 Ray ray = new Ray(animatedWeapon.position, animatedWeapon.TransformDirection(direction));
                 if (Physics.Raycast(ray, out RaycastHit hit, rayLength) && hit.collider.isTrigger == false) {
-                    if (hit.collider.transform.TryGetComponent(out Team t)) {
+                    if (hit.collider.transform.TryGetComponent(out Team t) && hit.collider.transform.TryGetComponent(out Health health)) {
                         if (t.GetTeam() == GetComponent<Team>().GetTeam())
-                            return;
-                    }
-                    if (hit.collider.transform.TryGetComponent(out Health health)) {
+                            continue;
                         health.Damage(damage);
                         attackHit = true;
+                        return;
                     }
-                    break;
                 }
             }
         }

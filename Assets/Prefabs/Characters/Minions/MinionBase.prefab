@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 592042918717572597}
   - component: {fileID: 7212588340153608805}
   - component: {fileID: 3842556588930281135}
+  - component: {fileID: 3763365444127402900}
   m_Layer: 0
   m_Name: MinionBase
   m_TagString: minion
@@ -92,10 +93,12 @@ MonoBehaviour:
   minionSpeed: 0
   minionAngularSpeed: 0
   attackDistance: 0
+  awarnessDistance: 0
   attackTarget: {fileID: 0}
   assignedPoint: {fileID: 0}
   pathPoints: []
   minionState: 0
+  returningState: 0
 --- !u!114 &9198961231487344513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,3 +202,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &3763365444127402900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393298794735004064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40447209703875b4abbb828073de511d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthbarFab: {fileID: 5571177453850800011, guid: e2493496e82019348a4b19d4d3ac8056, type: 3}
+  yOffset: 3
+  minion: 1

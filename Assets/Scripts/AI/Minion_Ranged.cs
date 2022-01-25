@@ -5,7 +5,7 @@ using Mirror;
 
 public class Minion_Ranged : Minion_Attack {
     bool projectTileLaunched, projCreated;
-    [SerializeField] GameObject archingProjectilePrefab;
+    [SerializeField] GameObject archingProjectilePrefab, projectileSpawnPoint;
 
     private void Start() {
         if (!isServer)
@@ -21,15 +21,16 @@ public class Minion_Ranged : Minion_Attack {
     private void LaunchProjectile() {
         if (!projectTileLaunched) {
             projectTileLaunched = true;
-            GameObject obj = Instantiate(archingProjectilePrefab, animatedWeapon.transform.position, animatedWeapon.transform.rotation);
+            GameObject obj = Instantiate(archingProjectilePrefab, projectileSpawnPoint.transform.position, projectileSpawnPoint.transform.rotation);
             NetworkServer.Spawn(obj);
-            obj.transform.position = animatedWeapon.transform.position;
-            obj.transform.position = animatedWeapon.transform.position;
+            obj.transform.position = projectileSpawnPoint.transform.position;
+            obj.transform.position = projectileSpawnPoint.transform.position;
             obj.transform.parent = null;
             obj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
             Color c = GetComponent<Team>().GetTeamColor();
             obj.GetComponent<Team>().SetTeamColor(c.r, c.g, c.b, c.a);
-            obj.GetComponent<ArchingProjectile>().Setup(GetComponent<MinionController>().GetMinionTarget().position);
+            if(GetComponent<MinionController>().GetMinionTarget() != null)
+                obj.GetComponent<ArchingProjectile>().Setup(GetComponent<MinionController>().GetMinionTarget().position);
         }
     }
 

@@ -8,9 +8,9 @@ using Helpers = Crotty.Helpers.StaticHelpers;
 public class MinionController : NetworkBehaviour
 {
     [SerializeField] string minionType;
-    [SerializeField] bool baseMinion;
+    [SerializeField] bool baseMinion, independentWeapon;
     [SerializeField] float minionSpeed, minionAngularSpeed, attackDistance, awarnessDistance;
-    [SerializeField] Transform attackTarget, assignedPoint;
+    [SerializeField] Transform attackTarget, assignedPoint, indWeapon;
     [SerializeField] List<Vector3> pathPoints = new List<Vector3>();
     Vector3 destination;
     NavMeshAgent agentC;
@@ -38,6 +38,7 @@ public class MinionController : NetworkBehaviour
         agentC.angularSpeed = minionAngularSpeed;
         pathPoints.Clear();
         layer = 1 << LayerMask.NameToLayer("Default");
+        GetComponent<WorldSpaceHealthBar>().Setup();
         if (!isServer) {
             Destroy(this);
             return;
@@ -47,7 +48,7 @@ public class MinionController : NetworkBehaviour
     
     RaycastHit[] hits;
     private void FixedUpdate() {
-        Debug.DrawRay(transform.position, transform.forward * awarnessDistance, Color.white);
+        //Debug.DrawRay(transform.position, transform.forward * awarnessDistance, Color.white);
         if (minionState != MinionState.Fighting) {
             hits = Physics.SphereCastAll(transform.position, awarnessDistance, transform.forward, 0, layer, QueryTriggerInteraction.Ignore);
             if (hits.Length > 0) {
@@ -65,7 +66,7 @@ public class MinionController : NetworkBehaviour
             }
         }
         else {
-            if (Helpers.Vector3Distance(attackTarget.position, transform.position) > awarnessDistance * 1.1f) {
+            if (attackTarget == null || Helpers.Vector3Distance(attackTarget.position, transform.position) > awarnessDistance * 1.1f) {
                 attackTarget = null;
                 minionState = returningState;
                 if(minionState == MinionState.OnPath) {
@@ -83,11 +84,14 @@ public class MinionController : NetworkBehaviour
         if(attackTarget != null) {
             destination = attackTarget.position;
             agentC.destination = destination;
-            if(Helpers.Vector3Distance(transform.position, destination) <= attackDistance) {
+            if (Helpers.Vector3Distance(transform.position, destination) <= attackDistance) {
                 //ADD checks to see if has line of sight
                 //Rotation speed of minion so they dont snap turn
                 agentC.destination = transform.position;
-                transform.LookAt(destination);
+                if (!independentWeapon)
+                    transform.LookAt(destination + Vector3.up);
+                else 
+                    indWeapon.LookAt(destination + Vector3.up);
                 attackC.Attack();
             }
         }

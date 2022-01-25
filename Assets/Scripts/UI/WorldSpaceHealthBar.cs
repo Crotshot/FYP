@@ -10,33 +10,42 @@ public class WorldSpaceHealthBar : MonoBehaviour
     [SerializeField] bool minion;
     private Transform cameraTrans;
     private Image healthFill;
+    GameObject localUI;
 
     public void SetupDelayed() {
         Invoke("Setup", 4f);
     }
 
-    private void Setup() {
-        GameObject localUI = Instantiate(healthbarFab, transform);
+    public void Setup() {
+        localUI = Instantiate(healthbarFab, transform);
         GetComponent<Health>().HealthChanged.AddListener(HealthDisplay);
         healthFill = localUI.transform.GetChild(0).GetComponent<Image>();
         healthFill.transform.parent.position = new Vector3(transform.position.x, yOffset, transform.position.z);
         cameraTrans = FindObjectOfType<Camera>().transform;
+        int team = GetComponent<Team>().GetTeam();
         if (minion) {
             localUI.transform.localScale = Vector3.one * 0.5f;
-            if (GetComponent<Team>().GetTeam() == GameObject.Find("Local").GetComponent<Team>().GetTeam())
-                healthFill.color = FindObjectOfType<Colors>().minionCol;
-            else
-                healthFill.color = FindObjectOfType<Colors>().enemyMinionCol;
-
+            if (team == 1) {
+                healthFill.color = FindObjectOfType<Colors>().redMinionCol;
+            }
+            else {
+                healthFill.color = FindObjectOfType<Colors>().blueMinionCol;
+            }
         }
         else {
             healthFill.color = FindObjectOfType<Colors>().enemyConqCol;
         }
+
+        localUI.SetActive(false);
     }
 
     private void HealthDisplay(float health, float maxHealth) {
+        if (health == maxHealth || health <= 0)
+            localUI.SetActive(false);
+        else
+            localUI.SetActive(true);
         healthFill.fillAmount = health/maxHealth;
-        Debug.Log("Displayer Updated: " + health + ", " + maxHealth);
+        //Debug.Log("Displayer Updated: " + health + ", " + maxHealth);
     }
 
     private void Update() {
