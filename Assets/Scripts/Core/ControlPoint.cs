@@ -23,13 +23,18 @@ public class ControlPoint : NetworkBehaviour
     private enum TeamState { Neutral, Captured}
     TeamState capState = TeamState.Neutral;
 
+    bool setUp;
+
     public UnityEvent captured;
-    private void Start() {
+    public void Setup() {
         if (isServer && captured == null)
             captured = new UnityEvent();
+        setUp = true;
     }
 
     private void FixedUpdate() {
+        if (!setUp)
+            return;
         if (isServer) {
             float teamCharges = 0;
             int teamLean = 0;
@@ -125,7 +130,9 @@ public class ControlPoint : NetworkBehaviour
 
     //Player, minion
     private void OnTriggerEnter(Collider other) {
-        if(other.tag.Equals("minion") || other.tag.Equals("Player") && !trackedTransforms.Contains(other.transform)) {
+        if (!setUp)
+            return;
+        if (other.tag.Equals("minion") || other.tag.Equals("Player") && !trackedTransforms.Contains(other.transform)) {
             trackedTransforms.Add(other.transform);
             if (!teams.Contains(other.GetComponent<Team>().GetTeam())) {
                 teams.Add(other.GetComponent<Team>().GetTeam());
@@ -134,6 +141,8 @@ public class ControlPoint : NetworkBehaviour
     }
 
     private void OnTriggerExit(Collider other) {
+        if (!setUp)
+            return;
         if (other.tag.Equals("minion") || other.tag.Equals("Player") && trackedTransforms.Contains(other.transform)) {
             trackedTransforms.Remove(other.transform);
         }

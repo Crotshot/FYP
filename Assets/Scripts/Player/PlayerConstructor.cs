@@ -8,6 +8,7 @@ public class PlayerConstructor : NetworkBehaviour
 {
     public CharacterStats conqueror;
     public CharacterStats[] minions;
+    public int seed;
 
     private void Start() {
         conqueror = new CharacterStats();
@@ -30,6 +31,10 @@ public class PlayerConstructor : NetworkBehaviour
 
     public void SetMinionNames(CharacterStats[] stats) {
         minions = stats;
+    }
+
+    public void SetSeed(int seed) {
+        this.seed = seed;
     }
 
     [Command (requiresAuthority = false)]

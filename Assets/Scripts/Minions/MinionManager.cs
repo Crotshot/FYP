@@ -9,21 +9,28 @@ public class MinionManager : NetworkBehaviour {
     float timer;
 
     [SerializeField] MinionSpawner t1_E, t1_W, t1_C, t2_E, t2_W, t2_C;
-    private bool t_G = false, e_G = false, w_G = false;
+    private bool t_G = false, e_G = false, w_G = false, started = false;
 
     [SerializeField] MinionPath NW_C, NE_C, C_SW, C_S, SW_S, SE_S, NW_SW, NE_SE; //All paths except spawn path for team 1
     [SerializeField] MinionPath SW_C, SE_C, C_NE, C_N, NW_N, NE_N, SW_NW, SE_NE; //All paths except spawn path for team 2
 
     [SerializeField] ControlPoint BN, BS, C, NW, NE, SW, SE;
     [SerializeField] List<MinionController> minions_1 = new List<MinionController>(), minions_2 = new List<MinionController>();
+    [SerializeField] int maxWaveSize = 10;
 
     private void Start() {
         if (!isServer)
             Destroy(this);
-        timer = waveTimer;
     }
 
-    private void FixedUpdate() {
+    public void StartWaveSystem() {
+        timer = waveTimer;
+        started = true;
+    }
+
+    private void Update() {
+        if (!started)
+            return;
         if (timer > 0)
             timer -= Time.deltaTime;
         else {
@@ -248,6 +255,8 @@ public class MinionManager : NetworkBehaviour {
                 }
             }
         }
+        if (minionsNeeded > maxWaveSize)
+            minionsNeeded = maxWaveSize;
         while (minionsNeeded > 0) {
             if (meleeC <= rangedC * 1.5f) {
                 meleeN++;

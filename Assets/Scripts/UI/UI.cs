@@ -7,16 +7,18 @@ using TMPro;
 public class UI : MonoBehaviour
 {
     [SerializeField] Image healthBar, a1_Icon, a2_Icon, a3_Icon, a1_Fill, a2_Fill, a3_Fill, player_Icon, player_Fill;
-    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp, shiniesCount;
+    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp, shiniesCount, timeText;
     [SerializeField] GameObject tabPanel;
 
     private PlayerHealth playerHp;
+    private PlayerCurrency pC;
     private Ability ab1, ab2, ab3;
     private Inputs inputs;
     float uiTimer = 0;
-    private bool set = false;
 
-    public void Setup(PlayerHealth hp) {
+    private bool setUp;
+
+    public void Setup(PlayerHealth hp, PlayerCurrency pC) {
         //Icons
 
         //Cooldowns
@@ -35,12 +37,14 @@ public class UI : MonoBehaviour
         //Health bar & Respawn
         playerHp = hp;
         inputs = FindObjectOfType<Inputs>();
-        set = true;
+        
+
+        this.pC = pC;
+        setUp = true;
     }
 
-
     private void Update() {
-        if (!set)
+        if (!setUp)
             return;
         if(uiTimer >= 1.0f / 30.0f) {
             uiTimer = 0;
@@ -93,9 +97,35 @@ public class UI : MonoBehaviour
             else {
                 tabPanel.SetActive(false);
             }
+
+            shiniesCount.text = pC.GetShinies().ToString();
         }
         else {
             uiTimer += Time.deltaTime;
+            //timeText.text = (.ToString() + " : " + ((int)matchTimer % 60).ToString();
         }
     }
+
+    public void UpdateMatchTimer(float matchTimer) {
+        int m = (int)matchTimer / 60;
+        if (m == 0) {
+            timeText.text = "00 : ";
+        }
+        else if (m < 10) {
+            timeText.text = "0" + m.ToString() + " : ";
+        }
+        else {
+            timeText.text = m.ToString() + " : ";
+        }
+        m = (int)matchTimer % 60;
+        if (m == 0) {
+            timeText.text += "00";
+        }
+        else if (m < 10) {
+            timeText.text += "0" + m.ToString();
+        }
+        else {
+            timeText.text += m.ToString();
+        }
+    }   
 }

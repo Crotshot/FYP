@@ -111,5 +111,35 @@ namespace Crotty.Helpers {
 
             return a + difference * percent;
         }
+        /// <summary>
+        /// Round int z to the nearest int v with offset o
+        /// </summary>
+        /// <param name="z"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static int Round(int z, int v, int o) { // 83   50    25   => 75 or 50 + 25    
+            if (o < 0)
+                o *= -1;
+            if (v < 0)
+                v *= -1;
+            bool neg = false;
+            if (z < 0) {
+                neg = true;
+                z *= -1;
+            }
+            int zwo = z - o; // Z without offset                83 -25 => 58                    
+            int zwom = zwo % v; // Is it closer last or next    58 % 50 => 8                    
+            int ret;
+            if(zwom >= v / 2) {
+                ret =  z + v - zwom;                            //125
+            }
+            else {
+                ret =  z - zwom;                                //75
+            }
+
+            if (neg)
+                ret *= -1;
+            return ret;
+        }
     }
 }

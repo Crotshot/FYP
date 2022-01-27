@@ -136,7 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  expRad: 8
+  expRad: 5
   damage: 15
   particles: {fileID: 7424425583773993260, guid: 540dc788045b54643852a4b86d6a8f09, type: 3}
 --- !u!1 &3985397195259326897
@@ -423,7 +423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: baseMinion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: minionType

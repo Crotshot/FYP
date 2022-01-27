@@ -11,6 +11,7 @@ public class MinionPool : NetworkBehaviour
         if (!isServer)
             Destroy(this);
     }
+
     public GameObject FindMinionOfType(string type) {
         //TEMPORARILY DISABLED, strange excess minion spawning issues;
         return null;

@@ -201,7 +201,7 @@ InputManager:
     m_Name: Command_Recall
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
+    negativeButton: r
     positiveButton: e
     altNegativeButton: 
     altPositiveButton: 

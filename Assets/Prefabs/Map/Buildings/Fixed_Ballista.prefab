@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8422915276962914640}
   - component: {fileID: 2328270814158811960}
   - component: {fileID: 5430251692407254130}
+  - component: {fileID: 8958412435237578029}
   m_Layer: 0
   m_Name: Fixed_Base
   m_TagString: Untagged
@@ -82,6 +83,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!208 &8958412435237578029
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007272824348292066}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5672285, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.3692012, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &6495187016734313649
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,9 +194,12 @@ GameObject:
   - component: {fileID: 6851996113406364195}
   - component: {fileID: 8762699091938132024}
   - component: {fileID: 5672210402208996258}
+  - component: {fileID: 2729391524578651677}
+  - component: {fileID: 2911585365728100156}
+  - component: {fileID: 8134156049201191325}
   m_Layer: 0
   m_Name: Fixed_Ballista
-  m_TagString: Untagged
+  m_TagString: structure
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -246,6 +266,73 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.1344566, z: 1}
   m_Center: {x: 0, y: 0.36920118, z: 0}
+--- !u!114 &2729391524578651677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6851996113406364194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: d2f58448575ebbf4eb3a45ecdbc3c60f
+  hasSpawned: 0
+--- !u!114 &2911585365728100156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6851996113406364194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 0
+  sendInterval: 0.05
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 0
+  bufferTimeMultiplier: 1
+  bufferSizeLimit: 64
+  catchupThreshold: 4
+  catchupMultiplier: 0.1
+  onlySyncOnChange: 1
+  bufferResetMultiplier: 5
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+--- !u!208 &8134156049201191325
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6851996113406364194}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.135215, y: 0.833997, z: 0.5667215}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.333997, z: 3.943411}
+  m_TimeToStationary: 0.5
 --- !u!1 &8278065764001141389
 GameObject:
   m_ObjectHideFlags: 0

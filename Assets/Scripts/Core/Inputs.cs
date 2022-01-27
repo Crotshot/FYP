@@ -22,5 +22,11 @@ public class Inputs : MonoBehaviour
     public float GetAbility2Input() { return Input.GetAxisRaw("Ability2"); }
     public float GetAbility3Input() { return Input.GetAxisRaw("Ability3"); }
 
+    public float GetCommandAttackInput() { return Input.GetAxisRaw("Command_Attack"); }
+    public float GetCommandDefendInput() { return Input.GetAxisRaw("Command_Defend"); }
+    public float GetCommandRecallInput() { return Input.GetAxisRaw("Command_Recall"); }
+
+    public float GetScrollWheelInput() { return Input.GetAxisRaw("Mouse ScrollWheel"); }
+
     public float GetAnyInput(string name) { return Input.GetAxisRaw(name); }
 }

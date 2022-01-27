@@ -297,6 +297,9 @@ GameObject:
   - component: {fileID: 7380687977253756971}
   - component: {fileID: 7327668436225318198}
   - component: {fileID: 207195300181792997}
+  - component: {fileID: 3093664540618079009}
+  - component: {fileID: 3615385702628552387}
+  - component: {fileID: 7509785099594961798}
   m_Layer: 0
   m_Name: 1_Bert
   m_TagString: Player
@@ -554,6 +557,50 @@ MonoBehaviour:
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
   target: {fileID: 0}
+--- !u!114 &3093664540618079009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394059884701148311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2959fbb0ef23b994680d8b2be7473d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  shinies: 200
+--- !u!114 &3615385702628552387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394059884701148311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebefd754a642f874597ee75ad2a06cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  ID: 0
+--- !u!114 &7509785099594961798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394059884701148311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1163e133801314c4c99cf2e5c18c9cfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &3394059886310829525
 GameObject:
   m_ObjectHideFlags: 0

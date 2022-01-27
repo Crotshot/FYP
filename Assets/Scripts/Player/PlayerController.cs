@@ -12,8 +12,9 @@ public class PlayerController : NetworkBehaviour
     Transform navTarget;
 
     public UnityEvent ab1, ab2, ab3;
+    private bool ready = false;
 
-    private void Start() {
+    public void Setup() {
         if (hasAuthority) {
             navTarget = transform.GetChild(0).GetChild(1);
             GetComponent<NavMeshAgent>().enabled = true;
@@ -29,7 +30,8 @@ public class PlayerController : NetworkBehaviour
                 ab3 = new UnityEvent();
 
             Destroy(GetComponent<WorldSpaceHealthBar>());
-            FindObjectOfType<UI>().Setup(GetComponent<PlayerHealth>());
+            FindObjectOfType<UI>().Setup(GetComponent<PlayerHealth>(), GetComponent<PlayerCurrency>());
+            GetComponent<Interactor>().Setup();
         }
         else{
             Destroy(transform.GetChild(0).gameObject);
@@ -39,6 +41,8 @@ public class PlayerController : NetworkBehaviour
     }
 
     private void Update() {
+        if (!ready)
+            return;
         navTarget.localPosition = inputs.GetMovementInput();
         if(agent.enabled && agent.isOnNavMesh)
             agent.destination = navTarget.position;
@@ -52,5 +56,10 @@ public class PlayerController : NetworkBehaviour
         if (inputs.GetAbility3Input() > 0) {
             ab3?.Invoke();
         }
+    }
+
+
+    public void Release() {
+        ready = true;
     }
 }

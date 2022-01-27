@@ -9,7 +9,7 @@ public class GateScript : NetworkBehaviour
     [SerializeField] float openDelay, openTime, openDegrees, inverseFPS;
     [SerializeField] string gateName;
 
-    private void Start() {
+    public void Setup() {
         if (!isServer)
             Destroy(this);
 
