@@ -13,6 +13,7 @@ public class LockIn : MonoBehaviour {
 
     private void Start() {
         player =  GameObject.Find("Local").GetComponent<PlayerConstructor>();
+        minionStats = new CharacterStats[4];
     }
 
     public void LockInSelection() { //Local Player has gameobject name set to Local in player constructor when its created

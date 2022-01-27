@@ -80,7 +80,12 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   conqueror: {fileID: 0}
-  minions: []
+  minions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  seed: 0
 --- !u!114 &7201763596977671254
 MonoBehaviour:
   m_ObjectHideFlags: 0

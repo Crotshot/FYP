@@ -12,6 +12,7 @@ using Mirror;
 
 public class MapBuilder : NetworkBehaviour {
     //Random generator
+    [SerializeField] bool oldMap;
     float currentSeed, multiplier = 257321, increment = 802997, modulus = 689101, state = 123456, constant = 84327;
     [SerializeField] int seed = 874326894;
     //Prefabs
@@ -68,18 +69,87 @@ public class MapBuilder : NetworkBehaviour {
         m_NavMesh = new NavMeshData();
         m_Instance = NavMesh.AddNavMeshData(m_NavMesh);
 
-        StartCoroutine("MakeMapDelayed");
-    }
 
+        if (oldMap) {
+            StartCoroutine("MakeMapDelayed");
+        }
+        else {
+            GenerateNew();
+        }
+    }
+    /* How the new map generation works
+     * 1. Pick 1 random point per tile and place a flora Vector, adding it to the floraPropList & pointsToCheckList;
+     * 2. while the pointsToCheckList.Count > 0, do 30 attempts per position to place more points.
+     * 3. To pick a point it uses the seeded Linear Congruential Generator to pick a point on the x,z that is within +- max flora radius,
+     * the points distance must be within the max radius but outside the min radius. If the point is a valid place away from the point that is generated from
+     * it then checks all other flora points to see if it is valid in their radius.
+     * 4. Map Boundaries are in place to prevent an infinite loop of point generation, with this method points are guaranteed to run out eventually.
+     * 5. Perlin noise is used here to adjust the min and max radius, this creates a very natural looking spread of points.
+     * 6. After a point passes the checks it is added to both the pointsToCheckList and the Flora List
+     * 7 => We repeat this proeces for the smallProps but this time the after the pointsToCheckList is exhausted it removes all flora within its clearingDistance
+     * 8 => And the same again for large props except this time again we remove flora and also smallProps.
+     * 9 => Finally buildings spots are picked and for inner and outer and all Large, small and flora props are removed within the clearing distance. 
+     */
+    [SerializeField] int attempts = 30;
+    int attemptCounter = 0;
+    [SerializeField] bool useNoise;
+    [SerializeField]
+    float floraClearMin, floraClearMax, smallClearMin, smallClearMax, largeClearMin, largeClearMax,
+        floraNoiseModifier, smallNoiseModifier, largeNoiseModifier, smallClearingDistance, 
+        largeClearingDistance, outerBuildingClearingDistance, innerBuildingClearingDistance; 
+    List<Vector3> innerBuilingList, outerBuildingList, floraPropList, smallPropList, largePropList, pointsToCheckList;
+    
+    private void GenerateNew() {
+        for(int x = 0; x < 8; x++) {
+            for(int z = 0; z < 8; z++) {
+                Vector2 point = new Vector2(x * 50, z * -50);
+                point = RandomPoint(point, point + new Vector2(50, -50));
+                floraPropList.Add(point);
+                pointsToCheckList.Add(point);
+            }
+        }
+        while (pointsToCheckList.Count > 0) {
+            attemptCounter = 0;
+            while (attemptCounter < attempts) { //Random points within max dist
+                attemptCounter++;
+                Vector2 point = RandomPointCentered(pointsToCheckList[pointsToCheckList.Count -1], floraClearMax);
+                if(point.x < 0 || point.x > 400 || point.y > 0 || point.y < 200) {
+                    continue;
+                }
+                float dist = Helpers.Vector2Distance(pointsToCheckList[pointsToCheckList.Count - 1], point); //Check if valid to parent point if not skip to next
+                if (dist > floraClearMin && dist < floraClearMax) {
+                    bool success = true;
+                    foreach (Vector2 floraPoint in floraPropList) {
+                        dist = Helpers.Vector2Distance(floraPoint, point);
+                        if (dist < floraClearMin) {
+                            success = false;
+                            break;
+                        }
+                    }
+                    if (success) {
+                        floraPropList.Add(point);
+                        pointsToCheckList.Add(point);
+                    }
+                }
+                else
+                    continue;
+            }
+            pointsToCheckList.RemoveAt(pointsToCheckList.Count - 1);
+        }
+
+        foreach(Vector2 floraPos in floraPropList) {
+            Instantiate(smallProps[5].getVariant(0), new Vector3(floraPos.x, 0, floraPos.y), Quaternion.identity);
+        }
+    }
+//OLD MAP GEN
+/*
     IEnumerator MakeMapDelayed() {
         yield return new WaitForSeconds(0.01f);
         Generate();
     }
-
     private void OnDestroy() {
         m_Instance.Remove();// Unload navmesh
     }
-
     public void Generate() {
         GameObject SideOne = new GameObject();
         SideOne.transform.parent = transform;
@@ -207,7 +277,7 @@ public class MapBuilder : NetworkBehaviour {
                     foreach (GameObjectVariants variants in largeProps) {
                         totalWeight += variants.weight;
                     }
-                    if (totalWeight == 0) { /*Debug.Log("No Large Prop variants");*/ break; } //No large props, break out of loop
+                    if (totalWeight == 0) { Debug.Log("No Large Prop variants"); break; } //No large props, break out of loop
 
                     float type = RandomFloat(0, totalWeight), count = 0;
                     index = 0;
@@ -221,7 +291,7 @@ public class MapBuilder : NetworkBehaviour {
                     foreach (float num in variant.getWeights()) {
                         totalWeight += num;
                     }
-                    if (totalWeight == 0) { /*Debug.Log("No Large Props in variant");*/ break; } //No props in this variant
+                    if (totalWeight == 0) { Debug.Log("No Large Props in variant"); break; } //No props in this variant
 
                     count = 0;
                     type = RandomFloat(0, totalWeight);
@@ -231,9 +301,15 @@ public class MapBuilder : NetworkBehaviour {
                         if (count >= type) break; else index++;
                     }
                     //Pick a place and spawn prop
-                    pickedPos = largePropPositions[RandomPick(0, largePropPositions.Count - 1)];
-                    GameObject obj = Instantiate(variant.getVariant(index), pickedPos);
-                    obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
+                    int _num = RandomPick(0, largePropPositions.Count - 1);
+                    pickedPos = largePropPositions[_num];
+                    if (_num < 0 || _num > smallPropPositions.Count) {
+                        Debug.Log("Skipped one prop as _num was not valid");
+                    }
+                    else {
+                        GameObject obj = Instantiate(variant.getVariant(index), pickedPos);
+                        obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
+                    }
                     //Debug.Log("Instantiated large prop: " + variant.getVariant(index).name);
                     largePropPositions.Remove(pickedPos); //Remove from list
                     //Delete all propPositions in general area that have no children  ~~ 12m
@@ -256,7 +332,7 @@ public class MapBuilder : NetworkBehaviour {
                     foreach (GameObjectVariants variants in smallProps) {
                         totalWeight += variants.weight;
                     }
-                    if (totalWeight == 0) { /*Debug.Log("No Small Prop variants"); */break; } //No small props, break out of loop
+                    if (totalWeight == 0) { Debug.Log("No Small Prop variants"); break; } //No small props, break out of loop
 
                     float type = RandomFloat(0, totalWeight), count = 0;
                     index = 0;
@@ -270,7 +346,7 @@ public class MapBuilder : NetworkBehaviour {
                     foreach (float num in variant.getWeights()) {
                         totalWeight += num;
                     }
-                    if (totalWeight == 0) { /*Debug.Log("No Small Props in variant"); */break; } //No props in this variant
+                    if (totalWeight == 0) { Debug.Log("No Small Props in variant"); break; } //No props in this variant
 
                     count = 0;
                     type = RandomFloat(0, totalWeight);
@@ -280,9 +356,15 @@ public class MapBuilder : NetworkBehaviour {
                         if (count >= type) break; else index++;
                     }
                     //Pick a place and spawn prop
-                    pickedPos = smallPropPositions[RandomPick(0, smallPropPositions.Count - 1)];
-                    GameObject obj = Instantiate(variant.getVariant(index), pickedPos);
-                    obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
+                    int _num = RandomPick(0, smallPropPositions.Count - 1);
+                    pickedPos = smallPropPositions[_num];
+                    if (_num < 0 || _num > smallPropPositions.Count) {
+                        Debug.Log("Skipped one prop as _num was not valid");
+                    }
+                    else {
+                        GameObject obj = Instantiate(variant.getVariant(index), pickedPos);
+                        obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
+                    }
                     //Debug.Log("Instantiated small prop: " + variant.getVariant(index).name);
                     smallPropPositions.Remove(pickedPos); //Remove from list
                     //Delete all propPositions in close proximity that have no children  ~~ 3m
@@ -302,7 +384,6 @@ public class MapBuilder : NetworkBehaviour {
 
         StartCoroutine("SideTwoDelay");
     }
-
     IEnumerator CreateBuildings() {        
         yield return new WaitForSeconds(0.01f);
         while(innerBuildingNums.Count > 0) {
@@ -354,12 +435,10 @@ public class MapBuilder : NetworkBehaviour {
         }
         buildingsPlaced = true;
     }
-
     [ClientRpc]
     private void BuildingsPlaced() {
         buildingsPlaced = true;
     }
-
     IEnumerator SideTwoDelay() {
         while (!buildingsPlaced)
             yield return new WaitForSeconds(0.01f);
@@ -369,7 +448,6 @@ public class MapBuilder : NetworkBehaviour {
             yield return new WaitForSeconds(0.01f);
         SideTwo();
     }
-
     private void SideTwo() {
         GameObject SideTwo = Instantiate(transform.GetChild(1).gameObject, transform);
         SideTwo.transform.eulerAngles = new Vector3(0, 180f, 0);
@@ -377,7 +455,6 @@ public class MapBuilder : NetworkBehaviour {
 
         StartCoroutine("BakeDelay");
     }
-
     IEnumerator Clean() {
         foreach (Transform mapSide in transform) {
             foreach (Transform tile in mapSide) {
@@ -402,12 +479,10 @@ public class MapBuilder : NetworkBehaviour {
         yield return new WaitForSeconds(1f);
         cleaned = true;
     }
-
     IEnumerator BakeDelay() {
         yield return new WaitForSeconds(1f);
         BakeMap();
     }
-
     private void BakeMap() {
         m_Sources.Clear();
         foreach (Transform wall in transform.GetChild(0)) {
@@ -497,6 +572,7 @@ public class MapBuilder : NetworkBehaviour {
         Debug.Log("Making nav mesh");
         StopAllCoroutines();
     }
+*/
 
     void UpdateNavMesh() {
         var defaultBuildSettings = NavMesh.GetSettingsByID(0);
@@ -530,6 +606,22 @@ public class MapBuilder : NetworkBehaviour {
 
     private float RandomFloat(float min, float max) {
         return min + (max - min) * Shuffle() / (constant - 1);
+    }
+    /// <summary>
+    /// Gets Random point in a square corner1 corner2 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    private Vector2 RandomPoint(Vector2 corner1, Vector2 corner2) {
+        return new Vector2(RandomFloat(corner1.x, corner2.x), RandomFloat(corner1.y, corner2.y));
+    }
+
+    private Vector2 RandomPointCentered(Vector2 corner, float radius) {
+        Vector2 corner1 = new Vector2(corner.x + radius, corner.y + radius),
+            corner2 = new Vector2(corner.x - radius, corner.y - radius);
+        return new Vector2(RandomFloat(corner1.x, corner2.x), RandomFloat(corner1.y, corner2.y));
     }
 }
 /*

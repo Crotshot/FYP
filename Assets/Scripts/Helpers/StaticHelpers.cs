@@ -141,5 +141,9 @@ namespace Crotty.Helpers {
                 ret *= -1;
             return ret;
         }
+
+        public static float Vector2Distance(Vector2 a, Vector2 b) {
+            return Mathf.Sqrt((Mathf.Pow(a.x - b.x, 2) + Mathf.Pow(a.y - b.y, 2)));
+        }
     }
 }

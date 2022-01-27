@@ -523,6 +523,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 2089f311b5d76ac42a9d7efe608a67e8, type: 2}
+    - target: {fileID: 7779476021768349301, guid: cbf13b1ccc255194da2aceaba60d31ab, type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbf13b1ccc255194da2aceaba60d31ab, type: 3}
 --- !u!4 &74070110 stripped
@@ -14049,6 +14053,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5713063663878187764, guid: 9b19d307f10add84d85148fc8e3c88ac, type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5748253605080519651, guid: 9b19d307f10add84d85148fc8e3c88ac, type: 3}
       propertyPath: m_Name
       value: Tri_Gate_W_1 (1)
@@ -16726,6 +16734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  oldMap: 0
   seed: 432423423
   tiles:
   - variants:
@@ -16931,6 +16940,20 @@ MonoBehaviour:
   innerBuildingClearing: 12
   halfPathWidth: 8
   regen: 0
+  attempts: 30
+  floraClearMin: 5
+  floraClearMax: 15
+  smallClearMin: 3
+  smallClearMax: 7
+  largeClearMin: 20
+  largeClearMax: 40
+  floraNoiseModifier: 1
+  smallNoiseModifier: 0.7
+  largeNoiseModifier: 0.5
+  smallClearingDistance: 3
+  largeClearingDistance: 7
+  outerBuildingClearingDistance: 8
+  innerBuildingClearingDistance: 12
 --- !u!4 &1876954894
 Transform:
   m_ObjectHideFlags: 0
@@ -19951,6 +19974,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 2089f311b5d76ac42a9d7efe608a67e8, type: 2}
+    - target: {fileID: 4411414089533895606, guid: 1814c81b471fe384c9768015298b1a8f, type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1814c81b471fe384c9768015298b1a8f, type: 3}
 --- !u!1001 &4416598895161144309

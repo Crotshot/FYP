@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 0_Rodger
   m_EditorClassIdentifier: 
   characterArt: {fileID: 21300000, guid: b50b497d201a2374dac1afea2e74e8f8, type: 3}
-  healthPoints: 100
-  movementSpeed: 100
-  attackDamage: 100
-  attackSpeed: 100
+  healthPoints: 250
+  movementSpeed: 15
+  attackDamage: 30
+  attackSpeed: 120
+  cost: 0
   abilities:
   - {fileID: 11400000, guid: f9d547bfe00be994d930ae5e0ec4c7ea, type: 2}
   - {fileID: 11400000, guid: 567a785d6da5def41909c1bd825ad7d4, type: 2}
