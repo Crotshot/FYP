@@ -37,22 +37,25 @@ public class MapBuilder : NetworkBehaviour {
 
     public bool regen;
     private void Update() {
-        if (isServer && regen) {
+        if (/*isServer && */regen) {
             regen = false;
             //Delete all the buildings
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("structure")) {
                 NetworkServer.Destroy(obj);
             }
-            RpcRegen(); //Gets called on server aswell as the host is a client
+            //RpcRegen(); //Gets called on server aswell as the host is a client
+            RegenerateMap();
         }
     }
 
     private void RegenerateMap() {
-        Destroy(transform.GetChild(1).gameObject);
-        Destroy(transform.GetChild(2).gameObject);
-        buildingsPlaced = false;
-        sideTwo = false;
-        cleaned = false;
+        if(transform.childCount > 1) {
+            Destroy(transform.GetChild(1).gameObject);
+        }
+        //Destroy(transform.GetChild(2).gameObject);
+        //buildingsPlaced = false;
+        //sideTwo = false;
+        //cleaned = false;
         GenerateMap(seed);
     }
 
@@ -97,11 +100,17 @@ public class MapBuilder : NetworkBehaviour {
     float floraClearMin, floraClearMax, smallClearMin, smallClearMax, largeClearMin, largeClearMax,
         floraNoiseModifier, smallNoiseModifier, largeNoiseModifier, smallClearingDistance, 
         largeClearingDistance, outerBuildingClearingDistance, innerBuildingClearingDistance; 
-    List<Vector3> innerBuilingList, outerBuildingList, floraPropList, smallPropList, largePropList, pointsToCheckList;
+    List<Vector3> innerBuilingList = new List<Vector3>(), outerBuildingList = new List<Vector3>(), floraPropList = new List<Vector3>(),
+        smallPropList = new List<Vector3>(), largePropList = new List<Vector3>(), pointsToCheckList = new List<Vector3>();
     
     private void GenerateNew() {
-        for(int x = 0; x < 8; x++) {
-            for(int z = 0; z < 8; z++) {
+        GameObject SideOne = new GameObject();
+        SideOne.transform.parent = transform;
+        SideOne.transform.position = Vector3.zero;
+        SideOne.name = "Side_1";
+
+        for (int x = 0; x < 8; x++) {
+            for(int z = 0; z < 4; z++) {
                 Vector2 point = new Vector2(x * 50, z * -50);
                 point = RandomPoint(point, point + new Vector2(50, -50));
                 floraPropList.Add(point);
@@ -113,7 +122,7 @@ public class MapBuilder : NetworkBehaviour {
             while (attemptCounter < attempts) { //Random points within max dist
                 attemptCounter++;
                 Vector2 point = RandomPointCentered(pointsToCheckList[pointsToCheckList.Count -1], floraClearMax);
-                if(point.x < 0 || point.x > 400 || point.y > 0 || point.y < 200) {
+                if(point.x < 0 || point.x > 400 || point.y > 0 || point.y < -200) {
                     continue;
                 }
                 float dist = Helpers.Vector2Distance(pointsToCheckList[pointsToCheckList.Count - 1], point); //Check if valid to parent point if not skip to next
@@ -138,7 +147,8 @@ public class MapBuilder : NetworkBehaviour {
         }
 
         foreach(Vector2 floraPos in floraPropList) {
-            Instantiate(smallProps[5].getVariant(0), new Vector3(floraPos.x, 0, floraPos.y), Quaternion.identity);
+            GameObject obj = Instantiate(smallProps[5].getVariant(0), new Vector3(floraPos.x - 200, 0, floraPos.y + 200), Quaternion.identity);
+            obj.transform.parent = SideOne.transform;
         }
     }
 //OLD MAP GEN
