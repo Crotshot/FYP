@@ -5,7 +5,7 @@ using Mirror;
 
 public class GameStarter : NetworkBehaviour
 {
-    [SerializeField] [SyncVar] int playersReady, playersNeededToBeReady, mapMade, matchSeed, currencyPerWave;
+    [SerializeField] [SyncVar] int playersReady, mapMade, matchSeed, currencyPerWave, playersNeededToBeReady;
     [SerializeField] float currencyWave;
     [SyncVar] float matchTimer;
     float currencyTimer;
@@ -18,6 +18,7 @@ public class GameStarter : NetworkBehaviour
     private void Start() {
         if (isServer) {
             playersNeededToBeReady = NetworkServer.connections.Count;
+            Debug.Log("GameStarter: Players Connected:" + playersNeededToBeReady);
             playersReady++;//Once when the server starts;
             matchSeed = ParseSeed(GameObject.Find("Local").GetComponent<PlayerConstructor>().seed);
         }
@@ -52,7 +53,8 @@ public class GameStarter : NetworkBehaviour
     private void Ready() {
         if (playersNeededToBeReady > playersReady)
             return;
-
+        RpcGenerateMap(matchSeed);
+        Debug.Log("GameStarter: Players Connected:" + playersNeededToBeReady);
         StartCoroutine("StartGame");
     }
 
@@ -74,12 +76,13 @@ public class GameStarter : NetworkBehaviour
         }
     }
 
+    [Command(requiresAuthority = false)]
     private void CmdMapMade() {
         Made();
     }
-
+    
     IEnumerator StartGame() {
-        CmdGenerateMap(matchSeed);
+        //CmdGenerateMap(matchSeed);
         while (mapMade < playersNeededToBeReady)
             yield return new WaitForEndOfFrame();
 
@@ -107,7 +110,7 @@ public class GameStarter : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void CmdGenerateMap(int matchSeed) {
+    private void RpcGenerateMap(int matchSeed) {
         this.matchSeed = matchSeed;
         FindObjectOfType<MapBuilder>().GenerateMap(matchSeed);
     }

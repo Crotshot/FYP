@@ -6,9 +6,9 @@ using TMPro;
 
 public class UI : MonoBehaviour
 {
-    [SerializeField] Image healthBar, a1_Icon, a2_Icon, a3_Icon, a1_Fill, a2_Fill, a3_Fill, player_Icon, player_Fill;
-    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp, shiniesCount, timeText;
-    [SerializeField] GameObject tabPanel;
+    [SerializeField] Image healthBar, a1_Icon, a2_Icon, a3_Icon, a1_Fill, a2_Fill, a3_Fill, player_Icon, player_Fill, loadingImage;
+    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp, shiniesCount, timeText, statusTime, statusTotal, status;
+    [SerializeField] GameObject tabPanel, statusPanel, hud;
 
     private PlayerHealth playerHp;
     private PlayerCurrency pC;
@@ -107,25 +107,45 @@ public class UI : MonoBehaviour
     }
 
     public void UpdateMatchTimer(float matchTimer) {
-        int m = (int)matchTimer / 60;
+        timeText.text = TimeConverter(matchTimer);
+    }
+
+    public void UpdateLoadStatusTimers(float loadTime, float totalLoadTime) {
+        statusTime.text = TimeConverter(loadTime);
+        statusTotal.text = TimeConverter(totalLoadTime);
+    }
+
+    public void UpdateLoadStatusText(string t) {
+        status.text = t;
+    }
+
+    public void LoadingComplete() {
+        statusPanel.SetActive(false);
+        hud.SetActive(true);
+    }
+
+    private string TimeConverter(float time) {
+        string ret = "";
+        int m = (int)time / 60;
         if (m == 0) {
-            timeText.text = "00 : ";
+            ret = "00 : ";
         }
         else if (m < 10) {
-            timeText.text = "0" + m.ToString() + " : ";
+            ret = "0" + m.ToString() + " : ";
         }
         else {
-            timeText.text = m.ToString() + " : ";
+            ret = m.ToString() + " : ";
         }
-        m = (int)matchTimer % 60;
+        m = (int)time % 60;
         if (m == 0) {
-            timeText.text += "00";
+            ret += "00";
         }
         else if (m < 10) {
-            timeText.text += "0" + m.ToString();
+            ret += "0" + m.ToString();
         }
         else {
-            timeText.text += m.ToString();
+            ret += m.ToString();
         }
-    }   
+        return ret;
+    }
 }

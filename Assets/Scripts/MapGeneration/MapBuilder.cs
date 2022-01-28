@@ -29,11 +29,35 @@ public class MapBuilder : NetworkBehaviour {
     NavMeshData m_NavMesh;
     NavMeshDataInstance m_Instance;
 
-   // private List<Vector3> outerBuildingPositions = new List<Vector3>(),
-      //  innerBuildingPositions = new List<Vector3>(),
-      //  COPYouterBuildingPositions = new List<Vector3>(),
-      //  COPYinnerBuildingPositions = new List<Vector3>();
-   // private List<int> innerBuildingNums = new List<int>(), outerBuildingNums = new List<int>();
+    // private List<Vector3> outerBuildingPositions = new List<Vector3>(),
+    //  innerBuildingPositions = new List<Vector3>(),
+    //  COPYouterBuildingPositions = new List<Vector3>(),
+    //  COPYinnerBuildingPositions = new List<Vector3>();
+    // private List<int> innerBuildingNums = new List<int>(), outerBuildingNums = new List<int>();
+
+    [SerializeField] int attempts = 30;
+    int attemptCounter = 0;
+    [SerializeField] bool useNoise, makeFlora, makeSmallProps, makeLargeProps, makeBuildings, removeBadPoints, bakeNavMesh;
+    [SerializeField]
+    float floraClearMin, floraClearMax, smallClearMin, smallClearMax, largeClearMin, largeClearMax,
+        floraNoiseModifier, smallNoiseModifier, largeNoiseModifier, smallClearingDistance,
+        largeClearingDistance, outerBuildingClearingDistance, innerBuildingClearingDistance, halfPathWidth = 8f;
+    [SerializeField] [Range(0, 1)] float pathClearance;
+
+    List<Vector2> innerBuildingList = new List<Vector2>(), outerBuildingList = new List<Vector2>(), floraPropList = new List<Vector2>(),
+        smallPropList = new List<Vector2>(), largePropList = new List<Vector2>(), pointsToCheckList = new List<Vector2>();
+
+    [SerializeField] Vector2Int[] innerBuildingTiles, outerBuildingTiles;
+    [SyncVar] int ready1 = 0, ready2 = 0, playersNeededToBeReady;
+    UI ui;
+    float currentTime, totalTimer;
+
+    private void Start() {
+        if (isServer) {
+            playersNeededToBeReady = NetworkServer.connections.Count;
+            Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
+        }
+    }
 
     public bool regen;
     private void Update() {
@@ -67,9 +91,11 @@ public class MapBuilder : NetworkBehaviour {
         ChangeSeed(seed);
         m_NavMesh = new NavMeshData();
         m_Instance = NavMesh.AddNavMeshData(m_NavMesh);
-        ready = 0;
+        ready1 = 0;
+        ready2 = 0;
+        ui = FindObjectOfType<UI>();
+        StartCoroutine("TimerCounter");
         StartCoroutine("GenerateNew");
-        Debug.Log("Generating Map");
     }
     /* How the new map generation works
      * 1. Pick 1 random point per tile and place a flora Vector, adding it to the floraPropList & pointsToCheckList;
@@ -84,38 +110,46 @@ public class MapBuilder : NetworkBehaviour {
      * 8 => And the same again for large props except this time again we remove flora and also smallProps.
      * 9 => Finally buildings spots are picked and for inner and outer and all Large, small and flora props are removed within the clearing distance. 
      */
-    [SerializeField] int attempts = 30;
-    int attemptCounter = 0;
-    [SerializeField] bool useNoise, makeFlora,makeSmallProps, makeLargeProps, makeBuildings, removeBadPoints;
-    [SerializeField]
-    float floraClearMin, floraClearMax, smallClearMin, smallClearMax, largeClearMin, largeClearMax,
-        floraNoiseModifier, smallNoiseModifier, largeNoiseModifier, smallClearingDistance, 
-        largeClearingDistance, outerBuildingClearingDistance, innerBuildingClearingDistance, halfPathWidth = 8f;
-    [SerializeField] [Range(0, 1)] float pathClearance;
 
-    List<Vector2> innerBuildingList = new List<Vector2>(), outerBuildingList = new List<Vector2>(), floraPropList = new List<Vector2>(),
-        smallPropList = new List<Vector2>(), largePropList = new List<Vector2>(), pointsToCheckList = new List<Vector2>();
-
-    [SerializeField] Vector2Int[] innerBuildingTiles, outerBuildingTiles;
-    [SyncVar] int ready;
+    IEnumerator TimerCounter() {
+        while (true) {
+            yield return new WaitForSeconds(0.999f);
+            currentTime += 1f;
+            totalTimer += 1f;
+            ui.UpdateLoadStatusTimers(currentTime, totalTimer);
+        }
+    }
 
     IEnumerator GenerateNew() {
-        yield return new WaitForEndOfFrame();
-        Debug.Log("GeneratingMap");
         GameObject SideOne = new GameObject();
         SideOne.transform.parent = transform;
         SideOne.transform.position = Vector3.zero;
         SideOne.name = "Side_1";
+        GameObject SideTwo = new GameObject();
+        SideTwo.transform.parent = transform;
+        SideTwo.transform.position = Vector3.zero;
+        SideTwo.name = "Side_2";
+
+        while (playersNeededToBeReady == 0) {
+            Debug.Log("playersNeededToBeReady is 0 when it should not");
+            yield return new WaitForSeconds(2f);
+        }
+        Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
 
         if (isServer)
-            ready++;
+            ready1++;
         else
-            CmdReady();
-
+            CmdReady1();
         if (makeFlora) {
-            while (ready < NetworkServer.connections.Count) {
+            while (ready1 < playersNeededToBeReady) {
+                ui.UpdateLoadStatusText("Waiting on other Player 1");
                 yield return new WaitForEndOfFrame();
             }
+            yield return new WaitForSeconds(0.999f);
+            ready1 = 0;
+            yield return new WaitForSeconds(0.999f);
+            currentTime = 0;
+            ui.UpdateLoadStatusText("Generating Flora points");
             #region Flora Positions
             for (int x = 0; x < 8; x++) {
                 for (int z = 0; z < 4; z++) {
@@ -153,24 +187,27 @@ public class MapBuilder : NetworkBehaviour {
                         continue;
                 }
                 pointsToCheckList.RemoveAt(pointOfInterest);
-                Debug.Log("Flora point");
-                yield return new WaitForEndOfFrame();
+                //***yield return new WaitForEndOfFrame();
             }
             #endregion
-            Debug.Log("Flora Positions Calculated");
             yield return new WaitForEndOfFrame();
         }
 
         if (isServer)
-            ready++;
+            ready2++;
         else
-            CmdReady();
+            CmdReady2();
 
         if (makeSmallProps) {
-            while (ready < NetworkServer.connections.Count) {
+            while (ready2 < playersNeededToBeReady && ready1 > 0) {
+                ui.UpdateLoadStatusText("Waiting on other Player 2");
                 yield return new WaitForEndOfFrame();
             }
-            ready = 0;
+            yield return new WaitForSeconds(0.999f);
+            ready2 = 0;
+            yield return new WaitForSeconds(0.999f);
+            currentTime = 0;
+            ui.UpdateLoadStatusText("Generating Small Prop points");
             #region Small Props Positions
             for (int x = 0; x < 8; x++) {
                 for (int z = 0; z < 4; z++) {
@@ -209,8 +246,7 @@ public class MapBuilder : NetworkBehaviour {
                 }
                 pointsToCheckList.RemoveAt(pointOfInterest);
 
-                Debug.Log("Small prop point");
-                yield return new WaitForEndOfFrame();
+                //***yield return new WaitForEndOfFrame();
             }
 
             foreach (Vector2 smallPos in smallPropList) {
@@ -223,20 +259,24 @@ public class MapBuilder : NetworkBehaviour {
 
 
             #endregion
-            Debug.Log("Small Positions Calculated");
             yield return new WaitForEndOfFrame();
         }
 
         if (isServer)
-            ready++;
+            ready1++;
         else
-            CmdReady();
+            CmdReady1();
 
         if (makeLargeProps) {
-            while (ready < NetworkServer.connections.Count) {
+            while (ready1 < playersNeededToBeReady && ready2 > 0) {
+                ui.UpdateLoadStatusText("Waiting on other Player 3");
                 yield return new WaitForEndOfFrame();
             }
-            ready = 0;
+            yield return new WaitForSeconds(0.999f);
+            ready1 = 0;
+            yield return new WaitForSeconds(0.999f);
+            currentTime = 0;
+            ui.UpdateLoadStatusText("Generating Large Prop points");
             #region Large Props Positions
             for (int x = 0; x < 8; x++) {
                 for (int z = 0; z < 4; z++) {
@@ -273,8 +313,7 @@ public class MapBuilder : NetworkBehaviour {
                     else
                         continue;
                 }
-                Debug.Log("Large prop point");
-                yield return new WaitForEndOfFrame();
+                //***yield return new WaitForEndOfFrame();
                 pointsToCheckList.RemoveAt(pointOfInterest);
             }
 
@@ -291,20 +330,24 @@ public class MapBuilder : NetworkBehaviour {
                 }
             }
             #endregion
-            Debug.Log("Large Positions Calculated");
             yield return new WaitForEndOfFrame();
         }
 
         if (isServer)
-            ready++;
+            ready2++;
         else
-            CmdReady();
+            CmdReady2();
 
         if (makeBuildings) {
-            while (ready < NetworkServer.connections.Count) {
+            while (ready2 < playersNeededToBeReady && ready1 > 0) {
+                ui.UpdateLoadStatusText("Waiting on other Player 4");
                 yield return new WaitForEndOfFrame();
             }
-            ready = 0;
+            yield return new WaitForSeconds(0.999f);
+            ready2 = 0;
+            yield return new WaitForSeconds(0.999f);
+            currentTime = 0;
+            ui.UpdateLoadStatusText("Generating Building points");
             #region Outer Buildings Positions
             foreach (Vector2 tile in outerBuildingTiles) {
                 Vector2 point = new Vector2(tile.x * 50 - 200, tile.y * -50 + 200);
@@ -357,20 +400,24 @@ public class MapBuilder : NetworkBehaviour {
                 }
             }
             #endregion
-            Debug.Log("Building Positions Calculated");
             yield return new WaitForEndOfFrame();
         }
 
         if (isServer)
-            ready++;
+            ready1++;
         else
-            CmdReady();
+            CmdReady1();
 
         if (removeBadPoints) {
-            while (ready < NetworkServer.connections.Count) {
+            while (ready1 < playersNeededToBeReady && ready2 > 0) {
+                ui.UpdateLoadStatusText("Waiting on other Player 5");
                 yield return new WaitForEndOfFrame();
             }
-            ready = 0;
+            ui.UpdateLoadStatusText("Cleaning bad points");
+            yield return new WaitForSeconds(0.999f);
+            ready1 = 0;
+            yield return new WaitForSeconds(0.999f);
+            currentTime = 0;
             #region Removing positions in Bases, OnPaths & OnWalls
             for (int i = floraPropList.Count - 1; i >= 0; i--) {
                 if (!CleanPoint(floraPropList[i])) {
@@ -399,22 +446,26 @@ public class MapBuilder : NetworkBehaviour {
                 }
             }
             #endregion
-            Debug.Log("Bad positions Cleaned");
             yield return new WaitForEndOfFrame();
         }
 
         if (isServer)
-            ready++;
+            ready2++;
         else
-            CmdReady();
+            CmdReady2();
 
         int index = 0;
         float totalWeight = 0, type = 0, count = 0;
         if (makeFlora) {
-            while (ready < NetworkServer.connections.Count) {
+            while (ready2 < playersNeededToBeReady && ready1 > 0) {
+                ui.UpdateLoadStatusText("Waiting on other Player 6");
                 yield return new WaitForEndOfFrame();
             }
-            ready = 0;
+            ui.UpdateLoadStatusText("Instatiating Flora");
+            yield return new WaitForSeconds(0.999f);
+            ready2 = 0;
+            yield return new WaitForSeconds(0.999f);
+            currentTime = 0;
             #region Instantiate Flora Map Props
             for (int i = floraPropList.Count - 1; i >= 0; i--) {
                 totalWeight = 0; //Weigh odds of picking a prop variant
@@ -447,25 +498,34 @@ public class MapBuilder : NetworkBehaviour {
                 }
                 Vector2 pos = floraPropList[floraPropList.Count - 1];
                 floraPropList.RemoveAt(floraPropList.Count - 1);
-                GameObject obj = Instantiate(variant.getVariant(index), new Vector3(pos.x, 0, pos.y), Quaternion.identity);
-                obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
-                obj.transform.parent = SideOne.transform;
+                GameObject obj1 = Instantiate(variant.getVariant(index), new Vector3(pos.x, 0, pos.y), Quaternion.identity);
+                //***yield return new WaitForEndOfFrame();
+                obj1.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
+                obj1.transform.parent = SideOne.transform;
+                GameObject obj2 = Instantiate(variant.getVariant(index), new Vector3(-pos.x, 0, -pos.y), Quaternion.identity);
+                yield return new WaitForEndOfFrame();
+                obj2.transform.eulerAngles = obj1.transform.eulerAngles + new Vector3(0,180,0);
+                obj2.transform.parent = SideTwo.transform;
             }
             #endregion
-            Debug.Log("Flora props placed");
             yield return new WaitForEndOfFrame();
         }
 
         if (isServer)
-            ready++;
+            ready1++;
         else
-            CmdReady();
+            CmdReady1();
 
         if (makeSmallProps) {
-            while (ready < NetworkServer.connections.Count) {
+            while (ready1 < playersNeededToBeReady && ready2 > 0) {
+                ui.UpdateLoadStatusText("Waiting on other Player 7");
                 yield return new WaitForEndOfFrame();
             }
-            ready = 0;
+            yield return new WaitForSeconds(0.999f);
+            ready1 = 0;
+            yield return new WaitForSeconds(0.999f);
+            currentTime = 0;
+            ui.UpdateLoadStatusText("Instatiating Small Props");
             #region Instantiate Small Map Props
             for (int i = smallPropList.Count - 1; i >= 0; i--) {
                 totalWeight = 0; //Weigh odds of picking a prop variant
@@ -498,25 +558,34 @@ public class MapBuilder : NetworkBehaviour {
                 }
                 Vector2 pos = smallPropList[smallPropList.Count - 1];
                 smallPropList.RemoveAt(smallPropList.Count - 1);
-                GameObject obj = Instantiate(variant.getVariant(index), new Vector3(pos.x, 0, pos.y), Quaternion.identity);
-                obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
-                obj.transform.parent = SideOne.transform;
+                GameObject obj1 = Instantiate(variant.getVariant(index), new Vector3(pos.x, 0, pos.y), Quaternion.identity);
+                //***yield return new WaitForEndOfFrame();
+                obj1.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
+                obj1.transform.parent = SideOne.transform;
+                GameObject obj2 = Instantiate(variant.getVariant(index), new Vector3(-pos.x, 0, -pos.y), Quaternion.identity);
+                yield return new WaitForEndOfFrame();
+                obj2.transform.eulerAngles = obj1.transform.eulerAngles + new Vector3(0, 180, 0);
+                obj2.transform.parent = SideTwo.transform;
             }
             #endregion
-            Debug.Log("Small props placed");
             yield return new WaitForEndOfFrame();
         }
 
         if (isServer)
-            ready++;
+            ready2++;
         else
-            CmdReady();
+            CmdReady2();
 
         if (makeLargeProps) {
-            while (ready < NetworkServer.connections.Count) {
+            while (ready2 < playersNeededToBeReady && ready1 > 0) {
+                ui.UpdateLoadStatusText("Waiting on other Player 8");
                 yield return new WaitForEndOfFrame();
             }
-            ready = 0;
+            yield return new WaitForSeconds(0.999f);
+            ready2 = 0;
+            yield return new WaitForSeconds(0.999f);
+            currentTime = 0;
+            ui.UpdateLoadStatusText("Instatiating Large Props");
             #region Instantiate Large Map Props
             for (int i = largePropList.Count - 1; i >= 0; i--) {
                 totalWeight = 0; //Weigh odds of picking a prop variant
@@ -550,24 +619,33 @@ public class MapBuilder : NetworkBehaviour {
 
                 Vector2 pos = largePropList[largePropList.Count - 1];
                 largePropList.RemoveAt(largePropList.Count - 1);
-                GameObject obj = Instantiate(variant.getVariant(index), new Vector3(pos.x, 0, pos.y), Quaternion.identity);
-                obj.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
-                obj.transform.parent = SideOne.transform;
+                GameObject obj1 = Instantiate(variant.getVariant(index), new Vector3(pos.x, 0, pos.y), Quaternion.identity);
+                //***yield return new WaitForEndOfFrame();
+                obj1.transform.eulerAngles = new Vector3(0, RandomFloat(0f, 360f), 0);
+                obj1.transform.parent = SideOne.transform;
+                GameObject obj2 = Instantiate(variant.getVariant(index), new Vector3(-pos.x, 0, -pos.y), Quaternion.identity);
+                yield return new WaitForEndOfFrame();
+                obj2.transform.eulerAngles = obj1.transform.eulerAngles + new Vector3(0, 180, 0);
+                obj2.transform.parent = SideTwo.transform;
             }
             #endregion
-            Debug.Log("Large props placed");
             yield return new WaitForEndOfFrame();
         }
 
         if (isServer)
-            ready++;
+            ready1++;
         else
-            CmdReady();
+            CmdReady1();
 
-        while (ready < NetworkServer.connections.Count) {
+        while (ready1 < playersNeededToBeReady && ready2 > 0) {
+            ui.UpdateLoadStatusText("Waiting on other Player 9");
             yield return new WaitForEndOfFrame();
         }
-        ready = 0;
+        yield return new WaitForSeconds(0.999f);
+        ready1 = 0;
+        yield return new WaitForSeconds(0.999f);
+        currentTime = 0;
+        ui.UpdateLoadStatusText("Instatiating Buildings");
         if (makeBuildings && isServer) {
             #region Instantiating Buildings
             if (isServer) {
@@ -590,10 +668,12 @@ public class MapBuilder : NetworkBehaviour {
                     GameObject building_1 = Instantiate(buildings[0].getVariant(index), null),
                     building_2 = Instantiate(buildings[0].getVariant(index), null);
                     NetworkServer.Spawn(building_1);
+                    yield return new WaitForSeconds(0.1f);
                     Vector3 pos = new Vector3(innerBuildingList[innerBuildingList.Count - 1].x, 0, innerBuildingList[innerBuildingList.Count - 1].y);
                     building_1.transform.position = pos;
                     building_1.transform.RotateAround(building_1.transform.position, building_1.transform.up, 180);
                     NetworkServer.Spawn(building_2);
+                    yield return new WaitForSeconds(0.1f);
                     building_2.transform.position = new Vector3(-pos.x, pos.y, -pos.z);
                     innerBuildingList.RemoveAt(innerBuildingList.Count - 1);
                 }
@@ -616,6 +696,7 @@ public class MapBuilder : NetworkBehaviour {
                     GameObject building_1 = Instantiate(buildings[1].getVariant(index), null),
                     building_2 = Instantiate(buildings[1].getVariant(index), null);
                     NetworkServer.Spawn(building_1);
+                    yield return new WaitForSeconds(0.1f);
                     Vector3 pos = new Vector3(outerBuildingList[outerBuildingList.Count - 1].x, 0, outerBuildingList[outerBuildingList.Count - 1].y);
 
                     Vector3 rounded = new Vector3(Helpers.Round((int)pos.x, 50, 25), 0, Helpers.Round((int)pos.z, 50, 25));
@@ -636,41 +717,44 @@ public class MapBuilder : NetworkBehaviour {
                     building_1.transform.eulerAngles = new Vector3(0, angle, 0);
                     building_1.transform.position = pos;
                     NetworkServer.Spawn(building_2);
+                    yield return new WaitForSeconds(0.1f);
                     building_2.transform.position = new Vector3(-pos.x, pos.y, -pos.z);
                     building_2.transform.eulerAngles = new Vector3(0, building_1.transform.eulerAngles.y + 180, 0);
                     outerBuildingList.RemoveAt(outerBuildingList.Count - 1);
                 }
             }
             #endregion
-            Debug.Log("Buildings placed");
         }
 
         if (isServer)
-            ready++;
+            ready2++;
         else
-            CmdReady();
-        while (ready < NetworkServer.connections.Count) {
+            CmdReady2();
+        while (ready2 < playersNeededToBeReady && ready1 > 0) {
+            ui.UpdateLoadStatusText("Waiting on other Player 10");
             yield return new WaitForEndOfFrame();
         }
-        ready = 0;
-        yield return new WaitForSeconds(0.3f);
-        SideTwo();
-
-        if (isServer)
-            ready++;
-        else
-            CmdReady();
-        while (ready < NetworkServer.connections.Count) {
-            yield return new WaitForEndOfFrame();
-        }
-        ready = 0;
+        yield return new WaitForSeconds(0.999f);
+        ready2 = 0;
+        yield return new WaitForSeconds(0.999f);
+        ui.UpdateLoadStatusText("Baking nav mesh");
         yield return new WaitForSeconds(1f);
-        BakeMap();
+        if(bakeNavMesh)
+            BakeMap();
+        else {
+            Debug.Log("Nav mesh not baked due to settings");
+            FindObjectOfType<GameStarter>().Made();
+        }
     }
 
     [Command (requiresAuthority = false)]
-    private void CmdReady() {
-        ready++;
+    private void CmdReady1() {
+        ready1++;
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdReady2() {
+        ready2++;
     }
 
     private bool CleanPoint(Vector2 p) {
@@ -715,14 +799,6 @@ public class MapBuilder : NetworkBehaviour {
         return true;
     }
 
-    private void SideTwo() {
-        GameObject SideTwo = Instantiate(transform.GetChild(1).gameObject, transform);
-        SideTwo.transform.eulerAngles = new Vector3(0, 180f, 0);
-        SideTwo.name = "Side_2";
-
-        //StartCoroutine("BakeDelay");
-    }
-
     //IEnumerator BakeDelay() {
     //    yield return new WaitForSeconds(1f);
     //    BakeMap();
@@ -758,9 +834,13 @@ public class MapBuilder : NetworkBehaviour {
 
         #endregion
         UpdateNavMesh();
+        ui.UpdateLoadStatusText("Nav finished");
         Debug.Log("Nav mesh created");
+        StopCoroutine("TimerCounter");
+        ui.LoadingComplete();
+
         FindObjectOfType<GameStarter>().Made();
-        StopAllCoroutines();
+        //StopAllCoroutines();
     }
 
     [System.Serializable]
