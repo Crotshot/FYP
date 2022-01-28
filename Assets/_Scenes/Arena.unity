@@ -8104,7 +8104,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!23 &618976204
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8163,7 +8163,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 618976202}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000020861623}
-  m_LocalPosition: {x: -36.31, y: 0.5, z: 15.98}
+  m_LocalPosition: {x: -72.5, y: 27.97, z: 25.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -12760,7 +12760,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1194273886
 Transform:
   m_ObjectHideFlags: 0
@@ -16734,8 +16734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  oldMap: 0
-  seed: 432423423
+  seed: 4206911
   tiles:
   - variants:
     - {fileID: 1203602855248801368, guid: d4c02be3f7bf9fc44931b1a5155d1faf, type: 3}
@@ -16807,50 +16806,6 @@ MonoBehaviour:
     - 0.25
     weight: 3
   - variants:
-    - {fileID: 7565208476194545115, guid: 81ab45f8584d424498a919299179261f, type: 3}
-    - {fileID: 7802080925312859987, guid: e3abd0031e9c57a4ca14064d1eee666e, type: 3}
-    weights:
-    - 0.38
-    - 0.62
-    weight: 1
-  - variants:
-    - {fileID: 358804113594605729, guid: 739bbcb71f66397479a50d49a682bcf3, type: 3}
-    - {fileID: 8269751115378131323, guid: 49ba7cd3e77f746438769a04101e00a6, type: 3}
-    - {fileID: 6867813019583492194, guid: 89c7a78fef033d54c83b2b7dba3cc2c0, type: 3}
-    - {fileID: 377085964289245313, guid: b2f866239dad53a4bafacfa3c2a41a0e, type: 3}
-    - {fileID: 1738581774626082798, guid: f7fcb907b0a56d147b6944eb645d363a, type: 3}
-    - {fileID: 7491246206096726923, guid: 0f7a756c8c4c19148a7eff38107dfa06, type: 3}
-    - {fileID: 7944793221055336152, guid: f367435bf195dad4c9c220800e4362b7, type: 3}
-    weights:
-    - 2.8
-    - 2.8
-    - 2.8
-    - 1.4
-    - 0.52
-    - 0.26
-    - 0.13
-    weight: 1
-  - variants:
-    - {fileID: 8368633432685421079, guid: 02e54a3c92a7eda45acce198fbfa77b1, type: 3}
-    - {fileID: 5065386000346466776, guid: 2fe709c83ad19354f8b396a7d395b4bb, type: 3}
-    - {fileID: 7759772380653954827, guid: 23def6b649d97d444883ba757e77478d, type: 3}
-    weights:
-    - 0.33
-    - 0.33
-    - 0.33
-    weight: 0.2
-  - variants:
-    - {fileID: 6629849888783094792, guid: b1dd6209386f1bd4c9dc1f9751fd0b21, type: 3}
-    - {fileID: 7371413071560592824, guid: b0101267873c8d049bf7fd447e621236, type: 3}
-    - {fileID: 2106226678237123733, guid: 598f425125dc4f6449b1a64558bf5043, type: 3}
-    - {fileID: 1511252458906490775, guid: 370b5826ec7b833498c81c45327710d0, type: 3}
-    weights:
-    - 0.4
-    - 0.3
-    - 0.2
-    - 0.1
-    weight: 2
-  - variants:
     - {fileID: 927554333261121653, guid: 5b19260cd57577047ba07ab53b8d53cb, type: 3}
     - {fileID: 1964433312344449837, guid: da95865eaceb3504c8270d5521e2f6b4, type: 3}
     - {fileID: 2455848423591466941, guid: 87cc77bb24da4344f847d6a0999656f7, type: 3}
@@ -16908,53 +16863,112 @@ MonoBehaviour:
     - 2
     - 0.1
     weight: 1
+  floraProps:
+  - variants:
+    - {fileID: 6629849888783094792, guid: b1dd6209386f1bd4c9dc1f9751fd0b21, type: 3}
+    - {fileID: 7371413071560592824, guid: b0101267873c8d049bf7fd447e621236, type: 3}
+    - {fileID: 2106226678237123733, guid: 598f425125dc4f6449b1a64558bf5043, type: 3}
+    - {fileID: 1511252458906490775, guid: 370b5826ec7b833498c81c45327710d0, type: 3}
+    weights:
+    - 0.4
+    - 0.3
+    - 0.2
+    - 0.1
+    weight: 5
+  - variants:
+    - {fileID: 358804113594605729, guid: 739bbcb71f66397479a50d49a682bcf3, type: 3}
+    - {fileID: 8269751115378131323, guid: 49ba7cd3e77f746438769a04101e00a6, type: 3}
+    - {fileID: 6867813019583492194, guid: 89c7a78fef033d54c83b2b7dba3cc2c0, type: 3}
+    - {fileID: 377085964289245313, guid: b2f866239dad53a4bafacfa3c2a41a0e, type: 3}
+    - {fileID: 1738581774626082798, guid: f7fcb907b0a56d147b6944eb645d363a, type: 3}
+    - {fileID: 7491246206096726923, guid: 0f7a756c8c4c19148a7eff38107dfa06, type: 3}
+    - {fileID: 7944793221055336152, guid: f367435bf195dad4c9c220800e4362b7, type: 3}
+    weights:
+    - 2.8
+    - 2.8
+    - 2.8
+    - 1.4
+    - 0.52
+    - 0.26
+    - 0.13
+    weight: 0.5
+  - variants:
+    - {fileID: 7565208476194545115, guid: 81ab45f8584d424498a919299179261f, type: 3}
+    - {fileID: 7802080925312859987, guid: e3abd0031e9c57a4ca14064d1eee666e, type: 3}
+    weights:
+    - 0.38
+    - 0.62
+    weight: 0.5
+  - variants:
+    - {fileID: 8368633432685421079, guid: 02e54a3c92a7eda45acce198fbfa77b1, type: 3}
+    - {fileID: 5065386000346466776, guid: 2fe709c83ad19354f8b396a7d395b4bb, type: 3}
+    - {fileID: 7759772380653954827, guid: 23def6b649d97d444883ba757e77478d, type: 3}
+    weights:
+    - 0.33
+    - 0.33
+    - 0.33
+    weight: 0.1
   paths:
-  - pointA: {fileID: 1672625619}
+  - pointA: {fileID: 1338630002}
     pointB: {fileID: 2002793669}
   - pointA: {fileID: 2002793669}
     pointB: {fileID: 732299831}
   - pointA: {fileID: 732299831}
-    pointB: {fileID: 1045017769}
+    pointB: {fileID: 657013322}
   - pointA: {fileID: 732299831}
     pointB: {fileID: 1204356788}
   - pointA: {fileID: 1204356788}
     pointB: {fileID: 1835779379}
-  - pointA: {fileID: 1701845076}
+  - pointA: {fileID: 1338630002}
     pointB: {fileID: 869408510}
   - pointA: {fileID: 869408510}
     pointB: {fileID: 1953113759}
   - pointA: {fileID: 1953113759}
-    pointB: {fileID: 238327268}
+    pointB: {fileID: 76813971}
   - pointA: {fileID: 1953113759}
     pointB: {fileID: 1930757110}
   - pointA: {fileID: 1930757110}
     pointB: {fileID: 1835779379}
   - pointA: {fileID: 989712575}
     pointB: {fileID: 1930757110}
-  - pointA: {fileID: 1496227638}
+  - pointA: {fileID: 1338630002}
     pointB: {fileID: 989712575}
-  largePropDist: 16
-  largePropClearing: 10
-  smallPropDist: 5
-  outerBuildingClearing: 7
-  innerBuildingClearing: 12
-  halfPathWidth: 8
   regen: 0
   attempts: 30
   useNoise: 0
-  floraClearMin: 5
-  floraClearMax: 15
-  smallClearMin: 3
-  smallClearMax: 7
-  largeClearMin: 20
-  largeClearMax: 40
+  makeFlora: 1
+  makeSmallProps: 1
+  makeLargeProps: 1
+  makeBuildings: 1
+  removeBadPoints: 1
+  floraClearMin: 4
+  floraClearMax: 16
+  smallClearMin: 5
+  smallClearMax: 12
+  largeClearMin: 30
+  largeClearMax: 45
   floraNoiseModifier: 1
   smallNoiseModifier: 0.7
   largeNoiseModifier: 0.5
-  smallClearingDistance: 3
-  largeClearingDistance: 7
-  outerBuildingClearingDistance: 8
-  innerBuildingClearingDistance: 12
+  smallClearingDistance: 2
+  largeClearingDistance: 6
+  outerBuildingClearingDistance: 6
+  innerBuildingClearingDistance: 10
+  halfPathWidth: 12
+  pathClearance: 0.8
+  innerBuildingTiles:
+  - {x: 4, y: 2}
+  - {x: 5, y: 2}
+  outerBuildingTiles:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 2}
+  - {x: 1, y: 0}
+  - {x: 6, y: 0}
+  - {x: 7, y: 0}
+  - {x: 7, y: 1}
+  - {x: 7, y: 2}
+  - {x: 7, y: 3}
 --- !u!4 &1876954894
 Transform:
   m_ObjectHideFlags: 0
