@@ -5,7 +5,7 @@ using Mirror;
 
 public class GameStarter : NetworkBehaviour
 {
-    [SerializeField] [SyncVar] int playersReady, playersNeededToBeReady, matchSeed, currencyPerWave;
+    [SerializeField] [SyncVar] int playersReady, playersNeededToBeReady, mapMade, matchSeed, currencyPerWave;
     [SerializeField] float currencyWave;
     [SyncVar] float matchTimer;
     float currencyTimer;
@@ -52,22 +52,8 @@ public class GameStarter : NetworkBehaviour
     private void Ready() {
         if (playersNeededToBeReady > playersReady)
             return;
-        
-        CmdGenerateMap(matchSeed);
-        SetupPlayers();
-        ReleasePlayers();
-        FindObjectOfType<MinionManager>().StartWaveSystem();
-        pCs = FindObjectsOfType<PlayerCurrency>();
-        StartMatchTimer();
-        foreach(MinionSumoner mS in FindObjectsOfType<MinionSumoner>()) {
-            mS.Setup(pCs);
-        }
-        foreach(GateScript gate in FindObjectsOfType<GateScript>()) {
-            gate.Setup();
-        }
-        foreach (ControlPoint cP in FindObjectsOfType<ControlPoint>()) {
-            cP.Setup();
-        }
+
+        StartCoroutine("StartGame");
     }
 
     private void ReadyUp() {
@@ -78,6 +64,42 @@ public class GameStarter : NetworkBehaviour
             CmdReady();
         }
     }
+
+    public void Made() {
+        if (isServer) {
+            mapMade++;
+        }
+        else {
+            CmdMapMade();
+        }
+    }
+
+    private void CmdMapMade() {
+        Made();
+    }
+
+    IEnumerator StartGame() {
+        CmdGenerateMap(matchSeed);
+        while (mapMade < playersNeededToBeReady)
+            yield return new WaitForEndOfFrame();
+
+        SetupPlayers();
+        ReleasePlayers();
+        FindObjectOfType<MinionManager>().StartWaveSystem();
+        pCs = FindObjectsOfType<PlayerCurrency>();
+        StartMatchTimer();
+        foreach (MinionSumoner mS in FindObjectsOfType<MinionSumoner>()) {
+            mS.Setup(pCs);
+        }
+        foreach (GateScript gate in FindObjectsOfType<GateScript>()) {
+            gate.Setup();
+        }
+        foreach (ControlPoint cP in FindObjectsOfType<ControlPoint>()) {
+            cP.Setup();
+        }
+    }
+
+
 
     [Command(requiresAuthority = false)]
     private void CmdReady() {
