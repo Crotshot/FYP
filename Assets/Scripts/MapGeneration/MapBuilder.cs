@@ -351,7 +351,7 @@ public class MapBuilder : NetworkBehaviour {
             #region Outer Buildings Positions
             foreach (Vector2 tile in outerBuildingTiles) {
                 Vector2 point = new Vector2(tile.x * 50 - 200, tile.y * -50 + 200);
-                point = RandomPoint(point + new Vector2(15, -15), point + new Vector2(35, -35));
+                point = RandomPoint(point + new Vector2(22, -22), point + new Vector2(22, -22));
                 outerBuildingList.Add(point);
                 pointsToCheckList.Add(point);
             }
@@ -377,7 +377,7 @@ public class MapBuilder : NetworkBehaviour {
             #region Inner Buildings Positions
             foreach (Vector2 tile in innerBuildingTiles) {
                 Vector2 point = new Vector2(tile.x * 50 -200, tile.y * -50 + 200);
-                point = RandomPoint(point + new Vector2(15, -15), point + new Vector2(35, -35));
+                point = RandomPoint(point + new Vector2(22, -22), point + new Vector2(22, -22));
                 innerBuildingList.Add(point);
                 pointsToCheckList.Add(point);
             }
@@ -665,13 +665,13 @@ public class MapBuilder : NetworkBehaviour {
                         if (count >= type) break; else index++;
                     }
 
-                    GameObject building_1 = Instantiate(buildings[0].getVariant(index), null),
-                    building_2 = Instantiate(buildings[0].getVariant(index), null);
+                    GameObject building_1 = Instantiate(buildings[0].getVariant(index), null);
                     NetworkServer.Spawn(building_1);
                     yield return new WaitForSeconds(0.1f);
                     Vector3 pos = new Vector3(innerBuildingList[innerBuildingList.Count - 1].x, 0, innerBuildingList[innerBuildingList.Count - 1].y);
                     building_1.transform.position = pos;
                     building_1.transform.RotateAround(building_1.transform.position, building_1.transform.up, 180);
+                    GameObject building_2 = Instantiate(buildings[0].getVariant(index), null);
                     NetworkServer.Spawn(building_2);
                     yield return new WaitForSeconds(0.1f);
                     building_2.transform.position = new Vector3(-pos.x, pos.y, -pos.z);
@@ -693,8 +693,7 @@ public class MapBuilder : NetworkBehaviour {
                         if (count >= type) break; else index++;
                     }
 
-                    GameObject building_1 = Instantiate(buildings[1].getVariant(index), null),
-                    building_2 = Instantiate(buildings[1].getVariant(index), null);
+                    GameObject building_1 = Instantiate(buildings[1].getVariant(index), null);
                     NetworkServer.Spawn(building_1);
                     yield return new WaitForSeconds(0.1f);
                     Vector3 pos = new Vector3(outerBuildingList[outerBuildingList.Count - 1].x, 0, outerBuildingList[outerBuildingList.Count - 1].y);
@@ -716,6 +715,7 @@ public class MapBuilder : NetworkBehaviour {
 
                     building_1.transform.eulerAngles = new Vector3(0, angle, 0);
                     building_1.transform.position = pos;
+                    GameObject building_2 = building_2 = Instantiate(buildings[1].getVariant(index), null);
                     NetworkServer.Spawn(building_2);
                     yield return new WaitForSeconds(0.1f);
                     building_2.transform.position = new Vector3(-pos.x, pos.y, -pos.z);

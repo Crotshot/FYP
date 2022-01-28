@@ -7,7 +7,8 @@ public class Interactor : NetworkBehaviour
 {
     Camera cam;
     Inputs inputs;
-    [SerializeField] ulong objectID;
+    [SyncVar] [SerializeField] ulong objectID = 0;
+    ulong lastObjectID = 0;
     GameObject arrow;
 
     bool setUp;
@@ -38,6 +39,20 @@ public class Interactor : NetworkBehaviour
         inputs.GetMousePosition();
         Ray cameraRay = cam.ScreenPointToRay(inputs.GetMousePosition());
         CameraRay(cameraRay.origin, cameraRay.direction);
+
+        if(objectID != lastObjectID) {
+            if (objectID != 0) {
+                foreach (Interactable inter in FindObjectsOfType<Interactable>()) {
+                    if (inter.GetID() == objectID) {
+                        arrow.transform.position = inter.transform.position;
+                    }
+                }
+            }
+            else {
+                arrow.transform.position = Vector3.down * 50f;
+            }
+            lastObjectID = objectID;
+        }
     }
 
     private void CameraRay(Vector3 origin, Vector3 direction) {
@@ -47,11 +62,11 @@ public class Interactor : NetworkBehaviour
             int layer = 1 << LayerMask.NameToLayer("Default");
             if (Physics.Raycast(cameraRay, out RaycastHit hit, 999f, layer, QueryTriggerInteraction.Ignore)) {
                 if(hit.collider.TryGetComponent(out Interactable inter)) {
-                    InformID(inter.GetID());
-                }
+                    objectID = inter.GetID();
+                } else objectID = 0;
             }
             else {
-                InformID(0);
+                objectID = 0;
             }
         }
         else {
@@ -62,10 +77,5 @@ public class Interactor : NetworkBehaviour
     [Command (requiresAuthority = false)]
     public void CmdServerRay(Vector3 origin, Vector3 direction) {
         CameraRay(origin, direction);
-    }
-
-    [ClientRpc]
-    public void InformID(ulong ID) {
-        objectID = ID;
     }
 }
