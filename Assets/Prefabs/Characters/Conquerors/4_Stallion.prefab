@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 6535265368243992406}
   - component: {fileID: 8681246067184600289}
   - component: {fileID: 2917514959419387400}
+  - component: {fileID: 7509166684449190281}
   m_Layer: 0
   m_Name: 4_Stallion
   m_TagString: Player
@@ -253,7 +254,7 @@ NavMeshAgent:
   m_Radius: 1.87
   m_Speed: 12
   m_Acceleration: 200
-  avoidancePriority: 99
+  avoidancePriority: 0
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
@@ -462,6 +463,23 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   objectID: 0
+--- !u!114 &7509166684449190281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2814933875791984564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0565d56b1f6e6814f8d583f1223ab932, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  maxFollowers: 4
+  minionTypes: []
+  followerMinions: []
 --- !u!1 &2814933876262695979
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,7 +606,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 68d7aa4ae429d224687fc683d4030573, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

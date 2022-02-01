@@ -41,8 +41,8 @@ public class MinionSpawner_Base : NetworkBehaviour {
         return freshMinion;
     }
 
-    IEnumerator MinionSpawn(GameObject minion) {
-        float timer = 0.66f;
+    IEnumerator MinionSpawn(GameObject minion) { //Called when the player spawns minions manually
+        float timer = 0.21f;
         while (timer > 0) {
             if (minion == null)
                 break;

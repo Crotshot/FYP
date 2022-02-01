@@ -10,6 +10,8 @@ public class Interactor : NetworkBehaviour
     [SyncVar] [SerializeField] ulong objectID = 0;
     ulong lastObjectID = 0;
     GameObject arrow;
+    Interactable focus;
+    [SyncVar] Vector3 mouseWorldPos;
 
     bool setUp;
 
@@ -44,12 +46,26 @@ public class Interactor : NetworkBehaviour
             if (objectID != 0) {
                 foreach (Interactable inter in FindObjectsOfType<Interactable>()) {
                     if (inter.GetID() == objectID) {
-                        arrow.transform.position = inter.transform.position;
+                        if (inter.TryGetComponent(out Team t)) {
+                            if(t.GetTeam() != GetComponent<Team>().GetTeam()) {
+                                arrow.transform.position = Vector3.down * 50f; //Dont show arrow above enemy minion Summoners
+                                focus = null;
+                            }
+                            else {
+                                arrow.transform.position = inter.transform.position;
+                                focus = inter;
+                            }
+                        }
+                        else {
+                            arrow.transform.position = inter.transform.position;
+                            focus = inter;
+                        }
                     }
                 }
             }
             else {
                 arrow.transform.position = Vector3.down * 50f;
+                focus = null;
             }
             lastObjectID = objectID;
         }
@@ -61,12 +77,17 @@ public class Interactor : NetworkBehaviour
             Debug.DrawRay(origin, direction * 99f, Color.cyan);
             int layer = 1 << LayerMask.NameToLayer("Default");
             if (Physics.Raycast(cameraRay, out RaycastHit hit, 999f, layer, QueryTriggerInteraction.Ignore)) {
-                if(hit.collider.TryGetComponent(out Interactable inter)) {
+                if (hit.collider.TryGetComponent(out Interactable inter)) {
                     objectID = inter.GetID();
-                } else objectID = 0;
+                } else {
+                    objectID = 0;
+                    focus = null;
+                }
+                mouseWorldPos = hit.point;
             }
             else {
                 objectID = 0;
+                focus = null;
             }
         }
         else {
@@ -77,5 +98,13 @@ public class Interactor : NetworkBehaviour
     [Command (requiresAuthority = false)]
     public void CmdServerRay(Vector3 origin, Vector3 direction) {
         CameraRay(origin, direction);
+    }
+
+    public Interactable GetFocus() {
+        return focus;
+    }
+
+    public Vector3 GetMouseWorldPos() {
+        return mouseWorldPos;
     }
 }

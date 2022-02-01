@@ -7,14 +7,16 @@ using TMPro;
 public class UI : MonoBehaviour
 {
     [SerializeField] Image healthBar, a1_Icon, a2_Icon, a3_Icon, a1_Fill, a2_Fill, a3_Fill, player_Icon, player_Fill, loadingImage;
-    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp, shiniesCount, timeText, statusTime, statusTotal, status;
-    [SerializeField] GameObject tabPanel, statusPanel, hud;
+    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp, shiniesCount, timeText, statusTime, statusTotal, status, minionCounter;
+    [SerializeField] GameObject tabPanel, statusPanel, hud, minionSelector;
 
     private PlayerHealth playerHp;
     private PlayerCurrency pC;
+    private PlayerMinions pM;
     private Ability ab1, ab2, ab3;
     private Inputs inputs;
     float uiTimer = 0;
+    private Vector3 targetAngle;
 
     private bool setUp;
 
@@ -41,6 +43,7 @@ public class UI : MonoBehaviour
 
         this.pC = pC;
         setUp = true;
+        pM = pC.GetComponent<PlayerMinions>();
     }
 
     private void Update() {
@@ -99,6 +102,11 @@ public class UI : MonoBehaviour
             }
 
             shiniesCount.text = pC.GetShinies().ToString();
+
+            minionCounter.text = pM.GetMinionCount();
+            targetAngle = new Vector3(0,0, pM.GetMinionSelectedAngle());
+
+            minionSelector.transform.eulerAngles = Vector3.Lerp(minionSelector.transform.eulerAngles, targetAngle, 0.15f);
         }
         else {
             uiTimer += Time.deltaTime;

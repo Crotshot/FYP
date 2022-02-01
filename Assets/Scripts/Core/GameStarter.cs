@@ -119,6 +119,7 @@ public class GameStarter : NetworkBehaviour
     private void SetupPlayers() {
         foreach (PlayerController pC in FindObjectsOfType<PlayerController>()) {
             pC.Setup();
+            pC.GetComponent<PlayerMinions>().Setup();
         }
     }
 

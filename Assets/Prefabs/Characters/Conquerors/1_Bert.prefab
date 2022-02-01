@@ -299,6 +299,7 @@ GameObject:
   - component: {fileID: 207195300181792997}
   - component: {fileID: 3093664540618079009}
   - component: {fileID: 7509785099594961798}
+  - component: {fileID: 3989870473643712915}
   m_Layer: 0
   m_Name: 1_Bert
   m_TagString: Player
@@ -336,7 +337,7 @@ NavMeshAgent:
   m_Radius: 1.7
   m_Speed: 12
   m_Acceleration: 200
-  avoidancePriority: 99
+  avoidancePriority: 0
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
@@ -586,6 +587,23 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   objectID: 0
+--- !u!114 &3989870473643712915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394059884701148311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0565d56b1f6e6814f8d583f1223ab932, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  maxFollowers: 4
+  minionTypes: []
+  followerMinions: []
 --- !u!1 &3394059886310829525
 GameObject:
   m_ObjectHideFlags: 0

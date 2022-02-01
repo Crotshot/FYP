@@ -7,9 +7,10 @@ public class Minion_Ranged : Minion_Attack {
     bool projectTileLaunched, projCreated;
     [SerializeField] GameObject archingProjectilePrefab, projectileSpawnPoint;
 
-    private void Start() {
+    public void Setup() {
         if (!isServer)
             Destroy(this);
+
         animatedWeapon.localPosition = animatedTimings[0].pos;
         animatedWeapon.localScale = animatedTimings[0].scale;
         animatedWeapon.localEulerAngles = animatedTimings[0].localEuler;

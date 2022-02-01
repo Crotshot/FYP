@@ -40,6 +40,8 @@ public class MinionManager : NetworkBehaviour {
                 if (C.GetTeam() == 1) {
                     if ((NW.GetTeam() == 1 || NE.GetTeam() == 1) && (SW.GetTeam() == 1 || SE.GetTeam() == 1)) {
                         foreach (MinionController min in minions_1) {
+                            if (!min.isBaseMinion())
+                                continue;
                             if (BS.GetCurrentMinions(1) < BS.GetMaxMinions()) {
                                 if (min.GetAssignedControlPoint() == C.transform) {
                                     min.AddPathPoints(C_S.points);
@@ -62,6 +64,8 @@ public class MinionManager : NetworkBehaviour {
                     }
                     else {
                         foreach (MinionController min in minions_1) {
+                            if (!min.isBaseMinion())
+                                continue;
                             if (SW.GetCurrentMinions(1) < SW.GetMaxMinions()) {
                                 if (min.GetAssignedControlPoint() == C.transform) {
                                     min.AddPathPoints(C_SW.points);
@@ -80,6 +84,8 @@ public class MinionManager : NetworkBehaviour {
             if(NE.GetTeam() == 1) {
                 if (e_G) { //If east gate is open
                     foreach (MinionController min in minions_1) {
+                        if (!min.isBaseMinion())
+                            continue;
                         if (SE.GetCurrentMinions(1) < SE.GetMaxMinions()) {
                             if (min.GetAssignedControlPoint() == NE.transform) {
                                 min.AddPathPoints(NE_SE.points);
@@ -93,6 +99,8 @@ public class MinionManager : NetworkBehaviour {
                     }
                 }
                 foreach (MinionController min in minions_1) {
+                    if (!min.isBaseMinion())
+                        continue;
                     if (C.GetCurrentMinions(1) < C.GetMaxMinions()) {
                         if (min.GetAssignedControlPoint() == NE.transform) {
                             min.AddPathPoints(NE_C.points);
@@ -110,6 +118,8 @@ public class MinionManager : NetworkBehaviour {
             if (NW.GetTeam() == 1) {
                 if (w_G) { //If east gate is open
                     foreach (MinionController min in minions_1) {
+                        if (!min.isBaseMinion())
+                            continue;
                         if (SW.GetCurrentMinions(1) < SW.GetMaxMinions()) {
                             if (min.GetAssignedControlPoint() == NW.transform) {
                                 min.AddPathPoints(NW_SW.points);
@@ -123,6 +133,8 @@ public class MinionManager : NetworkBehaviour {
                     }
                 }
                 foreach (MinionController min in minions_1) {
+                    if (!min.isBaseMinion())
+                        continue;
                     if (C.GetCurrentMinions(1) < C.GetMaxMinions()) {
                         if (min.GetAssignedControlPoint() == NW.transform) {
                             min.AddPathPoints(NW_C.points);
@@ -142,6 +154,8 @@ public class MinionManager : NetworkBehaviour {
                 if (C.GetTeam() == 2) {
                     if ((SW.GetTeam() == 2 || SE.GetTeam() == 2) && (NW.GetTeam() == 2 || NE.GetTeam() == 2)) {
                         foreach (MinionController min in minions_2) {
+                            if (!min.isBaseMinion())
+                                continue;
                             if (BN.GetCurrentMinions(2) < BN.GetMaxMinions()) {
                                 if (min.GetAssignedControlPoint() == C.transform) {
                                     min.AddPathPoints(C_N.points);
@@ -164,6 +178,8 @@ public class MinionManager : NetworkBehaviour {
                     }
                     else {
                         foreach (MinionController min in minions_2) {
+                            if (!min.isBaseMinion())
+                                continue;
                             if (NW.GetCurrentMinions(2) < NW.GetMaxMinions()) {
                                 if (min.GetAssignedControlPoint() == C.transform) {
                                     min.AddPathPoints(C_NE.points);
@@ -183,6 +199,8 @@ public class MinionManager : NetworkBehaviour {
             if (SW.GetTeam() == 2) {
                 if (w_G) { //If east gate is open
                     foreach (MinionController min in minions_2) {
+                        if (!min.isBaseMinion())
+                            continue;
                         if (NW.GetCurrentMinions(2) < NW.GetMaxMinions()) {
                             if (min.GetAssignedControlPoint() == SW.transform) {
                                 min.AddPathPoints(SW_NW.points);
@@ -196,6 +214,8 @@ public class MinionManager : NetworkBehaviour {
                     }
                 }
                 foreach (MinionController min in minions_2) {
+                    if (!min.isBaseMinion())
+                        continue;
                     if (C.GetCurrentMinions(2) < C.GetMaxMinions()) {
                         if (min.GetAssignedControlPoint() == SW.transform) {
                             min.AddPathPoints(SW_C.points);
@@ -213,6 +233,8 @@ public class MinionManager : NetworkBehaviour {
             if (SE.GetTeam() == 2) {
                 if (e_G) { //If east gate is open
                     foreach (MinionController min in minions_2) {
+                        if (!min.isBaseMinion())
+                            continue;
                         if (NE.GetCurrentMinions(2) < NE.GetMaxMinions()) {
                             if (min.GetAssignedControlPoint() == SE.transform) {
                                 min.AddPathPoints(SE_NE.points);
@@ -226,6 +248,8 @@ public class MinionManager : NetworkBehaviour {
                     }
                 }
                 foreach (MinionController min in minions_2) {
+                    if (!min.isBaseMinion())
+                        continue;
                     if (C.GetCurrentMinions(2) < C.GetMaxMinions()) {
                         if (min.GetAssignedControlPoint() == SE.transform) {
                             min.AddPathPoints(SE_C.points);

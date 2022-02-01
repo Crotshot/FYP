@@ -14,7 +14,7 @@ public class MinionPool : NetworkBehaviour
 
     public GameObject FindMinionOfType(string type) {
         ////TEMPORARILY DISABLED, strange excess minion spawning issues;
-        //return null;
+        return null;
         GameObject returnedMinion = null;
         foreach (GameObject minion in inactiveMinions) {
             if (minion.GetComponent<MinionController>().GetMinionType().Equals(type)) {

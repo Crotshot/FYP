@@ -54,13 +54,13 @@ NavMeshAgent:
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
+  m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1.2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 2
 --- !u!65 &2901265490299078009
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -90,12 +90,14 @@ MonoBehaviour:
   syncInterval: 0.1
   minionType: 
   baseMinion: 0
+  independentWeapon: 0
   minionSpeed: 0
   minionAngularSpeed: 0
   attackDistance: 0
   awarnessDistance: 0
   attackTarget: {fileID: 0}
   assignedPoint: {fileID: 0}
+  indWeapon: {fileID: 0}
   pathPoints: []
   minionState: 0
   returningState: 0

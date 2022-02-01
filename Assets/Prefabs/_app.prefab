@@ -175,6 +175,7 @@ MonoBehaviour:
   - {fileID: 6851996113406364194, guid: d2f58448575ebbf4eb3a45ecdbc3c60f, type: 3}
   - {fileID: 1933658793992876863, guid: 00e441ca9a8002540a436828b25069fd, type: 3}
   - {fileID: 8142856223614906384, guid: 640367dabe8a7bf43943e9c862064b5d, type: 3}
+  - {fileID: 597200091590666075, guid: 99f674aed11ca6948acc848a714b3cf4, type: 3}
   playerRoomPrefab: {fileID: -6223738119716034043, guid: 5cddf750ba5922a4585935014e7d9241, type: 3}
   gamePlayerPrefab: {fileID: 473611523937665362, guid: 77b6c797498fd464d8a19e8d81e98e45, type: 3}
   readyPlayers: 0
@@ -190,6 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 301ac03c0cfc792449f204cca8887b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scrollSensitivity: 1000
 --- !u!114 &3724736580032450677
 MonoBehaviour:
   m_ObjectHideFlags: 0
