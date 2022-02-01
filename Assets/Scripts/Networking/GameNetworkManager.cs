@@ -134,4 +134,12 @@ public class GameNetworkManager : NetworkManager
             ServerChangeScene("Arena");
         }
     }
+
+    public void Leave() {
+        NetworkServer.DisconnectAll();
+    }
+
+    public void LeaveDelay() {
+        Invoke("Leave", 4.85f);
+    }
 }

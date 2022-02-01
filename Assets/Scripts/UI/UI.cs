@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UI : MonoBehaviour
 {
     [SerializeField] Image healthBar, a1_Icon, a2_Icon, a3_Icon, a1_Fill, a2_Fill, a3_Fill, player_Icon, player_Fill, loadingImage;
-    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp, shiniesCount, timeText, statusTime, statusTotal, status, minionCounter;
-    [SerializeField] GameObject tabPanel, statusPanel, hud, minionSelector;
+    [SerializeField] TMP_Text currenthealth, maxHealth, a1_tmp, a2_tmp, a3_tmp, player_tmp, shiniesCount, timeText, statusTime, statusTotal, status, minionCounter, gameOverText;
+    [SerializeField] GameObject tabPanel, statusPanel, hud, minionSelector, gameOverPanel;
 
     private PlayerHealth playerHp;
     private PlayerCurrency pC;
@@ -155,5 +156,17 @@ public class UI : MonoBehaviour
             ret += m.ToString();
         }
         return ret;
+    }
+
+    public void ShowGameOver(int currentTeam) {
+        gameOverPanel.SetActive(true);
+        string s = "Blue";
+        if(currentTeam == 1) {
+            s = "Red";
+        }
+        gameOverText.text = s + " team has won the match!";
+
+        FindObjectOfType<_SceneManager>().MainMenuDelay();
+        FindObjectOfType<GameNetworkManager>().LeaveDelay();
     }
 }

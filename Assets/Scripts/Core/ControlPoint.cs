@@ -7,7 +7,7 @@ using Mirror;
 
 public class ControlPoint : NetworkBehaviour
 {
-
+    [SerializeField] ControlPoint mid, SE, NE, SW, NW;
     [SerializeField] private int assignedMinions_1, assignedMinions_2, maxAssignedMinions = 10;
 
     [SerializeField] private float chargesToCapture;
@@ -23,7 +23,7 @@ public class ControlPoint : NetworkBehaviour
     private enum TeamState { Neutral, Captured}
     TeamState capState = TeamState.Neutral;
 
-    bool setUp;
+    bool setUp, notCapped = true;
 
     public UnityEvent captured;
     public void Setup() {
@@ -91,12 +91,26 @@ public class ControlPoint : NetworkBehaviour
                 }
             }
             else {
-                charges -= teamC;
-                if (charges <= 0) {
-                    charges *= -1;
-                    currentTeam = team;
-                    captureFillImage.color = col;
-                    RPCReflectOwnerShip(team, col.r, col.g, col.b, col.a);
+                if (basePoint && !notCapped) {
+                    if(mid.GetTeam() != 0 && (mid.GetTeam() == SE.GetTeam() || mid.GetTeam() == NE.GetTeam()) && (mid.GetTeam() == SW.GetTeam() || mid.GetTeam() == NW.GetTeam())) {
+                        charges -= teamC;
+                        if (charges <= 0) {
+                            charges *= -1;
+                            currentTeam = team;
+                            captureFillImage.color = col;
+                            RPCReflectOwnerShip(team, col.r, col.g, col.b, col.a);
+                        }
+                    }
+                }
+                else { 
+                    charges -= teamC;
+                    if (charges <= 0) {
+                        charges *= -1;
+                        currentTeam = team;
+                        captureFillImage.color = col;
+                        RPCReflectOwnerShip(team, col.r, col.g, col.b, col.a);
+                        notCapped = false;
+                    }
                 }
             }
         }
@@ -119,13 +133,19 @@ public class ControlPoint : NetworkBehaviour
                     captureFillImage.color = col;
                      RPCReflectOwnerShip(team, col.r, col.g, col.b, col.a);
                     if (basePoint) {
-                        print("Team: " + currentTeam + " has won the match!");
+                        Debug.Log("Team: " + currentTeam + " has won the match!");
+                        RpcGameOver(currentTeam);
                     }
                 }
             }
         }
 
         captureFillImage.fillAmount = charges/chargesToCapture;
+    }
+
+    [ClientRpc]
+    private void RpcGameOver(int t) {
+        FindObjectOfType<UI>().ShowGameOver(t);
     }
 
     //Player, minion

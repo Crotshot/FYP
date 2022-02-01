@@ -64,8 +64,4 @@ public class MinionSumoner : MinionSpawner_Base { //Can only exist on server
         }
         coRoutineActive = false;
     }
-
-    public void HighLight() {
-        //DO LATER
-    }
 }

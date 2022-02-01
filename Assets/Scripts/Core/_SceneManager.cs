@@ -14,4 +14,12 @@ public class _SceneManager : MonoBehaviour
     {
         return SceneManager.GetActiveScene().name;
     }
+
+    public void MainMenu() {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void MainMenuDelay() {
+        Invoke("MainMenu", 5f);
+    }
 }
