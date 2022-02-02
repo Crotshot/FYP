@@ -738,7 +738,7 @@ GameObject:
   - component: {fileID: 5099484253043395869}
   - component: {fileID: 4632057266150013744}
   - component: {fileID: 4609596105812731839}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 2_Urny
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -991,6 +991,8 @@ MonoBehaviour:
   maxFollowers: 4
   minionTypes: []
   followerMinions: []
+  minionTypeSelected: 0
+  isCollossus: 0
 --- !u!1 &7540363499803825045
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class ArchingProjectile : NetworkBehaviour
     [SerializeField] float rayLength, expRad;
     [SerializeField] bool explosive;
     [SerializeField] GameObject particles;
+    int layer;
 
     public virtual void Setup(Vector3 targetedPosition) {
         if (!isServer)
@@ -24,6 +25,7 @@ public class ArchingProjectile : NetworkBehaviour
             airTime *= distance / range;
             archHeight*= distance / range;
         }
+        layer = 1 << LayerMask.NameToLayer("Unit");
     }
 
     private void FixedUpdate() {
@@ -68,7 +70,7 @@ public class ArchingProjectile : NetworkBehaviour
     }
 
     private void Explode() {
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, expRad, transform.forward * 0.01f);
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, expRad, transform.forward * 0.01f, 0, layer, QueryTriggerInteraction.Ignore);
 
         GameObject obj = Instantiate(particles, transform.position, transform.rotation);
         NetworkServer.Spawn(obj);
@@ -78,7 +80,7 @@ public class ArchingProjectile : NetworkBehaviour
 
         if (hits.Length > 0) {
             foreach(RaycastHit hit in hits) {
-                if (hit.collider.transform.TryGetComponent(out Team t) && hit.collider.transform.TryGetComponent(out Health health)) {
+                if (hit.transform.TryGetComponent(out Team t) && hit.transform.TryGetComponent(out Health health)) {
                     if (t.GetTeam() == GetComponent<Team>().GetTeam())
                         return;
                     health.Damage(damage);

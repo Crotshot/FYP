@@ -39,7 +39,7 @@ public class MinionController : NetworkBehaviour
         agentC.speed = minionSpeed;
         agentC.angularSpeed = minionAngularSpeed;
         pathPoints.Clear();
-        layer = 1 << LayerMask.NameToLayer("Default");
+        layer = 1 << LayerMask.NameToLayer("Unit");
         GetComponent<WorldSpaceHealthBar>().Setup();
         if (!isServer) {
             Destroy(this);

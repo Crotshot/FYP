@@ -24,9 +24,22 @@ public class StructureCaptureState : NetworkBehaviour
     private void Start() {
         if (isServer) {
             StartCoroutine("SetupEntry");
+            if (teamChanged == null)
+                teamChanged = new UnityEvent<int>();
+            
         }
-        if (teamChanged == null)
-            teamChanged = new UnityEvent<int>();
+    }
+
+    [SerializeField] bool addRed, addBlue;
+    private void Update() {
+        if (addBlue) {
+            addBlue = false;
+            MinionEnteredTEST(2);
+        }
+        if (addRed) {
+            addRed = false;
+            MinionEnteredTEST(1);
+        }
     }
 
     IEnumerator SetupEntry() {
@@ -50,6 +63,7 @@ public class StructureCaptureState : NetworkBehaviour
                     Destroy(minion);
                     if (charges == minionsToCapture) {
                         neutral = false;
+                        teamChanged?.Invoke(currentTeam);
                     }
                 }
             }
@@ -89,9 +103,78 @@ public class StructureCaptureState : NetworkBehaviour
                 if (charges == 0) {
                     neutral = true;
                     currentTeam = 0;
+                    teamChanged?.Invoke(0);
                 }
             }
         }
+
+
+        if (charges == 0) {
+            textBackground.color = Color.white;
+            ReflectColour(1, 1, 1, 1);
+        }
+        capturetext.SetText(charges.ToString());
+    }
+
+
+    private void MinionEnteredTEST(int team) {
+        Color col;
+        if (team == 1) {
+            col = new Color(0.9f, 0.1f, 0.1f, 1);
+        }
+        else{
+            col = new Color(0.1f, 0.1f, 0.9f, 1);
+        }
+
+        if (neutral) {
+            if (team == currentTeam) {
+                if (charges < minionsToCapture) {
+                    charges++;
+                    ReflectCharges(charges);
+                    if (charges == minionsToCapture) {
+                        neutral = false;
+                        teamChanged?.Invoke(currentTeam);
+                    }
+                }
+            }
+            else {
+                charges--;
+                if (charges <= 0) {
+                    charges *= -1;
+                    ReflectCharges(charges);
+                    currentTeam = team;
+                    if (charges == 0) {
+                        textBackground.color = Color.white;
+                        ReflectColour(1, 1, 1, 1);
+                    }
+                    else {
+                        textBackground.color = col;
+                        ReflectColour(col.r, col.g, col.b, col.a);
+                    }
+                }
+            }
+        }
+        else {
+            if (team == currentTeam) {
+                if (charges < minionsToCapture) {
+                    charges++;
+                    ReflectCharges(charges);
+                    if (charges == minionsToCapture) {
+                        neutral = false;
+                    }
+                }
+            }
+            else {
+                charges--;
+                ReflectCharges(charges);
+                if (charges == 0) {
+                    neutral = true;
+                    currentTeam = 0;
+                    teamChanged?.Invoke(0);
+                }
+            }
+        }
+
 
         if (charges == 0) {
             textBackground.color = Color.white;

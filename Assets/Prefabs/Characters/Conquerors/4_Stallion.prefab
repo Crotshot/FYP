@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 8681246067184600289}
   - component: {fileID: 2917514959419387400}
   - component: {fileID: 7509166684449190281}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 4_Stallion
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -480,6 +480,8 @@ MonoBehaviour:
   maxFollowers: 4
   minionTypes: []
   followerMinions: []
+  minionTypeSelected: 0
+  isCollossus: 0
 --- !u!1 &2814933876262695979
 GameObject:
   m_ObjectHideFlags: 0

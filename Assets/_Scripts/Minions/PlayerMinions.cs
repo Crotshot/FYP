@@ -228,7 +228,7 @@ public class PlayerMinions : NetworkBehaviour {
 
     public void OrderEnter(int mT) {
         foreach (MinionController min in followerMinions) {
-            if ((minionTypes[minionTypeSelected].Equals("All") || minionTypes[minionTypeSelected].Equals(min.GetMinionType())) && min.minionState != MinionController.MinionState.Recalling && min.minionState != MinionController.MinionState.Retreating ) {
+            if ((minionTypes[minionTypeSelected].Equals("All") || minionTypes[minionTypeSelected].Equals(min.GetMinionType())) && min.minionState != MinionController.MinionState.Recalling && min.minionState != MinionController.MinionState.Retreating && min.minionState != MinionController.MinionState.Entering) {
                 min.minionState = MinionController.MinionState.Entering;
                 min.SetDestination(inter.GetFocus().transform.position);
                 break;

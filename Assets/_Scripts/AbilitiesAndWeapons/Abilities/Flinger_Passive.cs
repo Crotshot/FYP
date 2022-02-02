@@ -8,12 +8,14 @@ public class Flinger_Passive : NetworkBehaviour
     [SerializeField] float expRad, damage;
     [SerializeField] GameObject particles;
     bool armed = true;
+    int layer;
 
     void Start()
     {
         if (!isServer)
             return;
         GetComponent<Health>().HealthChanged.AddListener(Explode);
+        layer = 1 << LayerMask.NameToLayer("Unit");
     }
 
     private void Explode(float health, float maxHealth) {
@@ -29,7 +31,7 @@ public class Flinger_Passive : NetworkBehaviour
             obj.transform.position = transform.position;
             obj.transform.parent = null;
 
-            RaycastHit[] hits = Physics.SphereCastAll(transform.position, expRad, transform.forward * 0.01f);
+            RaycastHit[] hits = Physics.SphereCastAll(transform.position, expRad, transform.forward * 0.01f, 0, layer, QueryTriggerInteraction.Ignore);
             if (hits.Length > 0) {
                 foreach (RaycastHit hit in hits) { //Friendly fire >:)
                     if (hit.collider.transform.TryGetComponent(out Health hp)) {

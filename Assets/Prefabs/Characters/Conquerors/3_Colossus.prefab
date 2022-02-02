@@ -982,7 +982,7 @@ GameObject:
   - component: {fileID: 4946593748043875182}
   - component: {fileID: 8708984351835042826}
   - component: {fileID: 3371035705519363432}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 3_Colossus
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1249,6 +1249,8 @@ MonoBehaviour:
   maxFollowers: 4
   minionTypes: []
   followerMinions: []
+  minionTypeSelected: 0
+  isCollossus: 0
 --- !u!1 &8888298964633051822
 GameObject:
   m_ObjectHideFlags: 0
