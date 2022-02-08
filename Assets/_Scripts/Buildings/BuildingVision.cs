@@ -7,7 +7,7 @@ using Helpers = Crotty.Helpers.StaticHelpers;
 public class BuildingVision : NetworkBehaviour
 {
     [SerializeField] Vector3 spherePos;
-    [SerializeField] float sensorRadius, interval;
+    [SerializeField] float sensorRadius, interval, minRange;
     float intervalTimer;
     int layer;
     StructureCaptureState sCS;
@@ -23,30 +23,39 @@ public class BuildingVision : NetworkBehaviour
         intervalTimer = interval;
     }
 
+    bool targSelected;
     private void FixedUpdate() {
         if(interval >= 0) {
             interval -= Time.deltaTime;
             return;
         }
-        if(target == null || Helpers.Vector3Distance(target.position, transform.position + spherePos) > sensorRadius ){//&& sCS.getOwningTeam() != 0) {
+        if(target == null || Helpers.Vector3Distance(target.position, transform.position + spherePos) > sensorRadius ){//&& sCS.getOwningTeam() != 0) { //ENABLE LATER
             RaycastHit[] hits = Physics.SphereCastAll(transform.position + spherePos, sensorRadius, transform.forward * 0.01f, 0, layer, QueryTriggerInteraction.Ignore);
             if (hits.Length > 0) {
+                targSelected = false;
                 foreach (RaycastHit hit in hits) {
-                    if (hit.transform.TryGetComponent(out Team team)) {
-                        if (team.GetTeam() != sCS.getOwningTeam()) {
-                            target = hit.transform;
-                            interval = intervalTimer;
+                    if(minRange == 0 || Helpers.Vector3Distance(transform.TransformPoint(spherePos), hit.transform.position) > minRange) {
+                        if (hit.transform.TryGetComponent(out Team team)) {
+                            if (team.GetTeam() != sCS.getOwningTeam()) {
+                                target = hit.transform;
+                                interval = intervalTimer;
+                                targSelected = true;
+                                break;
+                            }
                         }
                     }
+                }
+                if (!targSelected) {
+                    target = null;
+
                 }
             }
         }
         else {
             target = null;
-            interval = intervalTimer;
+            //interval = intervalTimer; //Disable as buildings would sit idle after scanning for a target
         }
     }
-
 
     public Vector3 GetTargetPos() {
         if (target == null)
