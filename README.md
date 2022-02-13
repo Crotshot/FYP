@@ -31,6 +31,6 @@ Each conqueror has a passive ability and three active abilities, each conqueror 
 to the others.
 Players purchase minions from spawners in their base to follow them, minions follow a variety of commands from the player to
 enable different forms of strategic gameplay. Minons despite being combat units they are also a resource that can be sacrificed
-in structures around the map to gain advantage
+in structures around the map to gain a resource or strategic advantage over your oppponent
 
 
