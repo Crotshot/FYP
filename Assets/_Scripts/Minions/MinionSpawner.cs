@@ -9,6 +9,15 @@ public class MinionSpawner : MinionSpawner_Base {
     [SerializeField] GameObject minion_ranged; //1 = Melee & also player purchased, 2 = Ranged
     [SerializeField] Transform[] path; //Assigned control point is last path point
 
+    private void Start() {
+        if (!isServer)
+            Destroy(this);
+        else {
+            pool = FindObjectOfType<MinionPool>();
+            mm = FindObjectOfType<MinionManager>();
+        }
+    }
+
     public void SpawnWave(int melee, int ranged) {
         MinionDat dat1 = new MinionDat(melee, 0, minion_1, "Base_Melee"), dat2 = new MinionDat(ranged, (melee + 1) * 0.66f, minion_ranged, "Base_Ranged");
         StartCoroutine("WaveSpawning", dat1);

@@ -1490,6 +1490,7 @@ MonoBehaviour:
   mType: Flinger
   background: {fileID: 798935972}
   cost: {fileID: 228752600}
+  debug: 0
 --- !u!208 &220966710
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -1957,6 +1958,7 @@ MonoBehaviour:
   mType: Sword
   background: {fileID: 138816632}
   cost: {fileID: 1899091751}
+  debug: 1
 --- !u!208 &266924222
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -2410,6 +2412,7 @@ MonoBehaviour:
   mType: Crossbow
   background: {fileID: 1224888489}
   cost: {fileID: 1830606136}
+  debug: 0
 --- !u!208 &314263000
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -2616,6 +2619,7 @@ MonoBehaviour:
   mType: Flinger
   background: {fileID: 1972809707}
   cost: {fileID: 1593052353}
+  debug: 0
 --- !u!208 &333299008
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -9861,6 +9865,7 @@ MonoBehaviour:
   mType: Stave
   background: {fileID: 1287724019}
   cost: {fileID: 111323466}
+  debug: 0
 --- !u!208 &750903204
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -10320,6 +10325,7 @@ MonoBehaviour:
   mType: Sword
   background: {fileID: 4673153578481187263}
   cost: {fileID: 4673153579889832831}
+  debug: 0
 --- !u!208 &824386690
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -11700,6 +11706,7 @@ MonoBehaviour:
   mType: Crossbow
   background: {fileID: 1005977369}
   cost: {fileID: 1889465342}
+  debug: 0
 --- !u!208 &1011152240
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -12559,6 +12566,7 @@ MonoBehaviour:
   mType: Stave
   background: {fileID: 1038498488}
   cost: {fileID: 705784489}
+  debug: 0
 --- !u!208 &1063710150
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -18065,8 +18073,8 @@ MonoBehaviour:
   attempts: 5
   useNoise: 0
   makeFlora: 1
-  makeSmallProps: 1
-  makeLargeProps: 1
+  makeSmallProps: 0
+  makeLargeProps: 0
   makeBuildings: 1
   removeBadPoints: 1
   bakeNavMesh: 1

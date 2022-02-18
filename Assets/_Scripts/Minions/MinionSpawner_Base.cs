@@ -11,15 +11,6 @@ public class MinionSpawner_Base : NetworkBehaviour {
     protected MinionPool pool;
     protected MinionManager mm;
 
-    private void Start() {
-        if (!isServer)
-            Destroy(this);
-        else {
-            pool = FindObjectOfType<MinionPool>();
-            mm = FindObjectOfType<MinionManager>();
-        }
-    }
-
     public GameObject SpawnMinion(GameObject min1, bool individualSpawnRoutine, string mType) {
         GameObject freshMinion = pool.FindMinionOfType(mType);
         if (freshMinion == null) {

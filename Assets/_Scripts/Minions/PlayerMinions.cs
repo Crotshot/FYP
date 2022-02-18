@@ -55,11 +55,12 @@ public class PlayerMinions : NetworkBehaviour {
         minionPositions[22] = new Vector2(-7.5f * xMod,-9 * yMod);
         minionPositions[23] = new Vector2(7.5f * xMod, -9 * yMod);
         minionPositions[24] = new Vector2(-6 * xMod,-10.5f * yMod);
-
     }
 
     public void Setup() {
-        inputs = FindObjectOfType<Inputs>();
+        if (hasAuthority) {
+            inputs = FindObjectOfType<Inputs>();
+        }
         if (isServer) {
             inter = GetComponent<Interactor>();
         }
@@ -157,8 +158,15 @@ public class PlayerMinions : NetworkBehaviour {
         }
         #endregion
 
-        int counter = 0, c2 = 0;
-        for (int i = followerMinions.Count - 1; i >= 0; i--) { //LATER will need to be changed 
+        if (isServer)
+            MinionFollowers();
+        else
+            CmdMinionFollowers();
+    }
+
+    private void MinionFollowers() {
+                int counter = 0, c2 = 0;
+        for (int i = followerMinions.Count - 1; i >= 0; i--) { 
             if (followerMinions[i] == null) {
                 followerMinions.RemoveAt(i);
                 continue;
@@ -174,10 +182,20 @@ public class PlayerMinions : NetworkBehaviour {
         followerCount = counter;
     }
 
+    [Command]
+    private void CmdMinionFollowers() {
+        MinionFollowers();
+    }
+
     #region Recall / Building interaction
     private void Recall_Interaction(int mT, bool b) {
         Interactable focus = inter.GetFocus();
+        if (focus == null)
+            Debug.Log("Focus is null");
+        else
+            Debug.Log(focus.name);
         if (focus != null) {
+            Debug.Log("Client is summoning minions");
             if (focus.TryGetComponent(out MinionSumoner summ) && followerCount < maxFollowers) {
                 summ.Summon();
             }

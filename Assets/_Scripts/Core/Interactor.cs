@@ -21,7 +21,6 @@ public class Interactor : NetworkBehaviour
         Invoke(nameof(InvokedSetUp), 3f);
     }
 
-
     public void InvokedSetUp() {
         inputs = FindObjectOfType<Inputs>();
         cam = FindObjectOfType<Camera>();
@@ -44,23 +43,11 @@ public class Interactor : NetworkBehaviour
 
         if(objectID != lastObjectID) {
             if (objectID != 0) {
-                foreach (Interactable inter in FindObjectsOfType<Interactable>()) {
-                    if (inter.GetID() == objectID) {
-                        if (inter.TryGetComponent(out Team t)) {
-                            if(t.GetTeam() != GetComponent<Team>().GetTeam()) {
-                                arrow.transform.position = Vector3.down * 50f; //Dont show arrow above enemy minion Summoners
-                                focus = null;
-                            }
-                            else {
-                                arrow.transform.position = inter.transform.position;
-                                focus = inter;
-                            }
-                        }
-                        else {
-                            arrow.transform.position = inter.transform.position;
-                            focus = inter;
-                        }
-                    }
+                if (isServer) {
+                    AlterFocus();
+                }
+                else {
+                    CmdAlterFocus();
                 }
             }
             else {
@@ -69,6 +56,32 @@ public class Interactor : NetworkBehaviour
             }
             lastObjectID = objectID;
         }
+    }
+
+    private void AlterFocus() {
+        foreach (Interactable inter in FindObjectsOfType<Interactable>()) {
+            if (inter.GetID() == objectID) {
+                if (inter.TryGetComponent(out Team t)) {
+                    if (t.GetTeam() != GetComponent<Team>().GetTeam()) {
+                        RpcArrowPos(Vector3.down * 50f); //Dont show arrow above enemy minion Summoners
+                        focus = null;
+                    }
+                    else {
+                        RpcArrowPos(inter.transform.position);
+                        focus = inter;
+                    }
+                }
+                else {
+                    RpcArrowPos(inter.transform.position);
+                    focus = inter;
+                }
+            }
+        }
+    }
+
+    [Command (requiresAuthority = false)]
+    private void CmdAlterFocus() {
+        AlterFocus();
     }
 
     private void CameraRay(Vector3 origin, Vector3 direction) {
@@ -98,6 +111,13 @@ public class Interactor : NetworkBehaviour
     [Command (requiresAuthority = false)]
     public void CmdServerRay(Vector3 origin, Vector3 direction) {
         CameraRay(origin, direction);
+    }
+
+    [ClientRpc]
+    private void RpcArrowPos(Vector3 pos) {
+        if (arrow == null)
+            return;
+        arrow.transform.position = pos;
     }
 
     public Interactable GetFocus() {

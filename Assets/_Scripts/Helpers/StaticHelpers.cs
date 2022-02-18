@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Crotty.Helpers {
     public static class StaticHelpers {
         /// <summary>
-        /// Gets the distance between 2 Vector3s as a float
+        /// Returns distance between Vector3s a & b as a float
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>

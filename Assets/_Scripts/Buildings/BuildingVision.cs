@@ -15,7 +15,7 @@ public class BuildingVision : NetworkBehaviour
 
     private void Start() {
         if (!isServer) {
-            return;
+            Destroy(this);
         }
 
         layer = 1 << LayerMask.NameToLayer("Unit");
@@ -29,7 +29,7 @@ public class BuildingVision : NetworkBehaviour
             interval -= Time.deltaTime;
             return;
         }
-        if(target == null || Helpers.Vector3Distance(target.position, transform.position + spherePos) > sensorRadius ){//&& sCS.getOwningTeam() != 0) { //ENABLE LATER
+        if((target == null || Helpers.Vector3Distance(target.position, transform.position + spherePos) > sensorRadius) && sCS.getOwningTeam() != 0) {
             RaycastHit[] hits = Physics.SphereCastAll(transform.position + spherePos, sensorRadius, transform.forward * 0.01f, 0, layer, QueryTriggerInteraction.Ignore);
             if (hits.Length > 0) {
                 targSelected = false;
@@ -47,7 +47,6 @@ public class BuildingVision : NetworkBehaviour
                 }
                 if (!targSelected) {
                     target = null;
-
                 }
             }
         }

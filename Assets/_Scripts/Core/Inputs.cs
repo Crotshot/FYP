@@ -64,8 +64,8 @@ public class Inputs : MonoBehaviour
         if (Input.GetAxisRaw("Command_Defend") > 0) cDefendT += Time.deltaTime; else  cDefendT = 0;
         if (Input.GetAxisRaw("Command_Recall") > 0) cRecallT += Time.deltaTime; else  cRecallT = 0;
         if (Input.GetAxisRaw("Command_Recall") < 0) cRetreatT += Time.deltaTime; else  cRetreatT = 0;
-        if (Input.GetAxisRaw("Command_Recall") > 0) cRecallL += Time.deltaTime; else cRecallT = 0;
-        if (Input.GetAxisRaw("Command_Recall") < 0) cRetreatL += Time.deltaTime; else cRetreatT = 0;
+        if (Input.GetAxisRaw("Command_Recall") > 0) cRecallL += Time.deltaTime; else cRecallL = 0;
+        if (Input.GetAxisRaw("Command_Recall") < 0) cRetreatL += Time.deltaTime; else cRetreatL = 0;
 
         if (scrollLimter > 0)
             scrollLimter -= Time.deltaTime;

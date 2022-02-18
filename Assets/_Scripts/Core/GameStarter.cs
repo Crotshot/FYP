@@ -12,18 +12,17 @@ public class GameStarter : NetworkBehaviour
     bool gameStarted;
    
     UI ui;
-    PlayerCurrency[] pCs;
     ulong IDcount = 0;
-
+    PlayerCurrency[] pCs;
     private void Start() {
-        if (isServer) {
+        if (isServer) { //When loaded in this is the first thing called
             playersNeededToBeReady = NetworkServer.connections.Count;
             Debug.Log("GameStarter: Players Connected:" + playersNeededToBeReady);
-            playersReady++;//Once when the server starts;
+            playersReady++;//Increment players ready
             matchSeed = ParseSeed(GameObject.Find("Local").GetComponent<PlayerConstructor>().seed);
         }
         else {
-            Increment(); //And the second when player 2 is ready;
+            Increment(); //And the second increment when player 2 is loaded in;
         }
         ReadyUp();
     }
@@ -82,27 +81,25 @@ public class GameStarter : NetworkBehaviour
     }
     
     IEnumerator StartGame() {
-        //CmdGenerateMap(matchSeed);
         while (mapMade < playersNeededToBeReady)
             yield return new WaitForEndOfFrame();
-
+        pCs = FindObjectsOfType<PlayerCurrency>();
         SetupPlayers();
         ReleasePlayers();
         FindObjectOfType<MinionManager>().StartWaveSystem();
-        pCs = FindObjectsOfType<PlayerCurrency>();
         StartMatchTimer();
-        foreach (MinionSumoner mS in FindObjectsOfType<MinionSumoner>()) {
-            mS.Setup(pCs);
-        }
+        
         foreach (GateScript gate in FindObjectsOfType<GateScript>()) {
             gate.Setup();
         }
         foreach (ControlPoint cP in FindObjectsOfType<ControlPoint>()) {
             cP.Setup();
         }
+
+        foreach (MinionSumoner mS in FindObjectsOfType<MinionSumoner>()) {
+            mS.Setup();
+        }
     }
-
-
 
     [Command(requiresAuthority = false)]
     private void CmdReady() {
