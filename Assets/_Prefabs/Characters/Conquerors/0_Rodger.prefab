@@ -545,10 +545,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   input: 1
-  coolDown: 2
+  coolDown: 4
   spawnPoint: {fileID: 3720017367289271357}
   range: 40
-  damage: 20
+  damage: 60
   stunTime: 0.5
 --- !u!114 &793785213778548600
 MonoBehaviour:
@@ -565,7 +565,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   input: 2
-  coolDown: 5
+  coolDown: 8
   speedPercentIncrease: 2
   boostDuration: 5
 --- !u!114 &5106697110751912112
@@ -583,7 +583,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   input: 3
-  coolDown: 1
+  coolDown: 40
   mortarShell: {fileID: 7512147332270784733, guid: 449c72d7b0316bf428c0c7dd0029eb86, type: 3}
   secondShotDelay: 0.5
   maxDistance: 50
@@ -2036,8 +2036,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.48584908, g: 0.51826704, b: 1, a: 1}
-      maxColor: {r: 0.4764151, g: 0.86936945, b: 1, a: 1}
+      minColor: {r: 0.25943398, g: 0.30465946, b: 1, a: 1}
+      maxColor: {r: 0.6179246, g: 0.90590674, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -2099,8 +2099,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.4
-      minScalar: 0.1
+      scalar: 0.6
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -3180,7 +3180,7 @@ ParticleSystem:
         key0: {r: 0, g: 0.559567, b: 1, a: 1}
         key1: {r: 0.02946679, g: 0, b: 0.41509432, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0.6431373}
-        key3: {r: 0, g: 0, b: 0, a: 0}
+        key3: {r: 0, g: 0, b: 0, a: 0.6431373}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
@@ -3196,7 +3196,7 @@ ParticleSystem:
         atime0: 0
         atime1: 33346
         atime2: 64571
-        atime3: 0
+        atime3: 64571
         atime4: 0
         atime5: 0
         atime6: 0
@@ -6633,7 +6633,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cdf520e80ed1c8541a04bbcea6d29119, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

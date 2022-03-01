@@ -20,12 +20,15 @@ public class MinionSumoner : MinionSpawner_Base { //Can only exist on server
     int minionsQueued = 0;
     bool coRoutineActive;
 
-    public void Setup() {
-        RpcSetup();
+    public void Setup(Vector3 location, Vector3 rotation) {
+        RpcSetup(location, rotation);
     }
 
     [ClientRpc]
-    private void RpcSetup() {
+    private void RpcSetup(Vector3 location, Vector3 rotation) {
+        transform.parent = null;
+        transform.position = location;
+        transform.eulerAngles = rotation;
         if (debug)
             Debug.Log("Setting up minion spawner");
         int team = 0;
@@ -72,4 +75,6 @@ public class MinionSumoner : MinionSpawner_Base { //Can only exist on server
         }
         coRoutineActive = false;
     }
+
+
 }

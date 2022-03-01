@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     _SceneManager sceneManager;
     [SerializeField] GameObject[] conquerorPrefabs;
-    [SerializeField] GameObject[] minionPrefabs;
+    [SerializeField] GameObject[] minionSpawnerPrefabs;
 
     private void Awake() {
         sceneManager = GetComponent<_SceneManager>();
@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
         sceneManager.LoadScene("MainMenu");
     }
 
-    public GameObject GetConqueror(string conqName) { // Can pass 10_ for an id or Bert for a name
+    public GameObject GetConqueror(string conqName) {
         foreach (GameObject obj in conquerorPrefabs) {
             if (obj.name.Contains(conqName) || obj.name.Equals(conqName)) {
                 return obj;
@@ -25,9 +25,9 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    public GameObject GetMinion(string minionName) { // Can pass 10_ for an id or Bert for a name
-        foreach (GameObject obj in minionPrefabs) {
-            if (obj.name.Contains(minionName)) {
+    public GameObject GetMinionSpawner(string name) {
+        foreach (GameObject obj in minionSpawnerPrefabs) {
+            if (obj.name.Contains(name)) {
                 return obj;
             }
         }

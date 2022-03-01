@@ -18,6 +18,7 @@ public class LockIn : MonoBehaviour {
 
     public void LockInSelection() { //Local Player has gameobject name set to Local in player constructor when its created
         player.SetConqueror(conqStats);
+        player.SetMinions(minionStats);
     }
 
     public void TextEdited() {

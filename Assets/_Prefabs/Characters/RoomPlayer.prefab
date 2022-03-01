@@ -217,6 +217,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &6468988153290735905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,7 +283,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: 5cddf750ba5922a4585935014e7d9241
   hasSpawned: 0
 --- !u!114 &-6223738119716034043
 MonoBehaviour:

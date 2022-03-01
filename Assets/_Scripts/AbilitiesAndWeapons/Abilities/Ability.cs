@@ -21,15 +21,15 @@ public class Ability : NetworkBehaviour
         if (hasAuthority) {
             if (input == 1) {
                 GetComponent<PlayerController>().ab1.AddListener(abilityCast);
-                Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
+               // Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
             }
             else if (input == 2) {
                 GetComponent<PlayerController>().ab2.AddListener(abilityCast);
-                Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
+               // Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
             }
             else if (input == 3) {
                 GetComponent<PlayerController>().ab3.AddListener(abilityCast);
-                Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
+                //Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
             }
         }
     }
@@ -39,15 +39,15 @@ public class Ability : NetworkBehaviour
         if (hasAuthority) {
             if (input == 1) {
                 GetComponent<PlayerController>().ab1.AddListener(abilityCast);
-                Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
+                //Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
             }
             else if (input == 2) {
                 GetComponent<PlayerController>().ab2.AddListener(abilityCast);
-                Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
+               // Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
             }
             else if (input == 3) {
                 GetComponent<PlayerController>().ab3.AddListener(abilityCast);
-                Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
+                //Debug.Log("Object: " + gameObject.name + "listening for ability " + input);
             }
         }
     }

@@ -29,7 +29,7 @@ public class PlayerConstructor : NetworkBehaviour
         CmdReadyUp(stats.name);
     }
 
-    public void SetMinionNames(CharacterStats[] stats) {
+    public void SetMinions(CharacterStats[] stats) {
         minions = stats;
     }
 

@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Mirror.FizzySteam;
 using System;
 using UnityEngine.AI;
+using kcp2k;
 
 public class GameNetworkManager : NetworkManager
 {
+    [SerializeField] bool useSteam;
+
     public static event Action ClientOnConnected;
     public static event Action ClientOnDisconnected;
     public static event Action ServerOnConnected;
@@ -27,6 +31,15 @@ public class GameNetworkManager : NetworkManager
 
     public override void Awake()
     {
+        if (useSteam) {
+            transport = GetComponent<FizzySteamworks>();
+            GetComponent<KcpTransport>().enabled = false;
+        }
+        else {
+            transport = GetComponent<KcpTransport>();
+            GetComponent<FizzySteamworks>().enabled = false;
+        }
+
         base.Awake();
         sM = GetComponent<_SceneManager>();
     }
@@ -55,7 +68,7 @@ public class GameNetworkManager : NetworkManager
             ServerOnDisconnected?.Invoke();
         }
 
-        //Can this be moved to only work when we are in the lobby
+        //Can this be moved to only work when in the lobby
         var player = conn.identity.GetComponent<Net_Room>();
         RoomPlayers.Remove(player);
 
@@ -141,5 +154,9 @@ public class GameNetworkManager : NetworkManager
 
     public void LeaveDelay() {
         Invoke("Leave", 4.85f);
+    }
+
+    public bool isUsingSteam() {
+        return useSteam;
     }
 }

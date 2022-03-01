@@ -7,6 +7,7 @@ public class GameStarter : NetworkBehaviour
 {
     [SerializeField] [SyncVar] int playersReady, mapMade, matchSeed, currencyPerWave, playersNeededToBeReady;
     [SerializeField] float currencyWave;
+    [SerializeField] Transform[] spawnerSpots1, spawnerSpots2; 
     [SyncVar] float matchTimer;
     float currencyTimer;
     bool gameStarted;
@@ -53,7 +54,7 @@ public class GameStarter : NetworkBehaviour
         if (playersNeededToBeReady > playersReady)
             return;
         RpcGenerateMap(matchSeed);
-        Debug.Log("GameStarter: Players Connected:" + playersNeededToBeReady);
+        //Debug.Log("GameStarter: Players Connected:" + playersNeededToBeReady);
         StartCoroutine("StartGame");
     }
 
@@ -83,6 +84,9 @@ public class GameStarter : NetworkBehaviour
     IEnumerator StartGame() {
         while (mapMade < playersNeededToBeReady)
             yield return new WaitForEndOfFrame();
+
+        SetupSpawners();
+        yield return new WaitForSeconds(0.1f);
         pCs = FindObjectsOfType<PlayerCurrency>();
         SetupPlayers();
         ReleasePlayers();
@@ -97,7 +101,59 @@ public class GameStarter : NetworkBehaviour
         }
 
         foreach (MinionSumoner mS in FindObjectsOfType<MinionSumoner>()) {
-            mS.Setup();
+            mS.Setup(mS.transform.position, mS.transform.eulerAngles);
+        }
+    }
+
+    GameManager gM;
+    private void SetupSpawners() {
+        //Called on the server, sets up team 1 spawners
+        gM = FindObjectOfType<GameManager>();
+        int count = 0;
+        foreach(CharacterStats minionS in GameObject.Find("Local").GetComponent<PlayerConstructor>().minions){
+            if(minionS != null) {
+                GameObject spawner = Instantiate(gM.GetMinionSpawner(minionS.name), spawnerSpots1[count]);
+                NetworkServer.Spawn(spawner);
+            }
+            count++;
+        }
+        RpcPingCLientForSpawners();
+    }
+
+    [ClientRpc]
+    private void RpcPingCLientForSpawners() { //Need to send minions spawner names to server to spawn
+        if (isClient && isServer)
+            return;
+        string[] names = new string[4];
+        int count = 0;
+        foreach (CharacterStats minionS in GameObject.Find("Local").GetComponent<PlayerConstructor>().minions) {
+            if (minionS != null) {
+                names[count] = minionS.name;
+            }
+            else {
+                names[count] = "null"; //Cannot send an array of strings so concatinating all strings to one string 
+            }
+            count++;
+        }
+        string sb = "";
+        foreach (string s in names) {
+            sb += s + "*";
+        }
+        //sb = sb.Substring(0,sb.Length-2);
+        SpawnClientSpawners(sb);
+    }
+
+    [Command(requiresAuthority = false)]
+    private void SpawnClientSpawners(string s) {
+        string[] names = s.Split('*');
+        int count = 0;
+        foreach (string name in names) {
+            Debug.Log(name);
+            if (name != "null" && name.Length > 0) { //THIS IS ACTING SUS?????
+                GameObject spawner = Instantiate(gM.GetMinionSpawner(name), spawnerSpots2[count]);
+                NetworkServer.Spawn(spawner);
+            }
+            count++;
         }
     }
 

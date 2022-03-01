@@ -12,18 +12,15 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] TMP_Text title, joinText, lobbyText, hostText;
     [SerializeField] TMP_InputField inputIP, inputName, hostIP;
     [SerializeField] Button startButton, hostButton, joinButton;
-    [SerializeField] bool useSteam = false;
 
     private _SceneManager sM;
+    private GameNetworkManager GNM;
     private string playerName = "_";
-
-    protected Callback<LobbyCreated_t> lobbyCreated;
-    protected Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
-    protected Callback<LobbyEnter_t> lobbyEntered;
 
     private void Awake()
     {
         sM = FindObjectOfType<_SceneManager>();
+        GNM = sM.GetComponent<GameNetworkManager>();
         //startButton.interactable = false;//----------------------------------------->Important Re-enable later
         hostButton.interactable = false;
         joinButton.interactable = false;
@@ -31,64 +28,10 @@ public class LobbyUI : MonoBehaviour
 
     private void Start()
     {
-        GameManager mang = FindObjectOfType<GameManager>();
-        if (mang != null) {
-            if(mang.TryGetComponent(out SteamManager man)) {
-                if (man.enabled) {
-                    useSteam = true;
-                }
-                else {
-                    useSteam = false;
-                }
-            }
-        }
-
-        if (useSteam) {
-            lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
-            gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
-            lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
-        }
-
-
         GameNetworkManager.ClientOnConnected += HandleClientConnected;
         GameNetworkManager.ClientOnDisconnected += HandleClientDisconnected;
         GameNetworkManager.ServerOnConnected += HandleServerConnected;
         GameNetworkManager.ServerOnDisconnected += HandleServerDisconnected;
-    }
-
-    private void OnLobbyCreated(LobbyCreated_t callback) {
-        if (callback.m_eResult != EResult.k_EResultOK) {
-            mainPanel.SetActive(true);
-            return;
-        }
-
-        NetworkManager.singleton.StartHost();
-
-        SteamMatchmaking.SetLobbyData(
-            new CSteamID(callback.m_ulSteamIDLobby),
-            "HostAddress",
-            SteamUser.GetSteamID().ToString());
-
-        lobbyPanel.SetActive(true);
-        mainPanel.SetActive(false);
-    }
-
-    private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback) {
-        SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
-    }
-
-    private void OnLobbyEntered(LobbyEnter_t callback) {
-        if (NetworkServer.active) { return; }
-
-        string hostAddress = SteamMatchmaking.GetLobbyData(
-            new CSteamID(callback.m_ulSteamIDLobby),
-            "HostAddress");
-
-        NetworkManager.singleton.networkAddress = hostAddress;
-        NetworkManager.singleton.StartClient();
-
-        mainPanel.SetActive(false);
-        lobbyPanel.SetActive(true);
     }
 
     private void OnDestroy()
@@ -148,13 +91,36 @@ public class LobbyUI : MonoBehaviour
     #region UI Buttons
     public void B_Host()
     {
-        if (useSteam) {
-            SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, 2);
+        if (GNM.isUsingSteam()) {
+            GNM.GetComponent<SteamLobby>().HostLobby();
             return;
         }
+
         hostPanel.SetActive(true);
         mainPanel.SetActive(false);
         hostText.text = "Enter IP to host a lobby";
+    }
+
+    public void DisableMain() {
+        mainPanel.SetActive(false);
+    }
+
+    public void SteamHost() {
+        lobbyPanel.SetActive(true);
+        lobbyText.text = "Waiting for opponent . . .";
+    }
+
+    public void SteamFail() {
+        mainPanel.SetActive(true);
+        lobbyPanel.SetActive(false);
+        joinPanel.SetActive(false);
+        lobbyText.text = "Waiting for opponent . . .";
+    }
+
+
+    public void SteamClient() {
+        mainPanel.SetActive(false);
+        lobbyPanel.SetActive(true);
     }
 
     public void B_HostLobby() {
@@ -214,7 +180,6 @@ public class LobbyUI : MonoBehaviour
 
     public void B_StartGame()
     {
-        //Change scene in Network manager
         ((GameNetworkManager)NetworkManager.singleton).StartGame();
     }
 

@@ -118,9 +118,9 @@ public class SelectionController : MonoBehaviour
         pressedButton.GetComponent<Button>().interactable = false;
         pressedButton.GetComponent<CardData>().disabledImage.enabled = true;
 
-        print("-----------------------------------");
-        print(validMinionIndex);
-        print(lockInScript.minionStats.Length);
+       // print("-----------------------------------");
+       // print(validMinionIndex);
+       // print(lockInScript.minionStats.Length);
 
         selectedMinions[validMinionIndex].AssignMinion(pressedButton.GetComponent<CardData>().stats);
         lockInScript.minionStats[validMinionIndex] = pressedButton.GetComponent<CardData>().stats;
@@ -135,6 +135,15 @@ public class SelectionController : MonoBehaviour
                 button.interactable = true;
                 button.GetComponent<CardData>().disabledImage.enabled = false;
             }
+        }
+
+        int count = 0;
+        foreach (CharacterStats mStats in lockInScript.minionStats) {
+            if(removedStats == mStats) {
+                lockInScript.minionStats[count] = null;
+                break;
+            }
+            count++;
         }
     }
 }
