@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Responsive Sidebar Menu</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="sidenav">
+		<ul>
+			<li>
+				<a href="index.html">
+					<span class="icon"></i></span>
+					<span class="Home">Home</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="Map.html">
+					<span class="icon"></i></span>
+					<span class="The Map">The Map</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="Structs_Props.html">
+					<span class="icon"></span>
+					<span class="Structures & Props">Structures & Props</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="Stats.html">
+					<span class="icon"></span>
+					<span class="Character Stats">Character Stats</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="Abilities.html">
+					<span class="icon"></span>
+					<span class="Abilities">Abilities</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="MTS.html">
+					<span class="icon"></span>
+					<span class="Match Time Scaling">Match Time Scaling</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="StatusEffects.html">
+					<span class="icon"></span>
+					<span class="Status Effects">Status Effects</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="WeakSpots.html">
+					<span class="icon"></span>
+					<span class="Weak Spots">Weak Spots</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="Controls.html">
+					<span class="icon"></span>
+					<span class="Controls">Controls</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="Conqs.html">
+					<span class="icon"></span>
+					<span class="Conquerors">Conquerors</span>
+				</a>
+				<p>-----------------</p>
+			</li>
+			<li>
+				<a href="Minions.html">
+					<span class="icon"></span>
+					<span class="Minions">Minions</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+
+
+	<div class = "parent">
+		<div class = "child">
+			<h1>The Map</h1>
+			<h3>This GitHub pages is still in development so some content will be missing!</h3>
+			<p>
+				This section is subject to detail all of the map tiles, their placement and their function in game. 
+			</p>
+			<p>
+				The map in Subjugation uses an 8x8 of mostly random generated Tiles to create a different map for every match which will change how players interact with the map and cause players to adapt their strategies in every time. The map also is mirrored through the centre so that players have the same tiles on their side ensuring that no player gets an unfair advantage from map generation.
+			</p>
+			<p>
+				Below is a simple view of the map and has different coloured tiles to show each different tile type:
+			</p>
+			<div class= "row">
+				<div class="column2">
+					<h1>[MAP SCREENSHOT]</h1>
+				</div>
+  				<div class="column2">
+  					<ul>
+  						<li>Green – Fixed or Constant Tiles</li>
+  						<li>Yellow – Cosmetic Tiles</li>
+  						<li>Purple – Wall Cosmetic Tiles</li>
+  						<li>White – Outer Gen Tiles</li>
+  						<li>Light Blue – Inner Gen Tiles</li>
+  					</ul>
+  				</div>
+			</div>
+
+			<div>
+				<h4><a href="">Constant Tiles</a></h4>
+				<p>
+					These tiles remain the same in every match and are subject to little or no random generation. These tiles are where Bases and Control Points are located.
+				</p>
+				<h4><a href="">Cosmetic Tiles</a></h4>
+				<p>
+					Cosmetic tiles are tiles that are almost functionally the same in every match with some very minor mostly aesthetic randomness. All yellow tiles have Paths on them that Base Minions follow to get to Control Points and Bases.
+				</p>
+				<h4><a href="">Wall Cosmetic Tiles</a></h4>
+				<p>
+					Wall tiles have a wall stretching from side to side in the middle of the tile preventing all traffic through them, they also have some very minor random generation for aesthetics. On the yellow tile between these wall tiles is where Gates are located.
+				</p>
+				<h4><a href="">Outer Gen Tiles</a></h4>
+				<p>
+					Outer gen tiles contain most of the generated parts of the game, these tiles will contain the bulk of capturable Structures, that when captured offer some bonus for the player who owns them.
+				</p>
+				<h4><a href="">Inner Gen Tiles</a></h4>
+				<p>
+					Inner gen tiles contain more powerful combat orientated Structures which have a large bearing on combat in surrounding tiles
+				</p>
+			</div>
+
+			<h2>Control Points & Paths</h2>
+
+			<p>
+				The map in Subjugation contains 7 control points, 1 in each base, 2 on either side of the map and finally 1 in the very centre of the map. Below is an illustration of the map showing the paths, the bases and the control points. 
+			</p>
+
+			<div class= "row">
+				<div class="column2">
+					<h1>[PATHS SCREENSHOT]</h1>
+				</div>
+  				<div class="column2">
+  					<ul>
+  						<li>Red/Blue Lines – Paths</li>
+  						<li>Small Grey Circles – Map Control Points</li>
+  						<li>Larger Grey Circle – Base Control Points</li>
+  						<li>Red/Blue Semi-circle- Respective Bases</li>
+  					</ul>
+  				</div>
+			</div>
+
+			<p>
+				Initially the only control point a player owns the one located inside their base (Large Grey Circle).
+			</p>
+
+			<p>
+				At the start of the match both player Bases will send out a group of around 3 Base Minions to the control points on the left and right side of the base, these minions will follow the paths to the control points and proceed to capture them.
+			</p>
+
+			<h4>Capturing Points</h4>
+			<p>
+				Control points require 70 “Charges” (C for short) for a team to change a control point capture state,
+			</p>
+			<p>	
+				Map control points have a neutral state between team states so capturing a point from the enemy team will take 140 C, 70 C to neutralise and a further 70 C to capture.
+			</p>
+			<p>	
+				Minions generate 1 C/s while on a point and Conquerors generate 10 C/s, for example a group of 10 minions and their Conqueror would capture a point from neutral in 3.5 seconds.
+			</p>
+			<p>	
+				At the start of the match minions who trek from their base to the first 2 neutral points will take 23.33 seconds to capture the points while there.
+			</p>
+
+
+			<h4>Control Point Win Condition</h4>
+			<p>
+				Players are only able to capture the enemy base control point if they own at least 1 control point on either side of the map and the central control point.
+			</p>
+
+
+
+
+			<h2>Gates</h2>
+			<p>
+				Gates play an important role in the evolution of combat and the movement of Base Minions throughout a match in Subjugation. Overall, there are 4 gates on the map, 1 on each base and 2 in the middle of the map between the wall tiles. Once a gate has its opening condition filled it will open and will remain permanently open for the rest for the match. Below is an illustration of the map with gates and walls in place:
+			</p>
+
+			<div class= "row">
+				<div class="column2">
+					<h1>[GATES SCREENSHOT]</h1>
+				</div>
+  				<div class="column2">
+  					<ul>
+  						<li>Brown Lines with yellow dots – Gates</li>
+  						<li>Thick Black bars – Walls</li>
+						<li>Thin Black Bars – Base walls</li>
+  					</ul>
+  				</div>
+			</div>
+
+
+
+			<h4>Opening Conditions</h4>
+			<p>
+				<b>Middle Gates</b> - One of the Gates in the middle of the map will open if a team owns both control points on either side of it. Once the gate is open minions and Conquerors are able to pass through it to reinforce the control point on the opposing side or to advance into enemy territory. 
+			</p>
+			<p>
+				<b>Base Gates</b> - Both player Base Gates will open 10 seconds (condition and value subject to change) after the central control point is captured. Enabling the player Bases to Reinforce or Advance on the central control point.
+			</p>
+
+
+
+			<h2>Bases, Base Minions, Reinforcements & Advancements</h2>
+			<p>
+				There are many mechanics and activities going on throughout map that are done by the player bases and not by the players themselves, the following is a list of these mechanics:
+			</p>
+
+			<h4>Base Minions</h4>
+			<p>
+				Base minions are spawned 1 by 1 to from a group of minions which will advance along a path to a control point to fight and capture it. They are not selected by the player before the match and are the same for everyone. Typically there are 2 kinds of base minions, melee and ranged.
+			</p>
+			<p>
+				Melee – Base Melee minions are the grunts of the game and only serve to mindlessly attack and soak damage for other minions/Conquerors. They regenerate health slowly and have a higher health pool.
+			</p>
+			<p>
+				Ranged – Base Ranged minions are what hide behind the melee minions and deal most of the damage. They are significantly squishier than melee minions, having a much small health pool. They shoot small arrows a from little crossbows that deal descent damage.
+			</p>
+			<p>
+				The ratio of ranged to melee minions will try to be 3 melee to 2 ranged.
+			</p>
+
+			<h4>Base Minions Spawning & Control Point Limiting</h4>
+			<p>
+				The number of minions spawned by a base is affected by two things, Match Time Scaling and control points assignment / limits.
+			</p>
+			<p>
+				At the start of the game bases send an initial wave of 10 minions to both side control points and will then continue to spawn a wave minions every 20 seconds, these waves are called “spawn waves”. The waves then shrink spawning up to 3 minions per wave and slowly this will scale up by 1 minion every 90 seconds up to a maximum of 10 minions per wave. (Values subject to change)
+			</p>
+			<p>
+				When spawning a wave of minions the base will spawn minions 1 second apart so they proceed in a line toward a control a point. Bases will also see what kind of minions are assigned to a point and will try to spawn different minions to hit the 6/4 melee to ranged ratio. For example: If a side control point has 2 melee and 3 ranged it will try to spawn 4 melee and 1 ranged to fill the numbers. 
+			</p>
+			<p>
+				In order to prevent bases from continuously spawning minions and lag out the game there are limits placed to control the spawning, the side control points have a limit of 10 base minions and the central point has a limit of 20 minions. Base control points are not assigned minions and have no effect on minion spawning.
+			</p>
+			<p>
+				Finally minions are spawned based on assigned position: So if 10 minions on a side control point are assigned to advance through a gate and get attacked before they leave it is possible that 10 base more base minions spawn to defend the point as there is no minions assigned to that point and 20 minions could be on the same point “defending” it.
+			</p>
+
+
+			<h4>Advancements & Reinforcements</h4>
+			<p>
+				Every 20 seconds when a base spawns minions the base also checks if minions can do any advancing or reinforcing. Reinforcing is sending minions to a point you own to replenish numbers and advancing is sending minions to enemy control points to capture them.
+			</p>
+			<p>
+				Unlike bases which spawn minions 1 by 1 advancing is an entire control point of minions moving forward as one unit, reinforcing is similar but the number of moving minions is determined by minion type and number of minions that need to move to hit the control point limit, control points will rather satisfy the next control point than fulfil their own minion needs. 
+			</p>
+			<p>
+				For example: If a side captured enemy control point need 4 ranged base minions, the previous control point will send its 4 ranged minions to reinforce and will then receive minions from the main base.
+			</p>
+			<p>
+				If a side gate beside a control point is open it will prioritise sending minions through the gate but if the gate is closed or they own the point on the opposing side and the opposing point is fully reinforced they will instead reinforce/advance on the middle point until it is capture.
+			</p>
+			<p>
+				The middle control point will only begin to advance if it has about 15 minions assigned to it and will only advance on the spawn wave after it has been assigned its last minions.
+			</p>
+			<p>
+				When the player owns the middle point and one point on either side of the map minions will continuously advance into the enemies base. Below is an illustrated example where both players captured opposite side points and blue team captured the central control point:
+			</p>
+
+			<div class= "row">
+				<div class="column2">
+					<h1>[GATES SCREENSHOT]</h1>
+				</div>
+  				<div class="column2">
+  					<ul>
+  						<li>Blue Path – Blue minion traffic</li>
+  						<li>Red Path – Red minion traffic</li>
+						<li>Grey Path -No minion traffic</li>
+						<li>Purple Path – Blue and Red Minions fighting along path</li>
+  					</ul>
+  				</div>
+			</div>
+			<p>
+				The minions on the upper right blue point come from the lower left blue point, this scenario can cause a gigantic battle in the middle control point where the attacking 20 red minions (10 from above and 10 from the left) can collide with 40 blue minions. (An advancing 20 blues from the central point, 10 blues coming from the left point and 10 blues coming from the central base path)
+			</p>
+			<p class="end"  > <a href="#top">Go to top</a> </p>
+		</div>
+	</div>
+</body>
+</html>
