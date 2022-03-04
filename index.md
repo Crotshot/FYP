@@ -1,6 +1,6 @@
 # Subjugation
 
-### by Pádraif Crotty
+### by Pádraig Crotty
 
 ## This GitHub pages is still in development so some content will be missing!
 
