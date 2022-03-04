@@ -1,5 +1,5 @@
-# FYP
-The unity project files for my final year project game, Subjugation.
+# Subjugation
+The unity project files for Subjugation.
 
 ## What is Subjugation?
 Subjugation is a 3rd person 1 vs 1 MOBA (Multiplayer Online Battle Arena). Similarly, to other
