@@ -86,5 +86,167 @@
             </li>
          </ul>
       </div>
+      <div class = "parent">
+         <div class = "child">
+            <h1>Structures & Props</h1>
+            <p>
+               In Subjugation there is many different structures and props used to make the map a fresh experience in every match. Props cannot be captured and are generally there to be aesthetically pleasing, some props like large rock or structures can lead to defendable choke points on the map. Capturable structures require minions to be sacrificed to them in order to be captured, similar to control points they also have a neutral state between team states, for example a gold mine that is neutral takes 4 minions to capture but an enemy controlled gold mine will take 4 minions to neutralise and a further 4 to capture.
+            </p>
+            <p>
+   	           The following is a list of all functional/capturable structures that are subject to be in the game: (Name – Capture Count)
+            </p>
+            <h4>Outer Tiles</h4>
+            <p><b>Fixed Ballista</b> - 3 minions</p>
+            <p>–  Similar to the Ballista Tower except it has a limited 90° firing arc, illustrated below is a red owned fixed ballista: </p>
+
+            <div class= "row">
+               <div class="column2">
+                  <img src="fixed_Ballista.png" alt="Fixed Ballista">
+               </div>
+               <div class="column2">
+                   <div class = "row">
+                     <p>
+                        - When spawned ballistae always face the path beside them either facing exactly North, South, East or West. The only exception to this is when a ballista spawns on a map corner tile, in this scenario it faces at a 45° angle toward the path.
+                     </p>
+                  </div>
+                  <div class = "row">
+                     <div class="column2">
+                        <img src="fixed_Ballista_45.png" alt="Fixed Ballista 45">
+                     </div>
+                     <div class="column2">
+                        <p>
+                           (Red owned ballista facing North-West after spawning, in the south east corner tile)
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <p><b>Small Minion Garrison</b> - 3 minions</p>
+            <p>– Similar to its large version the Large Minion Garrison except it has generates ½ the minions per spawn wave and is capped at ½ the minions of its larger counter part  </p>
+            <p><b>Gold Mine</b> - 4 minions</p>
+            <p>– Generates 2 gold every 3 seconds</p>
+            <p><b>Wheat Field</b> - 5 minions</p>
+            <p>– All friendly minions gain an additional 10% more max health</p>
+            <p><b>Pumpkin patch</b> - 5 minions</p>
+            <p>– All friendly minions gain 15% bonus damage on their abilities</p>
+            <p><b>Iron Mine</b> - 6 minions</p>
+            <p>– All friendly melee minions gain an additional 10% damage</p>
+            <p><b>Fletcher</b> - 6 minions</p>
+            <p>– All friendly ranged minions gain an additional 10% damage</p>
+            <p><b>Brewery</b> - 6 minions</p>
+            <p>– All friendly minions gain 20% additional health regeneration</p>
+            <p><b>Sacred Crystal</b> - 8 minions</p>
+            <p>– Owning Conqueror gains 10% reduced cooldowns (stacks diminishing)</p>
+            <p><b>Tavern</b> - 8 minions</p>
+            <p>–  Generates 2 gold every 3 seconds</p>
+            <p>–  Warns Owning Conqueror when enemy Conqueror comes nearby</p>
+            <p>–  +3 Conqueror Horde size </p>
+
+            <h4>Outer Tiles</h4>
+            <p><b>Ballista Tower</b> - 7 minions</p>
+            <p>Once a Ballista has been captured it will begin firing large ballista bolts at any enemy units that steps in its 2 tile radius. A ballista cannot shoot when units are within a ½ tile radius of its position, below is an illustration of the area a blue team ballista can fire upon: </p>
+
+            <div class= "row">
+               <div class="column2">
+                  <h1><img src="Ballista_Tower.png" alt="Ballista Tower"></h1>
+               </div>
+               <div class="column2">
+                  <p>-  The ballista has a limited rotation speed and will not fire unless it is aiming close to the target</p>
+                  <p>-  Fires bolts once every 3 seconds that deal ~70 damage to enemies hit in a small area</p>
+                  <p>-  A ballista will target the first enemy in its area and then proceed to target the nearest enemy to that target once the first target has left or is slain. The only exception is when an enemy Conqueror enters its area, it will fire at its initial target as normal but will always target the enemy Conqueror when its initial target is slain or has left.</p>
+               </div>
+            </div>
+
+
+            <p><b>Large Minion Garrison </b> -7 minions</p>
+            <p>When captured the large garrison will generate its own base minions up to a maximum of 10 minions, it will generate 2 minions every spawn wave until it is full. It will always keep the ratio of 3 melee minions to 2 ranged minions. When a garrison has at least 60% minions and an enemy Conqueror or minion is trespassing in its territory it will release its held base minions to hunt the trespasser(s). Below is an illustration of the large garrisons territory. </p>
+
+            <div class= "row">
+               <div class="column2">
+                  <h1><img src="large_Garrison.png" alt="Large Garrison"></h1>
+               </div>
+               <div class="column2">
+                  <p>-  The sent minions will continue hunting until all enemies are defeated or they have left a distance from the garrison, at this point minions will return to the garrison for replenishment.</p>
+                  <p>-  The garrison will only send out minions to trespassers if it has no minions out on the field.</p>
+                  <p>-  When a minion generates it is assigned to the garrison and is still counted toward the garrison minion cap when it is out on the field.</p>
+               </div>
+            </div>
+
+
+            <p><b>Trebuchet</b> -8 minions</p>
+            <p>–  When captured the catapult will fire at any enemy owned control point except for their base control point. Below is an illustration of a blue catapult and the areas that it can fire upon: </p>
+
+
+            <div class= "row">
+               <div class="column2">
+                  <h1><img src="catapult.png" alt="Trebuchet"></h1>
+               </div>
+               <div class="column2">
+                  <p>-  It fires one shot at a control point and has a cooldown of 10 seconds before firing at the next control point</p>
+                  <p>-  Attacks the opposing points first then the centre and finally the ones on its own side if they are enemy owner</p>
+                  <p>-  The trebuchet fires an extremely high arcing shot which takes many seconds to reach its target destination.</p>
+               </div>
+            </div>
+            <p>-  The shot explodes in mid-air just before it hits the ground peppering the area below with shrapnel, anything in the area of shrapnel takes 50 damage that drops off from 5 to 25 meters by 60%. Example: A minion 20 meters away takes 55% damage of 27.5.</p>
+            <p>-  The trebuchet is quite inaccurate being able to being on average up to 10 metres of target and on rare occasion being up to 20 metres off target .</p>
+
+
+
+            <p><b>Wizard Tower</b> -10 minions</p>
+            <p>–  When captured the wizard tower begins watching over all minions that cross into its area of effect. Below is an illustration of the wizard tower and its area of effect: </p>
+
+
+            <div class= "row">
+               <div class="column2">
+                  <h1><img src="wizard_Tower.png" alt="Wizard Tower"></h1>
+               </div>
+               <div class="column2">
+                  <p>-  Every 3 seconds the tower buffs friendly minions in its radius and de-buffs enemy minions.</p>
+                  <p>-  The tower gifts the Charged effect to all ally minions for 10 seconds.</p>
+                  <p>-  The tower curses the Drained effect all enemy minions for 10 seconds</p>
+                  <p>-  The tower also boasts a very high damage and short range flame thrower which incinerates all enemies that come near it.</p>
+               </div>
+            </div>
+
+            <h4>Cosmetic Tiles</h4>
+            <p>
+               Cosmetic tiles are the Yellow and Purple Tiles shown on The Map, they are tiles which are not capturable and the random generation they are subject to is mostly for cosmetic purposes with a small inclination for strategic play and some small 1 time collectibles such as a small amount of gold.
+            </p>
+            <p>
+               The following list is a plan of all cosmetic tile generated objects and is subject to change:
+            </p>
+            <p>
+               Rocks of various shapes and sizes, small hut, wooden barrels, wooden boxes, dilapidated stone house, broken cart/wagon, stone wall of various lengths, ruined fort, tree of various kinds, patch of path stones of various sizes, Bushes/ferns of various sizes, small forests of trees, openings, wooden fences of various lengths, small lake, puddles, various flowers, tall grass, fields of various sizes and different types of ground such as muddy or grassy.
+            </p>
+            <p>
+               (Many things in this list and as they are not core to the gameplay they will be not focused on and most will be considered extra to be added)
+            </p>
+
+<p class="end"  > <a href="#top">Go to top</a> </p>
+         </div>
+      </div>
 	</body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
