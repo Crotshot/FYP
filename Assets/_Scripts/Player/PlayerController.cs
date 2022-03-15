@@ -9,14 +9,14 @@ public class PlayerController : NetworkBehaviour
 {
     Inputs inputs;
     NavMeshAgent agent;
-    Transform navTarget;
+    //Transform navTarget;
 
     public UnityEvent ab1, ab2, ab3;
     private bool ready = false;
 
     public void Setup() {
         if (hasAuthority) {
-            navTarget = transform.GetChild(0).GetChild(1);
+            //navTarget = transform.GetChild(0).GetChild(1);
             GetComponent<NavMeshAgent>().enabled = true;
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
             inputs = FindObjectOfType<Inputs>();
@@ -43,9 +43,9 @@ public class PlayerController : NetworkBehaviour
     private void Update() {
         if (!ready)
             return;
-        navTarget.localPosition = inputs.GetMovementInput();
-        if(agent.enabled && agent.isOnNavMesh)
-            agent.destination = navTarget.position;
+        //navTarget.localPosition = inputs.GetMovementInput();
+        //if(agent.enabled && agent.isOnNavMesh)
+        //    agent.destination = navTarget.position;
 
         if(inputs.GetAbility1Input() > 0) {
             ab1?.Invoke();
