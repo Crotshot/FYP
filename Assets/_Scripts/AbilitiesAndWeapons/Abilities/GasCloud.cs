@@ -7,6 +7,8 @@ public class GasCloud : NetworkBehaviour
 {
     [SerializeField] float duration, poisonDamage, scalePerSec;
     [SerializeField] int poisonTicks;
+    [SerializeField] ParticleSystem shockEmitter;
+    [SerializeField] Transform gasEm;
     float tickInterval = 0.25f, ticktimer = 0.25f;
 
     List<Status> trackedStatus = new List<Status>();
@@ -30,6 +32,8 @@ public class GasCloud : NetworkBehaviour
         }
 
         transform.localScale += Vector3.one * scalePerSec * Time.deltaTime;
+        gasEm.localScale += Vector3.one * scalePerSec * Time.deltaTime;
+
         duration -= Time.deltaTime;
 
         if(duration <= 0) {
@@ -65,11 +69,20 @@ public class GasCloud : NetworkBehaviour
                     continue;
                 }
                 trackedStatus[i].AddEffect(Status.StatusEffect.Stun, ticks, 0);
+                RpcEffect();
             }
         }
         else {
             CmdTaserStun(ticks);
         }
+    }
+
+    [ClientRpc]
+    private void RpcEffect() {
+        Debug.Log("Shocking Combo");
+        var es = shockEmitter.shape;
+        es.radius = transform.localScale.x;
+        shockEmitter.Play();
     }
 
     [Command (requiresAuthority = false)]
