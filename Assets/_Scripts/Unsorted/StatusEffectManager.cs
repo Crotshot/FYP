@@ -9,8 +9,8 @@ public class StatusEffectManager : NetworkBehaviour {
     /// When a character is created they have a a StatusComponent, the status component alters the character based on status effects
     /// The status effect Components are also responsible for health regen on characters
     /// 
-    /// One thing to note if the same is applied multiple times the for example Speed 30% 2secs & Speed 10% for 5secs
-    /// Whichever effect lasts longest will remain.
+    /// NOTE: If the same is applied multiple times the for example Speed 30% 2secs & Speed 10% for 5secs 
+    /// Which ever effect has the highest value calculated by multiplying effect strength by time remaining will be used => 30% for 2 secs = 0.6
     /// 
     /// Regular Effects
     /// Stun        -> Character is completely disabled for duration
@@ -21,6 +21,7 @@ public class StatusEffectManager : NetworkBehaviour {
     /// Abduction   -> Character is disabled and is being moved against their will
     /// Rooted      -> Character cannot move but can still attack
     /// Magnetised  -> Character is being pulled toward location slowly
+    /// Poison      -> Character is toxic and taking X posion adamage per tick
     /// </summary>
 
     /// <summary>
@@ -56,7 +57,6 @@ public class StatusEffectManager : NetworkBehaviour {
         tickTime = 1 / tickRate;
         tickTimer = tickTime;
     }
-
 
     private void Update() {
         if(tickTimer > 0) {

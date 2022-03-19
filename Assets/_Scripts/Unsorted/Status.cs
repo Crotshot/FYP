@@ -5,12 +5,12 @@ using Mirror;
 
 //Minion Controller, Health, PlayerController
 public class Status : NetworkBehaviour {
-    /*[SyncVar] */int stunTicks, speedBoostTicks, slownessTicks, burningTicks, weakenedTicks, abductionTicks, rootedTicks, magnetisedTicks;
-    /*[SyncVar] */float speedBoostPerc, slownessPerc, burningDamage, weaknessPerc, magneticForce;
+    /*[SyncVar] */int stunTicks, speedBoostTicks, slownessTicks, burningTicks, weakenedTicks, abductionTicks, rootedTicks, magnetisedTicks, poisonTicks;
+    /*[SyncVar] */float speedBoostPerc, slownessPerc, burningDamage, weaknessPerc, magneticForce, poisonDamage;
     /*[SyncVar] */Vector3 magneticForceOrigin;
-    [SerializeField] ParticleSystem burningEffect, stunEffect;
+    [SerializeField] ParticleSystem burningEffect, stunEffect, poisonEffect;
 
-    public enum StatusEffect {Stun, Speed, Slow, Burn, Weak, Abduct, Root, Magnet}
+    public enum StatusEffect {Stun, Speed, Slow, Burn, Weak, Abduct, Root, Magnet, Poison}
 
     Controller controller;
     Health health;
@@ -49,6 +49,7 @@ public class Status : NetworkBehaviour {
         abductionTicks = 0;
         rootedTicks = 0;
         magnetisedTicks = 0;
+        poisonTicks = 0;
 
         StatusUpdate();
     }
@@ -57,6 +58,7 @@ public class Status : NetworkBehaviour {
     public void StatusUpdate() {
         isBurning();
         isStunned();
+        isPoisonned();
     }
     
     #region Ticks
@@ -86,29 +88,22 @@ public class Status : NetworkBehaviour {
 
         stunTicks--;
     }
+
+    [Server]
+    public void isPoisonned() {
+        if (poisonTicks == 0)
+            return;
+
+        if (poisonTicks == 1) {
+            RpcEffect("PoisonEmitter", false);
+            controller.EffectEnd("Poison");
+        }
+
+        stunTicks--;
+    }
     #endregion
 
     #region AddingEffects
-    //[Server]
-    //public void Burn(float damage, int ticks) {
-    //    if (ticks < burningTicks)
-    //        return;
-
-    //    RpcEffect("BurningEmitter", true); //Start particle emitter
-    //    burningTicks = ticks;
-    //    burningDamage = damage;
-    //}
-
-    //[Server]
-    //public void Stun(int ticks) {
-    //    if (ticks < stunTicks)
-    //        return;
-
-    //    RpcEffect("StunEmitter", true);
-    //    controller.EffectStart("Stun");
-    //    stunTicks = ticks;
-    //}
-
     /// <summary>
     /// Generic Status effect function that can apply any status effect
     /// </summary>
@@ -137,6 +132,14 @@ public class Status : NetworkBehaviour {
             RpcEffect("StunEmitter", true);
             stunTicks = ticks;
         }
+        else if (effectName == StatusEffect.Poison) {
+            if (ticks < poisonTicks)
+                return;
+            controller.EffectStart("Poison");
+
+            RpcEffect("PoisonEmitter", true);
+            poisonTicks = ticks;
+        }
     }
 
     [Command (requiresAuthority = false)]
@@ -152,6 +155,8 @@ public class Status : NetworkBehaviour {
             Effect(burningEffect, on);
         else if (emitterName.Equals("StunEmitter"))
             Effect(stunEffect, on);
+        else if (emitterName.Equals("PoisonEmitter"))
+            Effect(poisonEffect, on);
     }
 
     public void Effect(ParticleSystem pS, bool on) {
