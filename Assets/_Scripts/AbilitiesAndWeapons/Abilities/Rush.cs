@@ -4,27 +4,37 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Rush : Ability {
-
+    /// <summary>
+    /// Rush increases conqueror movespeed COMPLETE
+    /// The conqueror can only move forward and cannot stop but can still turn
+    /// Hitting another conqueror ends rush and stuns the second conqueror
+    /// Hitting minions deals damage to the minions
+    /// </summary>
     [SerializeField] float speedPercentIncrease, boostDuration;
+    [SerializeField] ParticleSystem rushEmmitter;
     float boostTimer, ogSpeed;
+    PlayerController pC;
 
     private void Start() {
         if (!hasAuthority)
             Destroy(this); //This one does not need to exist outside of its owner
-
+        pC = GetComponent<PlayerController>();
         SetUp(Cast);
-        ogSpeed = GetComponent<NavMeshAgent>().speed;
+        ogSpeed = pC.GetCharacterSpeed();
     }
 
     private void FixedUpdate() {
         CoolDown(Time.deltaTime);
 
         if(boostTimer > 0) {
-            //LATER -> Check destination and set it forward if not set
             boostTimer -= Time.deltaTime;
 
             if (boostTimer <= 0) {
-                GetComponent<NavMeshAgent>().speed = ogSpeed;
+                pC.SetCharacterSpeed(ogSpeed);
+                pC.EffectEnd("Rush");
+
+                var em = rushEmmitter.emission;
+                em.enabled = false;
             }
         }
     }
@@ -32,7 +42,11 @@ public class Rush : Ability {
     private void Cast() {
         if (AbilityUsed()) {
             boostTimer = boostDuration;
-            GetComponent<NavMeshAgent>().speed = ogSpeed + ogSpeed * speedPercentIncrease;
+            pC.SetCharacterSpeed(ogSpeed + ogSpeed * speedPercentIncrease);
+            pC.EffectStart("Rush");
+
+            var em = rushEmmitter.emission;
+            em.enabled = true;
         }
     }
 }

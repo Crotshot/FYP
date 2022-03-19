@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class BasicShell :  NetworkBehaviour
-{
+public class BasicShell :  NetworkBehaviour {
+
     [SerializeField] float shellSpeed = 2f, deleteTime = 10f, damage = 20f, rayLength = 0.5f;
     [SerializeField] Vector3 rayOrigin;
     [SerializeField] Vector3[] directions;

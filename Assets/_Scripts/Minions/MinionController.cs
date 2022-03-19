@@ -5,8 +5,8 @@ using UnityEngine.AI;
 using Mirror;
 using Helpers = Crotty.Helpers.StaticHelpers;
 
-public class MinionController : NetworkBehaviour
-{
+public class MinionController : Controller {
+
     [SerializeField] string minionType;
     [SerializeField] bool baseMinion, independentWeapon;
     [SerializeField] float minionSpeed, minionAngularSpeed, attackDistance, awarnessDistance;
@@ -19,6 +19,7 @@ public class MinionController : NetworkBehaviour
 
     public enum MinionState { Idle, OnPath, Follower, Entering, Forward, Defender, Fighting, Recalling, Retreating }
     public MinionState minionState = MinionState.Idle, returningState = MinionState.Idle;
+
     /*
      Idle -> Default State, does nothing
      OnPath -> Minion is following a path, will fight enemies in way but will not hunt enemies off path
@@ -50,6 +51,8 @@ public class MinionController : NetworkBehaviour
     
     RaycastHit[] hits;
     private void FixedUpdate() {
+        if (stunned)
+            return;
         if((minionState == MinionState.Retreating || minionState == MinionState.Recalling) && Helpers.Vector3Distance(destination, transform.position) < 5f) {
             minionState = MinionState.Follower;
         }
@@ -75,7 +78,17 @@ public class MinionController : NetworkBehaviour
                 }
             }
             else {
-                if (attackTarget == null || Helpers.Vector3Distance(attackTarget.position, transform.position) > awarnessDistance * 1.1f) {
+                bool targFound = false;
+                hits = Physics.SphereCastAll(transform.position, awarnessDistance, transform.forward, 0, layer, QueryTriggerInteraction.Ignore);
+                if (hits.Length > 0) {
+                    foreach (RaycastHit hit in hits) {
+                        if (hit.collider.transform == attackTarget) {
+                            targFound = true;
+                            break;
+                        }
+                    }
+                }
+                if (!targFound || attackTarget == null || Helpers.Vector3Distance(attackTarget.position, transform.position) > awarnessDistance * 1.1f) {
                     attackTarget = null;
                     minionState = returningState;
                     if (baseMinion) {
@@ -155,9 +168,6 @@ public class MinionController : NetworkBehaviour
     }
     #endregion
 
-
-
-
     public void MinionDeath() {
         attackTarget = null;
         returningState = MinionState.Idle;
@@ -196,5 +206,23 @@ public class MinionController : NetworkBehaviour
 
     public bool isBaseMinion() {
         return baseMinion;
+    }
+
+    override public void EffectStart(string effect) {
+        if (effect.Equals("Stun")) {
+            stunned = true;
+            attackC.isStun(true);
+            return;
+        }
+        base.EffectStart(effect);
+    }
+
+    override public void EffectEnd(string effect) {
+        if (effect.Equals("Stun")) {
+            stunned = false;
+            attackC.isStun(false);
+            return;
+        }
+        base.EffectEnd(effect);
     }
 }

@@ -15,6 +15,8 @@ public class Minion_Attack : NetworkBehaviour
     protected int index;
     public virtual void Attack() { }
 
+    protected bool stunned;
+
     protected void AnimatedAttack(Action act) {
         if (attacking) { //Atacking
             float W = animatedTimings[index].time - animatedTimings[index - 1].time;
@@ -52,7 +54,11 @@ public class Minion_Attack : NetworkBehaviour
             }
         }
     }
-    
+
+    public void isStun(bool stun) {
+        stunned = stun;
+    }
+
     [ClientRpc]
     public void ReflectWeapon(Vector3 pos, Vector3 rot, Vector3 scale) {
         animatedWeapon.localPosition = pos;

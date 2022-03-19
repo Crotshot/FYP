@@ -4,35 +4,24 @@ using UnityEngine;
 using UnityEngine.Events;
 using Mirror;
 
-public class RangedAttack : NetworkBehaviour {
+public class RodgerAttack : PlayerAttack {
     [SerializeField] float roundsPerMinute = 60f;
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject projectilePrefab;
-    Inputs inputs;
     float fireRatetimer;
 
-    public UnityEvent weaponFired;
-
-    void Start() {
-        if (!hasAuthority)
-            return;
-
-        inputs = FindObjectOfType<Inputs>();
-        if (weaponFired == null)
-            weaponFired = new UnityEvent();
+    void Update() {
+        if (fireRatetimer > 0) {
+            fireRatetimer -= Time.deltaTime;
+        }
     }
 
-    void Update() {
-        if(inputs != null) {
-            if (inputs.GetAttackInput() != 0 && fireRatetimer <= 0 && hasAuthority) {
-                Shoot();
-                fireRatetimer = 60f / roundsPerMinute;
-                weaponFired?.Invoke();
-            }
-
-            if (fireRatetimer > 0) {
-                fireRatetimer -= Time.deltaTime;
-            }
+    override public void Attack() {
+        Debug.Log("Shot fired!");
+        if (fireRatetimer <= 0) {
+            Shoot();
+            fireRatetimer = 60f / roundsPerMinute;
+            weaponFired?.Invoke();
         }
     }
 

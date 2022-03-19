@@ -9,10 +9,10 @@ public class Passive_0 : NetworkBehaviour
     GameObject projectilePrefab;
 
     private void Start() {
-        if(TryGetComponent(out RangedAttack atk)) {
+        if(TryGetComponent(out RodgerAttack atk)) {
             if(atk != null) {
                 atk.weaponFired.AddListener(Shoot);
-                projectilePrefab = GetComponent<RangedAttack>().GetShellPrefab();
+                projectilePrefab = atk.GetShellPrefab();
             }
         }
     }

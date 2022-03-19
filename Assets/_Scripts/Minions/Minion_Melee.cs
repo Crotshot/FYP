@@ -18,6 +18,8 @@ public class Minion_Melee : Minion_Attack{
     }
 
     private void FixedUpdate() {
+        if (stunned)
+            return;
         AnimatedAttack(RayCheck);
     }
 

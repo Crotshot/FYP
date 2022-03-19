@@ -145,5 +145,13 @@ namespace Crotty.Helpers {
         public static float Vector2Distance(Vector2 a, Vector2 b) {
             return Mathf.Sqrt((Mathf.Pow(a.x - b.x, 2) + Mathf.Pow(a.y - b.y, 2)));
         }
+
+        public static Vector3 Vector3Direction(Vector3 centre, Vector3 directionObject) {
+            return (directionObject - centre).normalized;
+        }
+
+        public static Vector3 Vector3Clamp(Vector3 var, float min, float max) {
+            return new Vector3(Mathf.Clamp(var.x, min, max), Mathf.Clamp(var.y, min, max), Mathf.Clamp(var.z, min, max));
+        }
     }
 }
