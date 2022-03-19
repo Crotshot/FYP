@@ -27,6 +27,7 @@ public class Health : NetworkBehaviour
         
         if(currentHealth <= 0) {
             dead = true;
+            GetComponent<Status>().DeInit();
         }
     }
 

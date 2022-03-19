@@ -15,7 +15,8 @@ public class PlayerController : Controller {
     public UnityEvent ab1, ab2, ab3, atk;
     protected bool ready = false;
 
-    virtual public void Setup() {
+    override public void Setup() {
+        base.Setup();
         if (hasAuthority) {
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
             inputs = FindObjectOfType<Inputs>();
@@ -42,24 +43,10 @@ public class PlayerController : Controller {
     }
 
     virtual protected void FixedUpdate() {
-        if (!ready || !stunned)
+        if (!ready || stunned)
             return;
 
-        Vector3 input = inputs.GetMovementInput();
-        if (input.x != 0)
-            transform.RotateAround(transform.position, Vector3.up, rotSpeed * Time.deltaTime * input.x);
-        if (input.z != 0) {
-            Vector3 currentVelocity = transform.forward * Time.deltaTime * characterSpeed * input.z * 50f;
-            currentVelocity = Helpers.Vector3Clamp(currentVelocity, -characterSpeed, characterSpeed);
-            rb.velocity = currentVelocity;
-        }
-    }
-
-    protected void Update() {
-        if (!ready || !stunned)
-            return;
-
-        if(inputs.GetAbility1Input() > 0) {
+        if (inputs.GetAbility1Input() > 0) {
             ab1?.Invoke();
         }
         if (inputs.GetAbility2Input() > 0) {
@@ -70,6 +57,15 @@ public class PlayerController : Controller {
         }
         if (inputs.GetAttackInput() > 0) {
             atk?.Invoke();
+        }
+
+        Vector3 input = inputs.GetMovementInput();
+        if (input.x != 0)
+            transform.RotateAround(transform.position, Vector3.up, rotSpeed * Time.deltaTime * input.x);
+        if (input.z != 0) {
+            Vector3 currentVelocity = transform.forward * Time.deltaTime * characterSpeed * input.z * 50f;
+            currentVelocity = Helpers.Vector3Clamp(currentVelocity, -characterSpeed, characterSpeed);
+            rb.velocity = currentVelocity;
         }
     }
 

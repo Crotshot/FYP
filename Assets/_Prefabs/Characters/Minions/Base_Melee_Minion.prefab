@@ -384,6 +384,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2086760959777170057, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: EmissionModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2086760959777170057, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3393298794735004064, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_Name
       value: Base_Melee_Minion
@@ -396,6 +404,30 @@ PrefabInstance:
       propertyPath: teamAccents.Array.data[0]
       value: 
       objectReference: {fileID: 8790234341975820867}
+    - target: {fileID: 5962769987103405413, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962769987103405413, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962769987103405413, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962769987103405413, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793452634974410023, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: EmissionModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793452634974410023, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_Enabled
       value: 1

@@ -9,6 +9,8 @@ public class RodgerController : PlayerController {
     protected bool overrideForward = false;
 
     protected override void FixedUpdate() {
+        if (!ready || stunned)
+            return;
         base.FixedUpdate();
         if (overrideForward) {
             Vector3 currentVelocity = transform.forward * Time.deltaTime * characterSpeed * 50f;

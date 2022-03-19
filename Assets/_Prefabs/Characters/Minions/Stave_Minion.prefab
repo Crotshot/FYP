@@ -253,6 +253,18 @@ PrefabInstance:
       propertyPath: m_AssetId
       value: cd59332b9e3340a4092d19d8630edd13
       objectReference: {fileID: 0}
+    - target: {fileID: 1267384911210042558, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1267384911210042558, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1267384911210042558, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1380134748945916644, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -297,6 +309,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2086760959777170057, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: EmissionModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3393298794735004064, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_Name
       value: Stave_Minion
@@ -313,6 +329,22 @@ PrefabInstance:
       propertyPath: teamAccents.Array.data[0]
       value: 
       objectReference: {fileID: 5476475490410582038}
+    - target: {fileID: 5962769987103405413, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195726798651038270, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195726798651038270, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195726798651038270, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: minionType
       value: Stave

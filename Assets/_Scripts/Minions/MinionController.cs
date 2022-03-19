@@ -32,7 +32,8 @@ public class MinionController : Controller {
      */
     //Minion Groups
 
-    public void Setup() {
+    override public void Setup() {
+        base.Setup();
         if (!baseMinion)
             minionState = MinionState.Follower;
         agentC = GetComponent<NavMeshAgent>();
@@ -212,6 +213,7 @@ public class MinionController : Controller {
         if (effect.Equals("Stun")) {
             stunned = true;
             attackC.isStun(true);
+            agentC.enabled = false;
             return;
         }
         base.EffectStart(effect);
@@ -221,6 +223,7 @@ public class MinionController : Controller {
         if (effect.Equals("Stun")) {
             stunned = false;
             attackC.isStun(false);
+            agentC.enabled = true;
             return;
         }
         base.EffectEnd(effect);

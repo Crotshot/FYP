@@ -5,7 +5,13 @@ using Mirror;
 
 public class Controller : NetworkBehaviour {
 
-    protected bool stunned = false;
+    [SyncVar]protected bool stunned = false;
+
+    virtual public void Setup() {
+        Debug.Log("Setting up controller");
+        if(isServer)
+            GetComponent<Status>().Init();
+    }
 
     public virtual void EffectStart(string effect) {
         Debug.Log("Controller for " + gameObject.name + " does not contain effect: " + effect);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-
+using System;
 
 public class StatusEffectManager : NetworkBehaviour {
     /// <summary>
@@ -44,7 +44,11 @@ public class StatusEffectManager : NetworkBehaviour {
     float tickTime, tickTimer;
     List<Status> statusList;
 
-    private void Awake() {
+    public void AddStatus(Status status) {
+        statusList.Add(status);
+    }
+
+    private void Start() {
         if (!isServer)
             Destroy(this);
 

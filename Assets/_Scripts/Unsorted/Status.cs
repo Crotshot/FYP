@@ -5,10 +5,12 @@ using Mirror;
 
 //Minion Controller, Health, PlayerController
 public class Status : NetworkBehaviour {
-    [SyncVar] int stunTicks, speedBoostTicks, slownessTicks, burningTicks, weakenedTicks, abductionTicks, rootedTicks, magnetisedTicks;
-    [SyncVar] float speedBoostPerc, slownessPerc, burningDamage, weaknessPerc, magneticForce;
-    [SyncVar] Vector3 forceOrigin;
+    /*[SyncVar] */int stunTicks, speedBoostTicks, slownessTicks, burningTicks, weakenedTicks, abductionTicks, rootedTicks, magnetisedTicks;
+    /*[SyncVar] */float speedBoostPerc, slownessPerc, burningDamage, weaknessPerc, magneticForce;
+    /*[SyncVar] */Vector3 magneticForceOrigin;
     [SerializeField] ParticleSystem burningEffect, stunEffect;
+
+    public enum StatusEffect {Stun, Speed, Slow, Burn, Weak, Abduct, Root, Magnet}
 
     Controller controller;
     Health health;
@@ -24,7 +26,7 @@ public class Status : NetworkBehaviour {
     #region Setup
     public void Init() {
         init = true;
-        //Add from StatusEffectManager StatusList
+        FindObjectOfType<StatusEffectManager>().AddStatus(this);
     }
 
     public void DeInit() {
@@ -39,7 +41,6 @@ public class Status : NetworkBehaviour {
     //Remove all effects, called when character is defeated in combat, potentially by abilities also later on
     public void Cleanse(bool onlyNegative) {
         if (!onlyNegative) {
-            speedBoostPerc = 0;
             speedBoostTicks = 0;
         }
 
@@ -50,6 +51,8 @@ public class Status : NetworkBehaviour {
         abductionTicks = 0;
         rootedTicks = 0;
         magnetisedTicks = 0;
+
+        StatusUpdate();
     }
     #endregion
 
@@ -66,6 +69,7 @@ public class Status : NetworkBehaviour {
 
         if (burningTicks == 1) {
             RpcEffect("BurningEmitter", false);
+            controller.EffectEnd("Burn");
         }
 
         burningTicks--;
@@ -87,6 +91,12 @@ public class Status : NetworkBehaviour {
     #endregion
 
     #region AddingEffects
+    /*
+     *I created 2 ways of doing this:
+     *1 calling the direct function 
+     *2 Using a generic function
+     * 
+    */
     [Server]
     public void Burn(float damage, int ticks) {
         if (ticks < burningTicks)
@@ -102,11 +112,42 @@ public class Status : NetworkBehaviour {
         if (ticks < stunTicks)
             return;
 
-        RpcEffect("StunEmitter", true); 
+        RpcEffect("StunEmitter", true);
+        controller.EffectStart("Stun");
         stunTicks = ticks;
     }
 
-    [Server]
+    /// <summary>
+    /// Generic Status effect function that can apply any status effect
+    /// </summary>
+    /// <param name="effectName"></param>
+    /// <param name="ticks"></param>
+    /// <param name="damage"></param>
+    /// 
+    public void AddEffect(StatusEffect effectName, int ticks, float damage) {
+        if (!isServer)
+            CmdAddEffect(effectName, ticks, damage);
+        if (effectName == StatusEffect.Burn) {
+            if (ticks < burningTicks)
+                return;
+
+            RpcEffect("BurningEmitter", true); //Start particle emitter
+            burningTicks = ticks;
+            burningDamage = damage;
+        }
+        else if (effectName == StatusEffect.Stun) {
+            if (ticks < stunTicks)
+                return;
+            controller.EffectStart("Stun");
+            RpcEffect("StunEmitter", true);
+            stunTicks = ticks;
+        }
+    }
+
+    [Command (requiresAuthority = false)]
+    public void CmdAddEffect(StatusEffect effectName, int ticks, float damage) {
+        AddEffect(effectName, ticks, damage);
+    }
     #endregion
 
     #region Effects

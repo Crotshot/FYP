@@ -18,6 +18,9 @@ public class ControlPoint : NetworkBehaviour
     [SerializeField] int currentTeam = 0;
     [SerializeField] Color fillColor;
 
+    [SerializeField] float syncGap = 1f;
+    float syncTimer;
+
     List<Transform> trackedTransforms = new List<Transform>();
     List<int> teams = new List<int>();
     private enum TeamState { Neutral, Captured}
@@ -30,6 +33,7 @@ public class ControlPoint : NetworkBehaviour
         if (isServer && captured == null)
             captured = new UnityEvent();
         setUp = true;
+        syncTimer = syncInterval;
     }
 
     private void FixedUpdate() {
@@ -38,28 +42,37 @@ public class ControlPoint : NetworkBehaviour
         if (isServer) {
             float teamCharges = 0;
             int teamLean = 0;
-            foreach (Transform form in trackedTransforms) {
-                if (form == null) {
-                    trackedTransforms.Remove(form);
+            for (int i = trackedTransforms.Count -1; i > -1; i--) {
+                if (trackedTransforms[i] == null) {
+                    trackedTransforms.Remove(trackedTransforms[i]);
                     continue;
                 }
 
-                if (form.GetComponent<Team>().GetTeam() == teamLean) {
-                    if (form.tag.Equals("Player")) teamCharges += 10f * Time.deltaTime; else teamCharges += 1f * Time.deltaTime;
+                if (trackedTransforms[i].GetComponent<Team>().GetTeam() == teamLean) {
+                    if (trackedTransforms[i].tag.Equals("Player")) teamCharges += 10f * Time.deltaTime; else teamCharges += 1f * Time.deltaTime;
                 }
                 else {
-                    if (form.tag.Equals("Player")) teamCharges -= 10f * Time.deltaTime; else teamCharges -= 1f * Time.deltaTime;
+                    if (trackedTransforms[i].tag.Equals("Player")) teamCharges -= 10f * Time.deltaTime; else teamCharges -= 1f * Time.deltaTime;
                     if (teamCharges <= 0) {
                         teamCharges *= -1;
-                        teamLean = form.GetComponent<Team>().GetTeam();
-                        fillColor = form.GetComponent<Team>().GetTeamColor();
+                        teamLean = trackedTransforms[i].GetComponent<Team>().GetTeam();
+                        fillColor = trackedTransforms[i].GetComponent<Team>().GetTeamColor();
                     }
                 }
             }
+
             if (teamCharges == 0)
                 return;
             Capturing(teamCharges, teamLean, fillColor);
-            RPCReflectFill(charges);
+
+            if(trackedTransforms.Count > 0)
+                if(syncTimer > 0) {
+                    syncTimer -= Time.deltaTime;
+                }
+                else {
+                    RPCReflectFill(charges);
+                    syncTimer = syncInterval;
+                }
         }
     }
 
