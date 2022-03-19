@@ -39,15 +39,19 @@ public class Taser : Ability {
                 pos = hit.point;
 #endif
 
-                Collider[] scannedColliders = Physics.OverlapSphere(hit.point, radius, unitLayer, QueryTriggerInteraction.Ignore);
+                Collider[] scannedColliders = Physics.OverlapSphere(hit.point, radius, unitLayer, QueryTriggerInteraction.Collide);
                 for (int i = 0; i < scannedColliders.Length; i++) {
-                    if (scannedColliders[i].TryGetComponent(out Health health) && scannedColliders[i].TryGetComponent(out Team team)) {
-                        if (team.GetTeam() != GetComponent<Team>().GetTeam()) {
-                            //Debug.Log("Damaging enemy");
-                            health.Damage(damage);
-                            health.GetComponent<Status>().AddEffect(Status.StatusEffect.Stun, stunTicks, 0);
+                    if(scannedColliders[i].TryGetComponent(out Team team))
+                        if (scannedColliders[i].TryGetComponent(out Health health)) {
+                            if (team.GetTeam() != GetComponent<Team>().GetTeam()) {
+                                //Debug.Log("Damaging enemy");
+                                health.Damage(damage);
+                                health.GetComponent<Status>().AddEffect(Status.StatusEffect.Stun, stunTicks, 0);
+                            }
                         }
-                    }
+                        else if(scannedColliders[i].TryGetComponent(out GasCloud gas)) {
+                            gas.TaserStun(stunTicks);
+                        }
                 }
             }
             TriggerEffect(halfDist, hit.point);

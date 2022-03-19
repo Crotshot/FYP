@@ -5,18 +5,16 @@ using UnityEngine;
 
 public class GasCloud : NetworkBehaviour
 {
-    [SerializeField] float duration, gasDamage, scalePerSec;
+    [SerializeField] float duration, poisonDamage, scalePerSec;
     [SerializeField] int poisonTicks;
-    float expansionTimer, tickInterval = 0.25f, ticktimer = 0.25f;
+    float tickInterval = 0.25f, ticktimer = 0.25f;
 
     List<Status> trackedStatus = new List<Status>();
 
-    private void Start() {
-        if (!isServer)
-            Destroy(this);
-    }
-
     private void FixedUpdate() {
+        if (!isServer)
+            return;
+
         if (ticktimer > 0) {
             ticktimer -= Time.deltaTime;
         }
@@ -26,15 +24,12 @@ public class GasCloud : NetworkBehaviour
                     trackedStatus.Remove(trackedStatus[i]);
                     continue;
                 }
-                trackedStatus[i].AddEffect(Status.StatusEffect.Poison, poisonTicks, gasDamage);
+                trackedStatus[i].AddEffect(Status.StatusEffect.Poison, poisonTicks, poisonDamage);
             }
             ticktimer = tickInterval;
         }
 
-        if(expansionTimer >= 0) {
-            expansionTimer -= Time.deltaTime;
-            transform.localScale += Vector3.one * scalePerSec * Time.deltaTime;
-        }
+        transform.localScale += Vector3.one * scalePerSec * Time.deltaTime;
         duration -= Time.deltaTime;
 
         if(duration <= 0) {
@@ -60,5 +55,25 @@ public class GasCloud : NetworkBehaviour
                 }
             }
         }
+    }
+
+    public void TaserStun(int ticks) {
+        if (isServer) {
+            for (int i = trackedStatus.Count - 1; i > -1; i--) {
+                if (trackedStatus[i] == null) {
+                    trackedStatus.Remove(trackedStatus[i]);
+                    continue;
+                }
+                trackedStatus[i].AddEffect(Status.StatusEffect.Stun, ticks, 0);
+            }
+        }
+        else {
+            CmdTaserStun(ticks);
+        }
+    }
+
+    [Command (requiresAuthority = false)]
+    private void CmdTaserStun(int ticks) {
+        TaserStun(ticks);
     }
 }

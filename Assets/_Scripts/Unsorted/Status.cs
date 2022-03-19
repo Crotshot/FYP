@@ -100,6 +100,7 @@ public class Status : NetworkBehaviour {
         }
 
         stunTicks--;
+        health.Damage(poisonDamage);
     }
     #endregion
 
@@ -139,6 +140,7 @@ public class Status : NetworkBehaviour {
 
             RpcEffect("PoisonEmitter", true);
             poisonTicks = ticks;
+            poisonDamage = damage;
         }
     }
 
