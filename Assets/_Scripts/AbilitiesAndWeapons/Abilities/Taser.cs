@@ -9,11 +9,15 @@ public class Taser : Ability {
     [SerializeField] float range, damage, radius = 2f;
     [SerializeField] LayerMask unitLayer, unitTerrainLayer;
     [SerializeField] int stunTicks;
+    [SerializeField] ParticleSystem aoe;
     ParticleSystem pS;
 
     private void Start() {
         SetUp(Cast);
         pS = spawnPoint.GetComponent<ParticleSystem>();
+        aoe.transform.parent = null;
+        var shape = aoe.shape;
+        shape.radius = radius;
     }
 
     private void FixedUpdate() {
@@ -34,6 +38,7 @@ public class Taser : Ability {
                 Debug.DrawRay(spawnPoint.position, spawnPoint.forward *  Helpers.Vector3Distance(hit.point, spawnPoint.position), Color.red, 5f);
                 pos = hit.point;
 #endif
+
                 Collider[] scannedColliders = Physics.OverlapSphere(hit.point, radius, unitLayer, QueryTriggerInteraction.Ignore);
                 for (int i = 0; i < scannedColliders.Length; i++) {
                     if (scannedColliders[i].TryGetComponent(out Health health) && scannedColliders[i].TryGetComponent(out Team team)) {
@@ -45,20 +50,23 @@ public class Taser : Ability {
                     }
                 }
             }
-            TriggerEffect(halfDist);
+            TriggerEffect(halfDist, hit.point);
         }
     }
 
-    public void TriggerEffect(float dist) {
+    public void TriggerEffect(float dist, Vector3 pos) {
         if (isServer) {
-            RpcEffect(dist);
+            RpcEffect(dist, pos);
         }
         else {
-            CmdEffect(dist);
+            CmdEffect(dist, pos);
         }
     }
 
-    private void Effect(float dist) {
+    private void Effect(float dist, Vector3 pos) {
+        aoe.transform.position = pos;
+        aoe.Play();
+
         var shape = pS.shape;
         shape.radius = dist;
         shape.position = new Vector3(0, 0, dist);
@@ -66,13 +74,13 @@ public class Taser : Ability {
     }
 
     [Command (requiresAuthority = false)]
-    private void CmdEffect(float dist) {
-        TriggerEffect(dist);
+    private void CmdEffect(float dist, Vector3 pos) {
+        TriggerEffect(dist, pos);
     }
 
     [ClientRpc]
-    private void RpcEffect(float dist) {
-        Effect(dist);
+    private void RpcEffect(float dist, Vector3 pos) {
+        Effect(dist, pos);
     }
 
 
