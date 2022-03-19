@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 4466698349442585953}
   - component: {fileID: 1674114185566518938}
   - component: {fileID: 3590124204847620928}
+  - component: {fileID: 2527948672664410491}
   m_Layer: 6
   m_Name: 0_Rodger
   m_TagString: Player
@@ -509,7 +510,10 @@ MonoBehaviour:
   coolDown: 8
   speedPercentIncrease: 2
   boostDuration: 2
+  damage: 20
+  stunTicks: 6
   rushEmmitter: {fileID: 5893398400459890699}
+  trigger: {fileID: 2527948672664410491}
 --- !u!114 &5106697110751912112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,7 +529,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   input: 3
-  coolDown: 40
+  coolDown: 2
   mortarShell: {fileID: 7512147332270784733, guid: 449c72d7b0316bf428c0c7dd0029eb86, type: 3}
   secondShotDelay: 0.5
   maxDistance: 50
@@ -1173,6 +1177,19 @@ MonoBehaviour:
   syncInterval: 0.1
   burningEffect: {fileID: 4932962882169133626}
   stunEffect: {fileID: 4219341838540668019}
+--- !u!65 &2527948672664410491
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 605830872944974801}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 4.0479336, y: 4.2843018, z: 1.8677965}
+  m_Center: {x: 0, y: 1.6421509, z: 2.8406553}
 --- !u!1 &894161766813505629
 GameObject:
   m_ObjectHideFlags: 0

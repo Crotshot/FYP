@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Mirror;
 
 public class Rush : Ability {
     /// <summary>
@@ -10,8 +11,11 @@ public class Rush : Ability {
     /// Hitting another conqueror ends rush and stuns the second conqueror
     /// Hitting minions deals damage to the minions
     /// </summary>
-    [SerializeField] float speedPercentIncrease, boostDuration;
+    [SerializeField] float speedPercentIncrease, boostDuration, damage;
+    [SerializeField] int stunTicks;
     [SerializeField] ParticleSystem rushEmmitter;
+    [SerializeField] BoxCollider trigger;
+
     float boostTimer, ogSpeed;
     PlayerController pC;
 
@@ -32,21 +36,50 @@ public class Rush : Ability {
             if (boostTimer <= 0) {
                 pC.SetCharacterSpeed(ogSpeed);
                 pC.EffectEnd("Rush");
-
-                var em = rushEmmitter.emission;
-                em.enabled = false;
+                trigger.enabled = false;
+                if (isServer) RpcEffect(false); else  CmdEffect(false);
             }
         }
     }
 
     private void Cast() {
         if (AbilityUsed()) {
+            trigger.enabled = true;
             boostTimer = boostDuration;
             pC.SetCharacterSpeed(ogSpeed + ogSpeed * speedPercentIncrease);
             pC.EffectStart("Rush");
+            if (isServer) RpcEffect(true); else CmdEffect(true);
+        }
+    }
 
-            var em = rushEmmitter.emission;
-            em.enabled = true;
+    [Command]
+    public void CmdEffect(bool on) {
+        RpcEffect(on);
+    }
+
+    [ClientRpc]
+    public void RpcEffect(bool on) {
+        var em = rushEmmitter.emission;
+        em.enabled = on;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(other.TryGetComponent(out Team team)) {
+            if(team.GetTeam() != GetComponent<Team>().GetTeam()) {
+
+                if(other.TryGetComponent(out Health health)) {
+                    health.Damage(damage);
+                }
+
+                if (other.tag.Equals("Player")) {
+                    other.GetComponent<Status>().AddEffect(Status.StatusEffect.Stun, stunTicks, 0);
+                    boostTimer = 0;
+                    pC.SetCharacterSpeed(ogSpeed);
+                    pC.EffectEnd("Rush");
+                    trigger.enabled = false;
+                    if (isServer) RpcEffect(false); else CmdEffect(false);
+                }
+            }
         }
     }
 }

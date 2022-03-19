@@ -17,10 +17,8 @@ public class Status : NetworkBehaviour {
     bool init = false;
 
     private void Start() {
-        if (isServer) {
-            health = GetComponent<Health>();
-            controller = GetComponent<Controller>();
-        }
+        health = GetComponent<Health>();
+        controller = GetComponent<Controller>();
     }
 
     #region Setup
@@ -91,31 +89,25 @@ public class Status : NetworkBehaviour {
     #endregion
 
     #region AddingEffects
-    /*
-     *I created 2 ways of doing this:
-     *1 calling the direct function 
-     *2 Using a generic function
-     * 
-    */
-    [Server]
-    public void Burn(float damage, int ticks) {
-        if (ticks < burningTicks)
-            return;
+    //[Server]
+    //public void Burn(float damage, int ticks) {
+    //    if (ticks < burningTicks)
+    //        return;
 
-        RpcEffect("BurningEmitter", true); //Start particle emitter
-        burningTicks = ticks;
-        burningDamage = damage;
-    }
+    //    RpcEffect("BurningEmitter", true); //Start particle emitter
+    //    burningTicks = ticks;
+    //    burningDamage = damage;
+    //}
 
-    [Server]
-    public void Stun(int ticks) {
-        if (ticks < stunTicks)
-            return;
+    //[Server]
+    //public void Stun(int ticks) {
+    //    if (ticks < stunTicks)
+    //        return;
 
-        RpcEffect("StunEmitter", true);
-        controller.EffectStart("Stun");
-        stunTicks = ticks;
-    }
+    //    RpcEffect("StunEmitter", true);
+    //    controller.EffectStart("Stun");
+    //    stunTicks = ticks;
+    //}
 
     /// <summary>
     /// Generic Status effect function that can apply any status effect
@@ -125,8 +117,10 @@ public class Status : NetworkBehaviour {
     /// <param name="damage"></param>
     /// 
     public void AddEffect(StatusEffect effectName, int ticks, float damage) {
-        if (!isServer)
+        if (!isServer) {
             CmdAddEffect(effectName, ticks, damage);
+            return;
+        }
         if (effectName == StatusEffect.Burn) {
             if (ticks < burningTicks)
                 return;
@@ -139,6 +133,7 @@ public class Status : NetworkBehaviour {
             if (ticks < stunTicks)
                 return;
             controller.EffectStart("Stun");
+
             RpcEffect("StunEmitter", true);
             stunTicks = ticks;
         }
