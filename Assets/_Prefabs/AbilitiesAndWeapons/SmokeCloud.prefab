@@ -82,10 +82,9 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   duration: 10
-  damagePerSecond: 20
-  finalScale: 5
-  expansionTime: 10
-  minTime: 2
+  gasDamage: 3
+  scalePerSec: 0.5
+  poisonTicks: 12
 --- !u!114 &610386076131778531
 MonoBehaviour:
   m_ObjectHideFlags: 0
