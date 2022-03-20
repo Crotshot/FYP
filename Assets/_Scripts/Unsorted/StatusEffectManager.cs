@@ -41,7 +41,7 @@ public class StatusEffectManager : NetworkBehaviour {
     /// Horde increase	+3 Conqueror minions
 
     /// </summary>
-    [SerializeField] float tickRate;//Ticks per second
+    [SerializeField] int tickRate = 4;//Ticks per second
     float tickTime, tickTimer;
     List<Status> statusList;
 
@@ -54,7 +54,7 @@ public class StatusEffectManager : NetworkBehaviour {
             Destroy(this);
 
         statusList = new List<Status>();
-        tickTime = 1 / tickRate;
+        tickTime = 1 / ((float)tickRate);
         tickTimer = tickTime;
     }
 
@@ -73,5 +73,9 @@ public class StatusEffectManager : NetworkBehaviour {
 
             statusList[i].StatusUpdate();
         }
+    }
+
+    public int GetTickRate() {
+        return tickRate;
     }
 }

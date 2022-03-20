@@ -24,12 +24,27 @@ public class Health : NetworkBehaviour
         }
         //Debug.Log("GameObject: " + gameObject.name + " took: " + damage + " damage");
         currentHealth -= damage;
-        
-        if(currentHealth <= 0) {
+
+        if (currentHealth <= 0) {
             dead = true;
             GetComponent<Status>().DeInit();
         }
     }
+
+    public virtual void Heal(float amount) {
+        if (!isServer) {
+            CmdHeal(amount);
+            return;
+        }
+        //Debug.Log("GameObject: " + gameObject.name + " took: " + damage + " damage");
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+    }
+
+    [Command(requiresAuthority = false)]
+    void CmdHeal(float amount) {
+        Heal(amount);
+    }
+
 
     private void Altered(float oldHealth, float newHealth) {
         HealthChanged?.Invoke(currentHealth, maxHealth);

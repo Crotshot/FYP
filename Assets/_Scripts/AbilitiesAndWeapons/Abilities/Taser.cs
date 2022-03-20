@@ -49,9 +49,19 @@ public class Taser : Ability {
                                 health.GetComponent<Status>().AddEffect(Status.StatusEffect.Stun, stunTicks, 0);
                             }
                         }
-                        else if(scannedColliders[i].TryGetComponent(out GasCloud gas)) {
-                            gas.TaserStun(stunTicks);
+                        //else if(scannedColliders[i].TryGetComponent(out GasCloud gas)) {
+                        //    gas.TaserStun(stunTicks);
+                        //}
+                }
+
+                //For some reason tge gas clouds do not show in the overlapspere so I am doing this here
+                foreach (GasCloud cloud in FindObjectsOfType<GasCloud>()) {
+                    //Debug.Log("Dist: " + Helpers.Vector3Distance(hit.point, cloud.transform.position) + ", max dist: " + (radius + cloud.transform.localScale.x * 1.2f));
+                    if (Helpers.Vector3Distance(hit.point, cloud.transform.position) <= radius + cloud.transform.localScale.x * 1.2f) {//cloud.transform.localScale.x is radius of cloud & 1.2 is og radius of sphere it scales
+                        if (cloud.GetComponent<Team>().GetTeam() == GetComponent<Team>().GetTeam()) {
+                            cloud.TaserStun(stunTicks);
                         }
+                    }
                 }
             }
             TriggerEffect(halfDist, hit.point);

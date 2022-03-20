@@ -14,6 +14,8 @@ public class GasCloud : NetworkBehaviour
     List<Status> trackedStatus = new List<Status>();
 
     private void FixedUpdate() {
+        gasEm.localScale += Vector3.one * scalePerSec * Time.deltaTime;
+
         if (!isServer)
             return;
 
@@ -32,8 +34,6 @@ public class GasCloud : NetworkBehaviour
         }
 
         transform.localScale += Vector3.one * scalePerSec * Time.deltaTime;
-        gasEm.localScale += Vector3.one * scalePerSec * Time.deltaTime;
-
         duration -= Time.deltaTime;
 
         if(duration <= 0) {
@@ -69,8 +69,8 @@ public class GasCloud : NetworkBehaviour
                     continue;
                 }
                 trackedStatus[i].AddEffect(Status.StatusEffect.Stun, ticks, 0);
-                RpcEffect();
             }
+            RpcEffect();
         }
         else {
             CmdTaserStun(ticks);

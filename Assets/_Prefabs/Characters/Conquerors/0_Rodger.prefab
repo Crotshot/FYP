@@ -1175,6 +1175,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  stunTicks: 0
+  speedBoostTicks: 0
+  slownessTicks: 0
+  burningTicks: 0
+  weakenedTicks: 0
+  abductionTicks: 0
+  rootedTicks: 0
+  magnetisedTicks: 0
+  poisonTicks: 0
+  regenTicks: 0
+  speedBoostPerc: 0
+  slownessPerc: 0
+  burningDamage: 0
+  weaknessPerc: 0
+  magneticForce: 0
+  poisonDamage: 0
+  regenAmount: 0
+  magneticForceOrigin: {x: 0, y: 0, z: 0}
+  baseHealthRegenPercent: 0.03
   burningEffect: {fileID: 4932962882169133626}
   stunEffect: {fileID: 4219341838540668019}
   poisonEffect: {fileID: 1033209358593067454}

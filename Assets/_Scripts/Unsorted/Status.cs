@@ -5,26 +5,41 @@ using Mirror;
 
 //Minion Controller, Health, PlayerController
 public class Status : NetworkBehaviour {
-    /*[SyncVar] */int stunTicks, speedBoostTicks, slownessTicks, burningTicks, weakenedTicks, abductionTicks, rootedTicks, magnetisedTicks, poisonTicks;
-    /*[SyncVar] */float speedBoostPerc, slownessPerc, burningDamage, weaknessPerc, magneticForce, poisonDamage;
-    /*[SyncVar] */Vector3 magneticForceOrigin;
+    //[SerializeField] For debugging in inspector
+    [SerializeField] int stunTicks, speedBoostTicks, slownessTicks, burningTicks, weakenedTicks, abductionTicks, rootedTicks, magnetisedTicks, poisonTicks, regenTicks;
+    [SerializeField] float speedBoostPerc, slownessPerc, burningDamage, weaknessPerc, magneticForce, poisonDamage, regenAmount;
+    [SerializeField] Vector3 magneticForceOrigin;
+
+    //Base Health Regen Percent is how much %hp a character will heal every second while alive
+    [SerializeField] [Range(0, 1)] float baseHealthRegenPercent;
     [SerializeField] ParticleSystem burningEffect, stunEffect, poisonEffect;
 
-    public enum StatusEffect {Stun, Speed, Slow, Burn, Weak, Abduct, Root, Magnet, Poison}
+    public enum StatusEffect {Stun, Speed, Slow, Burn, Weak, Abduct, Root, Magnet, Poison, Regen}
 
     Controller controller;
     Health health;
     bool init = false;
+    private int tickRate;
+    int baseRegenticks;
+    float baseHealthRegen;
 
     private void Start() {
         health = GetComponent<Health>();
         controller = GetComponent<Controller>();
+        CalcHealthRegen();
     }
 
     #region Setup
     public void Init() {
         init = true;
-        FindObjectOfType<StatusEffectManager>().AddStatus(this);
+        StatusEffectManager SEM = FindObjectOfType<StatusEffectManager>();
+        SEM.AddStatus(this);
+        tickRate = SEM.GetTickRate();
+        baseRegenticks = tickRate;
+    }
+
+    public void CalcHealthRegen() {
+        baseHealthRegen = health.GetMaxHealth() * baseHealthRegenPercent;
     }
 
     public void DeInit() {
@@ -59,9 +74,21 @@ public class Status : NetworkBehaviour {
         isBurning();
         isStunned();
         isPoisonned();
+        HealthRegeneration();
     }
     
     #region Ticks
+    [Server]
+    private void HealthRegeneration() {
+        if(baseRegenticks > 0) {
+            baseRegenticks--;
+        }
+        else {
+            baseRegenticks = tickRate;
+            health.Heal(baseHealthRegen);
+        }
+    }
+
     [Server]
     public void isBurning() {
         if (burningTicks == 0)
@@ -99,7 +126,7 @@ public class Status : NetworkBehaviour {
             controller.EffectEnd("Poison");
         }
 
-        stunTicks--;
+        poisonTicks--;
         health.Damage(poisonDamage);
     }
     #endregion
@@ -136,8 +163,6 @@ public class Status : NetworkBehaviour {
         else if (effectName == StatusEffect.Poison) {
             if (ticks < poisonTicks)
                 return;
-            controller.EffectStart("Poison");
-
             RpcEffect("PoisonEmitter", true);
             poisonTicks = ticks;
             poisonDamage = damage;
