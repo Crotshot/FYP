@@ -9927,7 +9927,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &968819275
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15258,10 +15258,10 @@ MonoBehaviour:
     pointB: {fileID: 1930757110}
   - pointA: {fileID: 1338630002}
     pointB: {fileID: 989712575}
-  attempts: 5
+  attempts: 10
   useNoise: 0
-  makeFlora: 0
-  makeSmallProps: 0
+  makeFlora: 1
+  makeSmallProps: 1
   makeLargeProps: 1
   makeBuildings: 1
   removeBadPoints: 1
@@ -15270,17 +15270,17 @@ MonoBehaviour:
   floraClearMax: 12
   smallClearMin: 9
   smallClearMax: 12
-  largeClearMin: 37
-  largeClearMax: 43
+  largeClearMin: 35
+  largeClearMax: 41
   floraNoiseModifier: 1
   smallNoiseModifier: 0.7
   largeNoiseModifier: 0.5
-  smallClearingDistance: 2.5
-  largeClearingDistance: 7.5
-  outerBuildingClearingDistance: 9
-  innerBuildingClearingDistance: 15.5
-  halfPathWidth: 8
-  pathClearance: 0.66
+  smallClearingDistance: 2.3
+  largeClearingDistance: 7.2
+  outerBuildingClearingDistance: 7.5
+  innerBuildingClearingDistance: 14.5
+  halfPathWidth: 6.5
+  pathClearance: 0.741
   innerBuildingTiles:
   - {x: 4, y: 2}
   - {x: 5, y: 2}
