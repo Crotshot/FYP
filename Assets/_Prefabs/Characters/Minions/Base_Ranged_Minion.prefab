@@ -259,7 +259,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   stunTicks: 0
-  speedBoostTicks: 0
+  speedTicks: 0
   slownessTicks: 0
   burningTicks: 0
   weakenedTicks: 0
@@ -268,7 +268,7 @@ MonoBehaviour:
   magnetisedTicks: 0
   poisonTicks: 0
   regenTicks: 0
-  speedBoostPerc: 0
+  speedPerc: 0
   slownessPerc: 0
   burningDamage: 0
   weaknessPerc: 0
@@ -280,6 +280,8 @@ MonoBehaviour:
   burningEffect: {fileID: 8717852765815634862}
   stunEffect: {fileID: 4201457965798280192}
   poisonEffect: {fileID: 0}
+  slowEffect: {fileID: 0}
+  speedEffect: {fileID: 0}
 --- !u!1 &2910633273768910602
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,6 +649,10 @@ PrefabInstance:
       propertyPath: serverOnly
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1303457580115261607, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 1380134748945916644, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -694,6 +700,18 @@ PrefabInstance:
     - target: {fileID: 3393298794735004064, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_Name
       value: Base_Ranged_Minion
+      objectReference: {fileID: 0}
+    - target: {fileID: 4273404068912657719, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: slowEffect
+      value: 
+      objectReference: {fileID: 7342177901384719479}
+    - target: {fileID: 4273404068912657719, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: speedEffect
+      value: 
+      objectReference: {fileID: 4165543634369142809}
+    - target: {fileID: 5637543528226309321, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5795049616598599552, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: teamAccents.Array.size
@@ -766,6 +784,16 @@ ParticleSystem:
 --- !u!198 &8717852765815634862 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 6793452634974410023, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+  m_PrefabInstance: {fileID: 2790887938606476937}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7342177901384719479 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4854772841675879166, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+  m_PrefabInstance: {fileID: 2790887938606476937}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4165543634369142809 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2266931389653438096, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
   m_PrefabInstance: {fileID: 2790887938606476937}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &697022809498404649 stripped

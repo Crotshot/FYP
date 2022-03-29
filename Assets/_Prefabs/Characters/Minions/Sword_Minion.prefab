@@ -340,6 +340,10 @@ PrefabInstance:
       propertyPath: teamAccents.Array.data[0]
       value: 
       objectReference: {fileID: 2823579665394574485}
+    - target: {fileID: 5962769987103405413, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: minionType
       value: Sword
@@ -351,6 +355,10 @@ PrefabInstance:
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: attackDistance
       value: 2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: characterSpeed
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: awarnessDistance

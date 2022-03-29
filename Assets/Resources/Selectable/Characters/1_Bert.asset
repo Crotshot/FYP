@@ -17,6 +17,7 @@ MonoBehaviour:
   movementSpeed: 90
   attackDamage: 5
   attackSpeed: 500
+  cost: 0
   abilities:
   - {fileID: 11400000, guid: 7b7cdaa79658554438429dfc1c20a2ee, type: 2}
   - {fileID: 11400000, guid: 636e9c7bc6ec5ec4c90268c61fc0bd25, type: 2}

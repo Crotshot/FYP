@@ -23,7 +23,7 @@ public class Health : NetworkBehaviour
             return;
         }
         //Debug.Log("GameObject: " + gameObject.name + " took: " + damage + " damage");
-        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth -damage, 0 , maxHealth);
 
         if (currentHealth <= 0) {
             dead = true;

@@ -47,7 +47,7 @@ public class Rush : Ability {
             trigger.enabled = true;
             boostTimer = boostDuration;
             pC.SetCharacterSpeed(ogSpeed + ogSpeed * speedPercentIncrease);
-            pC.EffectStart("Rush");
+            pC.EffectStart("Rush", 0);
             if (isServer) RpcEffect(true); else CmdEffect(true);
         }
     }

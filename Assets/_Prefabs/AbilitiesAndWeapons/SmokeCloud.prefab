@@ -84,7 +84,9 @@ MonoBehaviour:
   duration: 10
   poisonDamage: 1.5
   scalePerSec: 0.5
+  slowStrength: 0.3
   poisonTicks: 8
+  slownessTicks: 8
   shockEmitter: {fileID: 7457360384315079894}
   gasEm: {fileID: 5900753396411348829}
 --- !u!114 &610386076131778531

@@ -9,7 +9,7 @@ public class MinionController : Controller {
 
     [SerializeField] string minionType;
     [SerializeField] bool baseMinion, independentWeapon;
-    [SerializeField] float minionSpeed, minionAngularSpeed, attackDistance, awarnessDistance;
+    [SerializeField] float attackDistance, awarnessDistance;
     [SerializeField] Transform attackTarget, assignedPoint, indWeapon;
     [SerializeField] List<Vector3> pathPoints = new List<Vector3>();
     Vector3 destination;
@@ -36,10 +36,11 @@ public class MinionController : Controller {
         base.Setup();
         if (!baseMinion)
             minionState = MinionState.Follower;
+        actualSpeed = characterSpeed;
         agentC = GetComponent<NavMeshAgent>();
         attackC = GetComponent<Minion_Attack>();
-        agentC.speed = minionSpeed;
-        agentC.angularSpeed = minionAngularSpeed;
+        agentC.speed = actualSpeed;
+        agentC.angularSpeed = rotSpeed;
         pathPoints.Clear();
         layer = 1 << LayerMask.NameToLayer("Unit");
         GetComponent<WorldSpaceHealthBar>().Setup();
@@ -51,9 +52,8 @@ public class MinionController : Controller {
     }
     
     RaycastHit[] hits;
-    private void FixedUpdate() {
-        if (stunned)
-            return;
+    override protected void FixedUpdate() {
+        base.FixedUpdate();
         if((minionState == MinionState.Retreating || minionState == MinionState.Recalling) && Helpers.Vector3Distance(destination, transform.position) < 5f) {
             minionState = MinionState.Follower;
         }
@@ -71,7 +71,7 @@ public class MinionController : Controller {
                                 attackTarget = hit.transform;
                                 returningState = minionState;
                                 minionState = MinionState.Fighting;
-                                agentC.speed = minionSpeed;
+                                agentC.speed = actualSpeed;
                                 break;
                             }
                         }
@@ -92,7 +92,7 @@ public class MinionController : Controller {
                 if (!targFound || attackTarget == null || Helpers.Vector3Distance(attackTarget.position, transform.position) > awarnessDistance * 1.1f) {
                     attackTarget = null;
                     minionState = returningState;
-                    if (baseMinion) {
+                    if (baseMinion && agentC.enabled) {
                         if (minionState == MinionState.OnPath) {
                             agentC.speed = 8;
                         }
@@ -109,11 +109,13 @@ public class MinionController : Controller {
 
         if(attackTarget != null) {
             destination = attackTarget.position;
-            agentC.destination = destination;
+            if (agentC.enabled)
+                agentC.destination = destination;
             if (Helpers.Vector3Distance(transform.position, destination) <= attackDistance) {
                 //ADD checks to see if has line of sight
                 //Rotation speed of minion so they dont snap turn
-                agentC.destination = transform.position;
+                if(agentC.enabled)
+                    agentC.destination = transform.position;
                 if (!independentWeapon)
                     transform.LookAt(destination + Vector3.up);
                 else 
@@ -128,7 +130,7 @@ public class MinionController : Controller {
                 pathPoints.Remove(pathPoints[0]);
                 minionState = MinionState.Defender;
                 returningState = MinionState.Defender;
-                agentC.speed = minionSpeed;
+                agentC.speed = characterSpeed;
             }
             else { //Else proceed to next path
                 pathPoints.Remove(pathPoints[0]); 
@@ -148,7 +150,7 @@ public class MinionController : Controller {
         }
         else {
             minionState = MinionState.OnPath;
-            agentC.speed = 8;
+            agentC.speed = actualSpeed;
         }
     }
 
@@ -209,14 +211,16 @@ public class MinionController : Controller {
         return baseMinion;
     }
 
-    override public void EffectStart(string effect) {
+    override public void EffectStart(string effect, float value) {
         if (effect.Equals("Stun")) {
             stunned = true;
             attackC.isStun(true);
             agentC.enabled = false;
+            destination = agentC.destination;
             return;
         }
-        base.EffectStart(effect);
+        base.EffectStart(effect, value);
+        agentC.speed = actualSpeed;
     }
 
     override public void EffectEnd(string effect) {
@@ -224,8 +228,10 @@ public class MinionController : Controller {
             stunned = false;
             attackC.isStun(false);
             agentC.enabled = true;
+            agentC.destination = destination;
             return;
         }
         base.EffectEnd(effect);
+        agentC.speed = actualSpeed;
     }
 }

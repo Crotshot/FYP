@@ -15258,11 +15258,11 @@ MonoBehaviour:
     pointB: {fileID: 1930757110}
   - pointA: {fileID: 1338630002}
     pointB: {fileID: 989712575}
-  attempts: 10
+  attempts: 5
   useNoise: 0
-  makeFlora: 1
-  makeSmallProps: 1
-  makeLargeProps: 1
+  makeFlora: 0
+  makeSmallProps: 0
+  makeLargeProps: 0
   makeBuildings: 1
   removeBadPoints: 1
   bakeNavMesh: 1

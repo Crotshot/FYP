@@ -8,7 +8,7 @@ public class PlayerAttack : NetworkBehaviour {
 
     public UnityEvent weaponFired;
 
-    void Start() {
+    virtual protected void Start() {
         if (!hasAuthority)
             return;
         if (weaponFired == null)

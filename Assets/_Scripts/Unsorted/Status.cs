@@ -6,13 +6,13 @@ using Mirror;
 //Minion Controller, Health, PlayerController
 public class Status : NetworkBehaviour {
     //[SerializeField] For debugging in inspector
-    [SerializeField] int stunTicks, speedBoostTicks, slownessTicks, burningTicks, weakenedTicks, abductionTicks, rootedTicks, magnetisedTicks, poisonTicks, regenTicks;
-    [SerializeField] float speedBoostPerc, slownessPerc, burningDamage, weaknessPerc, magneticForce, poisonDamage, regenAmount;
+    [SerializeField] int stunTicks, speedTicks, slownessTicks, burningTicks, weakenedTicks, abductionTicks, rootedTicks, magnetisedTicks, poisonTicks, regenTicks;
+    [SerializeField] float speedPerc, slownessPerc, burningDamage, weaknessPerc, magneticForce, poisonDamage, regenAmount;
     [SerializeField] Vector3 magneticForceOrigin;
 
     //Base Health Regen Percent is how much %hp a character will heal every second while alive
     [SerializeField] [Range(0, 1)] float baseHealthRegenPercent;
-    [SerializeField] ParticleSystem burningEffect, stunEffect, poisonEffect;
+    [SerializeField] ParticleSystem burningEffect, stunEffect, poisonEffect, slowEffect, speedEffect;
 
     public enum StatusEffect {Stun, Speed, Slow, Burn, Weak, Abduct, Root, Magnet, Poison, Regen}
 
@@ -54,17 +54,17 @@ public class Status : NetworkBehaviour {
     //Remove all effects, called when character is defeated in combat, potentially by abilities also later on
     public void Cleanse(bool onlyNegative) {
         if (!onlyNegative) {
-            speedBoostTicks = 0;
+            speedTicks = 1;
         }
 
-        stunTicks = 0;
-        slownessTicks = 0;
-        burningTicks = 0;
-        weakenedTicks = 0;
-        abductionTicks = 0;
-        rootedTicks = 0;
-        magnetisedTicks = 0;
-        poisonTicks = 0;
+        stunTicks = 1;
+        slownessTicks = 1;
+        burningTicks = 1;
+        weakenedTicks = 1;
+        abductionTicks = 1;
+        rootedTicks = 1;
+        magnetisedTicks = 1;
+        poisonTicks = 1;
 
         StatusUpdate();
     }
@@ -75,6 +75,8 @@ public class Status : NetworkBehaviour {
         isStunned();
         isPoisonned();
         HealthRegeneration();
+        isSlow();
+        isSpeed();
     }
     
     #region Ticks
@@ -96,7 +98,6 @@ public class Status : NetworkBehaviour {
 
         if (burningTicks == 1) {
             RpcEffect("BurningEmitter", false);
-            controller.EffectEnd("Burn");
         }
 
         burningTicks--;
@@ -123,17 +124,44 @@ public class Status : NetworkBehaviour {
 
         if (poisonTicks == 1) {
             RpcEffect("PoisonEmitter", false);
-            controller.EffectEnd("Poison");
         }
 
         poisonTicks--;
         health.Damage(poisonDamage);
     }
+
+    [Server]
+    public void isSpeed() {
+        if (speedTicks == 0)
+            return;
+
+        if (speedTicks == 1) {
+            RpcEffect("SpeedEmitter", false);
+            controller.EffectEnd("Speed");
+            speedPerc = 0;
+        }
+
+        speedTicks--;
+    }
+
+    [Server]
+    public void isSlow() {
+        if (slownessTicks == 0)
+            return;
+
+        if (slownessTicks == 1) {
+            RpcEffect("SlowEmitter", false);
+            controller.EffectEnd("Slow");
+            slownessPerc = 0;
+        }
+
+        slownessTicks--;
+    }
     #endregion
 
     #region AddingEffects
     /// <summary>
-    /// Generic Status effect function that can apply any status effect
+    /// Generic Status effect function that can apply any status effect, damage is damage per tick on effects that modify health and a modifier for effects that alter stats
     /// </summary>
     /// <param name="effectName"></param>
     /// <param name="ticks"></param>
@@ -144,21 +172,37 @@ public class Status : NetworkBehaviour {
             CmdAddEffect(effectName, ticks, damage);
             return;
         }
-        if (effectName == StatusEffect.Burn) {
+        if (effectName == StatusEffect.Slow) {
+            if (ticks < slownessTicks)
+                return;
+            controller.EffectStart("Slow", damage);
+            RpcEffect("SlowEmitter", true); //Start particle emitter
+            slownessTicks = ticks;
+            slownessPerc = damage;
+        }
+        else if (effectName == StatusEffect.Speed) {
+            if (ticks < speedTicks)
+                return;
+            controller.EffectStart("Speed", damage);
+            RpcEffect("SpeedEmitter", true);
+            speedTicks = ticks;
+            speedPerc = damage;
+        }
+        else if (effectName == StatusEffect.Stun) {
+            if (ticks < stunTicks)
+                return;
+            controller.EffectStart("Stun", damage);
+
+            RpcEffect("StunEmitter", true);
+            stunTicks = ticks;
+        }
+        else if (effectName == StatusEffect.Burn) {
             if (ticks < burningTicks)
                 return;
 
             RpcEffect("BurningEmitter", true); //Start particle emitter
             burningTicks = ticks;
             burningDamage = damage;
-        }
-        else if (effectName == StatusEffect.Stun) {
-            if (ticks < stunTicks)
-                return;
-            controller.EffectStart("Stun");
-
-            RpcEffect("StunEmitter", true);
-            stunTicks = ticks;
         }
         else if (effectName == StatusEffect.Poison) {
             if (ticks < poisonTicks)
@@ -178,7 +222,11 @@ public class Status : NetworkBehaviour {
     #region Effects
     [ClientRpc]
     public void RpcEffect(string emitterName, bool on) {
-        if (emitterName.Equals("BurningEmitter"))
+        if (emitterName.Equals("SlowEmitter"))
+            Effect(slowEffect, on);
+        else if (emitterName.Equals("SpeedEmitter"))
+            Effect(speedEffect, on);
+        else if (emitterName.Equals("BurningEmitter"))
             Effect(burningEffect, on);
         else if (emitterName.Equals("StunEmitter"))
             Effect(stunEffect, on);

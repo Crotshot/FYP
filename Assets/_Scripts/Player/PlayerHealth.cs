@@ -5,8 +5,8 @@ using UnityEngine.AI;
 using Mirror;
 
 public class PlayerHealth : Health { //Class for managin player health
-    [SerializeField] float respawnTime;
-    [SerializeField] ParticleSystem deathFire;
+    [SerializeField] protected float respawnTime;
+    [SerializeField] protected ParticleSystem deathFire;
     Vector3 spawnPoint;
     private float respawnTimer = 0;
 
@@ -41,7 +41,6 @@ public class PlayerHealth : Health { //Class for managin player health
         if (!dead) {
             base.Damage(damage);
             if (dead) {
-                //LATER -> Kill all player minions
                 RpcDeath();
             }
         }
@@ -59,23 +58,8 @@ public class PlayerHealth : Health { //Class for managin player health
         transform.position -= Vector3.up * 0.5f;
         var em = deathFire.emission;
         em.enabled = true;
-
-
-        //Rotate character to a random angle, move them down just a little bit and then play a fire particle effect
-
-
         StartCoroutine("RespawnDelay");
     }
-
-    //[Command (requiresAuthority = false)]
-    //public void NavAgentEnabled(bool enable) {
-    //    if (TryGetComponent(out NavMeshAgent aI))
-    //        aI.enabled = enable;
-    //}
-    //[Command]
-    //private void CmdSetPos(Vector3 pos) {
-    //    transform.position = pos;
-    //}
 
     IEnumerator RespawnDelay() {
         respawnTimer = respawnTime;
@@ -92,11 +76,7 @@ public class PlayerHealth : Health { //Class for managin player health
 
     public void RespawnPlayer() {
         transform.position = spawnPoint;
-        //if (hasAuthority)
-        //    CmdSetPos(transform.position);
-        //if (TryGetComponent(out NavMeshAgent aI))
-          //  aI.enabled = true;
-        //NavAgentEnabled(true);
+
         if (TryGetComponent(out PlayerController pC))
             pC.enabled = true;
         if (TryGetComponent(out MeshCollider mC))

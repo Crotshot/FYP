@@ -19,21 +19,19 @@ public class RodgerController : PlayerController {
         }
     }
 
-    public override void EffectStart(string effect) {
+    public override void EffectStart(string effect, float value) {
         if (effect.Equals("Rush")) {
             overrideForward = true;
+            return;
         }
-        else {
-            base.EffectStart(effect);
-        }
+        base.EffectStart(effect, value);
     }
 
     public override void EffectEnd(string effect) {
         if (effect.Equals("Rush")) {
             overrideForward = false;
+            return;
         }
-        else {
-            base.EffectEnd(effect);
-        }
+        base.EffectEnd(effect);
     }
 }

@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class GasCloud : NetworkBehaviour
 {
-    [SerializeField] float duration, poisonDamage, scalePerSec;
-    [SerializeField] int poisonTicks;
+    [SerializeField] float duration, poisonDamage, scalePerSec, slowStrength;
+    [SerializeField] int poisonTicks, slownessTicks;
     [SerializeField] ParticleSystem shockEmitter;
     [SerializeField] Transform gasEm;
     float tickInterval = 0.25f, ticktimer = 0.25f;
@@ -29,6 +29,7 @@ public class GasCloud : NetworkBehaviour
                     continue;
                 }
                 trackedStatus[i].AddEffect(Status.StatusEffect.Poison, poisonTicks, poisonDamage);
+                trackedStatus[i].AddEffect(Status.StatusEffect.Slow, slownessTicks, slowStrength);
             }
             ticktimer = tickInterval;
         }

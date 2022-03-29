@@ -52,10 +52,12 @@ public class Ability : NetworkBehaviour
         }
     }
 
-    protected void CoolDown(float time) {
+    protected bool CoolDown(float time) {
         if(coolDownTimer > 0) {
             coolDownTimer -= time;
+            return true;
         }
+        return false;
     }
 
     protected bool AbilityUsed() {

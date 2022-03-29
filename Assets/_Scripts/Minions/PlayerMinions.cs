@@ -4,7 +4,7 @@ using UnityEngine;
 using Mirror;
 //A class controlled by the player for commanding minions
 public class PlayerMinions : NetworkBehaviour {
-    [SyncVar] [SerializeField] int maxFollowers;
+    [SyncVar] /*[SerializeField] */int maxFollowers;
     [SyncVar] int followerCount; //Rpc from server for local UI
     [SerializeField] string[] minionTypes;
     [SerializeField] List<MinionController> followerMinions;

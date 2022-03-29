@@ -8,7 +8,6 @@ using Helpers = Crotty.Helpers.StaticHelpers;
 
 public class PlayerController : Controller {
 
-    [SerializeField][Min(0)] protected float characterSpeed = 5f, rotSpeed = 5f;
     protected Inputs inputs;
     protected Rigidbody rb;
 
@@ -20,6 +19,7 @@ public class PlayerController : Controller {
         if (hasAuthority) {
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
             inputs = FindObjectOfType<Inputs>();
+            actualSpeed = characterSpeed;
 
             if (ab1 == null)
                 ab1 = new UnityEvent();
@@ -42,9 +42,10 @@ public class PlayerController : Controller {
         }
     }
 
-    virtual protected void FixedUpdate() {
-        if (!ready || stunned)
+    override protected void FixedUpdate() {
+        if (!ready)
             return;
+        base.FixedUpdate();
 
         if (inputs.GetAbility1Input() > 0) {
             ab1?.Invoke();
@@ -63,8 +64,8 @@ public class PlayerController : Controller {
         if (input.x != 0)
             transform.RotateAround(transform.position, Vector3.up, rotSpeed * Time.deltaTime * input.x);
         if (input.z != 0) {
-            Vector3 currentVelocity = transform.forward * Time.deltaTime * characterSpeed * input.z * 50f;
-            currentVelocity = Helpers.Vector3Clamp(currentVelocity, -characterSpeed, characterSpeed);
+            Vector3 currentVelocity = transform.forward * Time.deltaTime * actualSpeed * input.z * 50f;
+            currentVelocity = Helpers.Vector3Clamp(currentVelocity, -actualSpeed, actualSpeed);
             rb.velocity = currentVelocity;
         }
     }
@@ -79,21 +80,14 @@ public class PlayerController : Controller {
 
     public void SetCharacterSpeed(float speed) {
         characterSpeed = speed; // Changes base speed of character
+        actualSpeed = characterSpeed * modifierSpeed * modifierSlow;
     }
 
-    override public void EffectStart(string effect) {
-        if (effect.Equals("Stun")) {
-            stunned = true;
-            return;
-        }
-        base.EffectStart(effect);
+    override public void EffectStart(string effect, float value) {
+        base.EffectStart(effect, value);
     }
 
     override public void EffectEnd(string effect) {
-        if (effect.Equals("Stun")) {
-            stunned = false;
-            return;
-        }
         base.EffectEnd(effect);
     }
 }

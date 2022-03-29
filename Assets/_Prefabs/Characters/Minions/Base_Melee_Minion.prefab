@@ -340,6 +340,10 @@ PrefabInstance:
       propertyPath: m_AssetId
       value: a95f9251c0fa3fa49b0e861a55cbc62a
       objectReference: {fileID: 0}
+    - target: {fileID: 1303457580115261607, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 1380134748945916644, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -395,6 +399,18 @@ PrefabInstance:
     - target: {fileID: 3393298794735004064, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_Name
       value: Base_Melee_Minion
+      objectReference: {fileID: 0}
+    - target: {fileID: 4273404068912657719, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: slowEffect
+      value: 
+      objectReference: {fileID: 983992319576663014}
+    - target: {fileID: 4273404068912657719, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: speedEffect
+      value: 
+      objectReference: {fileID: 5876506977619697544}
+    - target: {fileID: 5637543528226309321, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5795049616598599552, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: teamAccents.Array.size
@@ -478,5 +494,15 @@ GameObject:
 --- !u!4 &6764249261807875068 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1380134748945916644, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+  m_PrefabInstance: {fileID: 5690379358210461976}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &983992319576663014 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4854772841675879166, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+  m_PrefabInstance: {fileID: 5690379358210461976}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &5876506977619697544 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2266931389653438096, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
   m_PrefabInstance: {fileID: 5690379358210461976}
   m_PrefabAsset: {fileID: 0}
