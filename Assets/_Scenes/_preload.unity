@@ -246,7 +246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2277960445811590527, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}
       propertyPath: useSteam
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2277960445811590527, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}
       propertyPath: transport

@@ -5,7 +5,8 @@ using UnityEngine.AI;
 using Mirror;
 
 public class PlayerHealth : Health { //Class for managin player health
-    [SerializeField] float respawnTime;
+    [SerializeField] protected float respawnTime;
+    [SerializeField] protected ParticleSystem deathFire;
     Vector3 spawnPoint;
     private float respawnTimer = 0;
 
@@ -40,7 +41,6 @@ public class PlayerHealth : Health { //Class for managin player health
         if (!dead) {
             base.Damage(damage);
             if (dead) {
-                //LATER -> Kill all player minions
                 RpcDeath();
             }
         }
@@ -49,26 +49,17 @@ public class PlayerHealth : Health { //Class for managin player health
     [ClientRpc]
     public void RpcDeath() {
         if (TryGetComponent(out PlayerController pC))
-            pC.enabled = false;
-        if (TryGetComponent(out NavMeshAgent aI))
-            aI.enabled = false;
-        NavAgentEnabled(false);
-        transform.position = spawnPoint + (Vector3.down * 30f);
-        //if(hasAuthority)
-        //    CmdSetPos(transform.position);
-        //Invoke("RespawnPlayer", respawnTime);
+            pC.enabled = false; //All chracter abilities and their weapon is disabled due to the controller being disabled
+        if (TryGetComponent(out MeshCollider mC))
+            mC.enabled = false;
+        if (TryGetComponent(out Rigidbody rB))
+            rB.useGravity = false;
+
+        transform.position -= Vector3.up * 0.5f;
+        var em = deathFire.emission;
+        em.enabled = true;
         StartCoroutine("RespawnDelay");
     }
-
-    [Command (requiresAuthority = false)]
-    public void NavAgentEnabled(bool enable) {
-        if (TryGetComponent(out NavMeshAgent aI))
-            aI.enabled = enable;
-    }
-    //[Command]
-    //private void CmdSetPos(Vector3 pos) {
-    //    transform.position = pos;
-    //}
 
     IEnumerator RespawnDelay() {
         respawnTimer = respawnTime;
@@ -85,13 +76,17 @@ public class PlayerHealth : Health { //Class for managin player health
 
     public void RespawnPlayer() {
         transform.position = spawnPoint;
-        //if (hasAuthority)
-        //    CmdSetPos(transform.position);
-        if (TryGetComponent(out NavMeshAgent aI))
-            aI.enabled = true;
-        NavAgentEnabled(true);
+
         if (TryGetComponent(out PlayerController pC))
             pC.enabled = true;
+        if (TryGetComponent(out MeshCollider mC))
+            mC.enabled = true;
+        if (TryGetComponent(out Rigidbody rB))
+            rB.useGravity = true;
+
+        var em = deathFire.emission;
+        em.enabled = false;
+
         ResetHealth();
     }
 

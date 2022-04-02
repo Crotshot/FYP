@@ -27,14 +27,16 @@ public class Minion_MultiShot : ArchingProjectile
         else {
             NetworkServer.Destroy(gameObject);
         }
-        GameObject obj = Instantiate(actualProjectile, transform.position, transform.rotation);
-        NetworkServer.Spawn(obj);
-        obj.transform.position = transform.position;
-        obj.transform.position = transform.position;
-        obj.transform.parent = null;
-        obj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
-        Color c = GetComponent<Team>().GetTeamColor();
-        obj.GetComponent<Team>().SetTeamColor(c.r, c.g, c.b, c.a);
-        obj.GetComponent<ArchingProjectile>().Setup(tPos+ Helpers.RandomVector3XZ(inaccuracy));
+        if (NetworkServer.active) {
+            GameObject obj = Instantiate(actualProjectile, transform.position, transform.rotation);
+            NetworkServer.Spawn(obj);
+            obj.transform.position = transform.position;
+            obj.transform.position = transform.position;
+            obj.transform.parent = null;
+            obj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
+            Color c = GetComponent<Team>().GetTeamColor();
+            obj.GetComponent<Team>().SetTeamColor(c.r, c.g, c.b, c.a);
+            obj.GetComponent<ArchingProjectile>().Setup(tPos + Helpers.RandomVector3XZ(inaccuracy));
+        }
     }
 }

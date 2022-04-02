@@ -212,7 +212,7 @@ MonoBehaviour:
   pointA: {fileID: 604024517320725531}
   pointB: {fileID: 6672425681368894187}
   objectLength: 1.11
---- !u!114 &8126158287747717565
+--- !u!114 &729950064228931210
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -226,36 +226,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  attackTime: 0.1
-  attackCooldownTime: 1.3
+  attackTime: 0.2
+  attackCooldownTime: 1.2
   animatedTimings:
   - pos: {x: 0, y: 0.982, z: -0.379}
     localEuler: {x: 14.777, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
+    scale: {x: 0, y: 0, z: 0}
     time: 0
-  - pos: {x: 0, y: 1.357, z: -0.161}
-    localEuler: {x: 47.792, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 0.05
-  - pos: {x: 0, y: 1.695, z: 0.773}
-    localEuler: {x: 72.676, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 0.1
-  - pos: {x: 0, y: 1.301, z: 0.959}
-    localEuler: {x: 111.389, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 0.5
-  - pos: {x: 0, y: 1.531, z: 0.09}
-    localEuler: {x: 70.692, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 0.85
+  - pos: {x: 0, y: 1.602, z: 0.259}
+    localEuler: {x: 50.041, y: 0, z: 0}
+    scale: {x: 0, y: 0, z: 0}
+    time: 0.2
   - pos: {x: 0, y: 0.982, z: -0.379}
     localEuler: {x: 14.777, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
+    scale: {x: 0, y: 0, z: 0}
     time: 1.4
   animatedWeapon: {fileID: 7585897654180890116}
   archingProjectilePrefab: {fileID: 6276850478000177189, guid: 180a5ced5207f784aa50a9499cce0215, type: 3}
   projectileSpawnPoint: {fileID: 1101373180738591776}
+--- !u!114 &7911996774017295472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697022809498404649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af28b07b39dfd694d964433389e95900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  stunTicks: 0
+  speedTicks: 0
+  slownessTicks: 0
+  burningTicks: 0
+  weakenedTicks: 0
+  abductionTicks: 0
+  rootedTicks: 0
+  magnetisedTicks: 0
+  poisonTicks: 0
+  regenTicks: 0
+  speedPerc: 0
+  slownessPerc: 0
+  burningDamage: 0
+  weaknessPerc: 0
+  magneticForce: 0
+  poisonDamage: 0
+  regenAmount: 0
+  magneticForceOrigin: {x: 0, y: 0, z: 0}
+  baseHealthRegenPercent: 0.01
+  burningEffect: {fileID: 8717852765815634862}
+  stunEffect: {fileID: 4201457965798280192}
+  poisonEffect: {fileID: 0}
+  slowEffect: {fileID: 0}
+  speedEffect: {fileID: 0}
 --- !u!1 &2910633273768910602
 GameObject:
   m_ObjectHideFlags: 0
@@ -623,6 +649,10 @@ PrefabInstance:
       propertyPath: serverOnly
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1303457580115261607, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 1380134748945916644, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -671,6 +701,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Base_Ranged_Minion
       objectReference: {fileID: 0}
+    - target: {fileID: 4273404068912657719, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: slowEffect
+      value: 
+      objectReference: {fileID: 7342177901384719479}
+    - target: {fileID: 4273404068912657719, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: speedEffect
+      value: 
+      objectReference: {fileID: 4165543634369142809}
+    - target: {fileID: 5637543528226309321, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5795049616598599552, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: teamAccents.Array.size
       value: 3
@@ -687,6 +729,10 @@ PrefabInstance:
       propertyPath: teamAccents.Array.data[2]
       value: 
       objectReference: {fileID: 1101373180738591776}
+    - target: {fileID: 5962769987103405413, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8402493518902461764, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
       propertyPath: baseMinion
       value: 1
@@ -728,6 +774,26 @@ PrefabInstance:
 --- !u!4 &3862963640992238701 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1380134748945916644, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+  m_PrefabInstance: {fileID: 2790887938606476937}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4201457965798280192 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2086760959777170057, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+  m_PrefabInstance: {fileID: 2790887938606476937}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8717852765815634862 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6793452634974410023, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+  m_PrefabInstance: {fileID: 2790887938606476937}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7342177901384719479 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4854772841675879166, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+  m_PrefabInstance: {fileID: 2790887938606476937}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4165543634369142809 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2266931389653438096, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
   m_PrefabInstance: {fileID: 2790887938606476937}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &697022809498404649 stripped

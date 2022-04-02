@@ -5,11 +5,11 @@ using UnityEngine.AI;
 using Mirror;
 using Helpers = Crotty.Helpers.StaticHelpers;
 
-public class MinionController : NetworkBehaviour
-{
+public class MinionController : Controller {
+
     [SerializeField] string minionType;
     [SerializeField] bool baseMinion, independentWeapon;
-    [SerializeField] float minionSpeed, minionAngularSpeed, attackDistance, awarnessDistance;
+    [SerializeField] float attackDistance, awarnessDistance;
     [SerializeField] Transform attackTarget, assignedPoint, indWeapon;
     [SerializeField] List<Vector3> pathPoints = new List<Vector3>();
     Vector3 destination;
@@ -19,6 +19,7 @@ public class MinionController : NetworkBehaviour
 
     public enum MinionState { Idle, OnPath, Follower, Entering, Forward, Defender, Fighting, Recalling, Retreating }
     public MinionState minionState = MinionState.Idle, returningState = MinionState.Idle;
+
     /*
      Idle -> Default State, does nothing
      OnPath -> Minion is following a path, will fight enemies in way but will not hunt enemies off path
@@ -31,13 +32,15 @@ public class MinionController : NetworkBehaviour
      */
     //Minion Groups
 
-    public void Setup() {
+    override public void Setup() {
+        base.Setup();
         if (!baseMinion)
             minionState = MinionState.Follower;
+        actualSpeed = characterSpeed;
         agentC = GetComponent<NavMeshAgent>();
         attackC = GetComponent<Minion_Attack>();
-        agentC.speed = minionSpeed;
-        agentC.angularSpeed = minionAngularSpeed;
+        agentC.speed = actualSpeed;
+        agentC.angularSpeed = rotSpeed;
         pathPoints.Clear();
         layer = 1 << LayerMask.NameToLayer("Unit");
         GetComponent<WorldSpaceHealthBar>().Setup();
@@ -49,7 +52,8 @@ public class MinionController : NetworkBehaviour
     }
     
     RaycastHit[] hits;
-    private void FixedUpdate() {
+    override protected void FixedUpdate() {
+        base.FixedUpdate();
         if((minionState == MinionState.Retreating || minionState == MinionState.Recalling) && Helpers.Vector3Distance(destination, transform.position) < 5f) {
             minionState = MinionState.Follower;
         }
@@ -67,7 +71,7 @@ public class MinionController : NetworkBehaviour
                                 attackTarget = hit.transform;
                                 returningState = minionState;
                                 minionState = MinionState.Fighting;
-                                agentC.speed = minionSpeed;
+                                agentC.speed = actualSpeed;
                                 break;
                             }
                         }
@@ -75,10 +79,20 @@ public class MinionController : NetworkBehaviour
                 }
             }
             else {
-                if (attackTarget == null || Helpers.Vector3Distance(attackTarget.position, transform.position) > awarnessDistance * 1.1f) {
+                bool targFound = false;
+                hits = Physics.SphereCastAll(transform.position, awarnessDistance, transform.forward, 0, layer, QueryTriggerInteraction.Ignore);
+                if (hits.Length > 0) {
+                    foreach (RaycastHit hit in hits) {
+                        if (hit.collider.transform == attackTarget) {
+                            targFound = true;
+                            break;
+                        }
+                    }
+                }
+                if (!targFound || attackTarget == null || Helpers.Vector3Distance(attackTarget.position, transform.position) > awarnessDistance * 1.1f) {
                     attackTarget = null;
                     minionState = returningState;
-                    if (baseMinion) {
+                    if (baseMinion && agentC.enabled) {
                         if (minionState == MinionState.OnPath) {
                             agentC.speed = 8;
                         }
@@ -95,11 +109,13 @@ public class MinionController : NetworkBehaviour
 
         if(attackTarget != null) {
             destination = attackTarget.position;
-            agentC.destination = destination;
+            if (agentC.enabled)
+                agentC.destination = destination;
             if (Helpers.Vector3Distance(transform.position, destination) <= attackDistance) {
                 //ADD checks to see if has line of sight
                 //Rotation speed of minion so they dont snap turn
-                agentC.destination = transform.position;
+                if(agentC.enabled)
+                    agentC.destination = transform.position;
                 if (!independentWeapon)
                     transform.LookAt(destination + Vector3.up);
                 else 
@@ -114,7 +130,7 @@ public class MinionController : NetworkBehaviour
                 pathPoints.Remove(pathPoints[0]);
                 minionState = MinionState.Defender;
                 returningState = MinionState.Defender;
-                agentC.speed = minionSpeed;
+                agentC.speed = characterSpeed;
             }
             else { //Else proceed to next path
                 pathPoints.Remove(pathPoints[0]); 
@@ -134,7 +150,7 @@ public class MinionController : NetworkBehaviour
         }
         else {
             minionState = MinionState.OnPath;
-            agentC.speed = 8;
+            agentC.speed = actualSpeed;
         }
     }
 
@@ -154,9 +170,6 @@ public class MinionController : NetworkBehaviour
         return assignedPoint;
     }
     #endregion
-
-
-
 
     public void MinionDeath() {
         attackTarget = null;
@@ -196,5 +209,29 @@ public class MinionController : NetworkBehaviour
 
     public bool isBaseMinion() {
         return baseMinion;
+    }
+
+    override public void EffectStart(string effect, float value) {
+        if (effect.Equals("Stun")) {
+            stunned = true;
+            attackC.isStun(true);
+            agentC.enabled = false;
+            destination = agentC.destination;
+            return;
+        }
+        base.EffectStart(effect, value);
+        agentC.speed = actualSpeed;
+    }
+
+    override public void EffectEnd(string effect) {
+        if (effect.Equals("Stun")) {
+            stunned = false;
+            attackC.isStun(false);
+            agentC.enabled = true;
+            agentC.destination = destination;
+            return;
+        }
+        base.EffectEnd(effect);
+        agentC.speed = actualSpeed;
     }
 }

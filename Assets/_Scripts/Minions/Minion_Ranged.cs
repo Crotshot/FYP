@@ -15,7 +15,10 @@ public class Minion_Ranged : Minion_Attack {
         animatedWeapon.localScale = animatedTimings[0].scale;
         animatedWeapon.localEulerAngles = animatedTimings[0].localEuler;
     }
+
     private void FixedUpdate() {
+        if (stunned)
+            return;
         AnimatedAttack(LaunchProjectile);
     }
 

@@ -3,40 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
+/*
+ * OLD AND REDUNDENT >>>> DELETE
+ */
 public class Passive_0 : NetworkBehaviour 
 {
-    [SerializeField] Transform spawnPoint;
-    GameObject projectilePrefab;
 
-    private void Start() {
-        if(TryGetComponent(out RangedAttack atk)) {
-            if(atk != null) {
-                atk.weaponFired.AddListener(Shoot);
-                projectilePrefab = GetComponent<RangedAttack>().GetShellPrefab();
-            }
-        }
-    }
+    //[SerializeField] Transform spawnPoint;
+    //GameObject projectilePrefab;
 
-    private void Shoot() {
-        if (isServer) {
+    //private void Start() {
+    //    if(TryGetComponent(out RodgerAttack atk)) {
+    //        if(atk != null) {
+    //            atk.weaponFired.AddListener(Shoot);
+    //            projectilePrefab = atk.GetShellPrefab();
+    //        }
+    //    }
+    //}
 
-            GameObject newProj = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
-            NetworkServer.Spawn(newProj);
-            newProj.transform.position = spawnPoint.position;
-            newProj.transform.rotation = spawnPoint.rotation;
-            newProj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
-            newProj.GetComponent<BasicShell>().TeamAssigned();
-            newProj.transform.parent = null;
-        }
-        else {
-            CmdDoubleTap();
-        }
-    }
+    //private void Shoot() {
+    //    if (isServer) {
 
-    [Command]
-    private void CmdDoubleTap() {
-        Shoot();
-    }
+    //        GameObject newProj = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
+    //        NetworkServer.Spawn(newProj);
+    //        newProj.transform.position = spawnPoint.position;
+    //        newProj.transform.rotation = spawnPoint.rotation;
+    //        newProj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
+    //        newProj.GetComponent<BasicShell>().TeamAssigned();
+    //        newProj.transform.parent = null;
+    //    }
+    //    else {
+    //        CmdDoubleTap();
+    //    }
+    //}
+
+    //[Command]
+    //private void CmdDoubleTap() {
+    //    Shoot();
+    //}
 }
 
 

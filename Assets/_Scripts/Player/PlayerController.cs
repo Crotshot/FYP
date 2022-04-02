@@ -4,23 +4,22 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.AI;
 using Mirror;
+using Helpers = Crotty.Helpers.StaticHelpers;
 
-public class PlayerController : NetworkBehaviour
-{
-    Inputs inputs;
-    NavMeshAgent agent;
-    Transform navTarget;
+public class PlayerController : Controller {
 
-    public UnityEvent ab1, ab2, ab3;
-    private bool ready = false;
+    protected Inputs inputs;
+    protected Rigidbody rb;
 
-    public void Setup() {
+    public UnityEvent ab1, ab2, ab3, atk;
+    protected bool ready = false;
+
+    override public void Setup() {
+        base.Setup();
         if (hasAuthority) {
-            navTarget = transform.GetChild(0).GetChild(1);
-            GetComponent<NavMeshAgent>().enabled = true;
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
             inputs = FindObjectOfType<Inputs>();
-            agent = GetComponent<NavMeshAgent>();
+            actualSpeed = characterSpeed;
 
             if (ab1 == null)
                 ab1 = new UnityEvent();
@@ -28,10 +27,13 @@ public class PlayerController : NetworkBehaviour
                 ab2 = new UnityEvent();
             if (ab3 == null)
                 ab3 = new UnityEvent();
+            if (atk == null)
+                atk = new UnityEvent();
 
             Destroy(GetComponent<WorldSpaceHealthBar>());
             FindObjectOfType<UI>().Setup(GetComponent<PlayerHealth>(), GetComponent<PlayerCurrency>());
             GetComponent<Interactor>().Setup();
+            rb = GetComponent<Rigidbody>();
         }
         else{
             Destroy(transform.GetChild(0).gameObject);
@@ -40,14 +42,12 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    private void Update() {
+    override protected void FixedUpdate() {
         if (!ready)
             return;
-        navTarget.localPosition = inputs.GetMovementInput();
-        if(agent.enabled && agent.isOnNavMesh)
-            agent.destination = navTarget.position;
+        base.FixedUpdate();
 
-        if(inputs.GetAbility1Input() > 0) {
+        if (inputs.GetAbility1Input() > 0) {
             ab1?.Invoke();
         }
         if (inputs.GetAbility2Input() > 0) {
@@ -56,10 +56,38 @@ public class PlayerController : NetworkBehaviour
         if (inputs.GetAbility3Input() > 0) {
             ab3?.Invoke();
         }
-    }
+        if (inputs.GetAttackInput() > 0) {
+            atk?.Invoke();
+        }
 
+        Vector3 input = inputs.GetMovementInput();
+        if (input.x != 0)
+            transform.RotateAround(transform.position, Vector3.up, rotSpeed * Time.deltaTime * input.x);
+        if (input.z != 0) {
+            Vector3 currentVelocity = transform.forward * Time.deltaTime * actualSpeed * input.z * force;
+            currentVelocity = Helpers.Vector3Clamp(currentVelocity, -actualSpeed, actualSpeed);
+            rb.velocity = currentVelocity;
+        }
+    }
 
     public void Release() {
         ready = true;
+    }
+
+    public float GetCharacterSpeed() {
+        return characterSpeed;
+    }
+
+    public void SetCharacterSpeed(float speed) {
+        characterSpeed = speed; // Changes base speed of character
+        actualSpeed = characterSpeed * modifierSpeed * modifierSlow;
+    }
+
+    override public void EffectStart(string effect, float value) {
+        base.EffectStart(effect, value);
+    }
+
+    override public void EffectEnd(string effect) {
+        base.EffectEnd(effect);
     }
 }

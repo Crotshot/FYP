@@ -11,7 +11,7 @@ public class Ability : NetworkBehaviour
     protected float coolDownTimer;
 
     /// <summary>
-    /// Sets ability listeners for the player controller,. The added componenet desipte existing everywhere is local
+    /// Sets ability listeners for the player controller,. The added component despite existing everywhere is local
     /// therefore to access, it must be done using net id's
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -52,10 +52,12 @@ public class Ability : NetworkBehaviour
         }
     }
 
-    protected void CoolDown(float time) {
+    protected bool CoolDown(float time) {
         if(coolDownTimer > 0) {
             coolDownTimer -= time;
+            return true;
         }
+        return false;
     }
 
     protected bool AbilityUsed() {
