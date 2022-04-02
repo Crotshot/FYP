@@ -5,89 +5,115 @@ using Mirror;
 
 public class Sawblade_Launcher : Ability {
     [SerializeField] Transform sawblade, launchPoint;
-    [SerializeField] float damage, slowStrength, radius, bladeSpeed, minY = 0.5f, gravity = 9.8f;
+    [SerializeField] float damage, slowStrength, radius, bladeSpeed, minY = 0.5f, gravity = 9.8f, scale = 2f;
     [SerializeField] LayerMask unitLayer, defaultLayer;
     [SerializeField] int slowTicks;
     [SerializeField] TrailRenderer tR;
 
     List<Health> trackedHealth;
-    bool active = true;
+
+    //                           0         1         2
+    private enum BladeState { Inactive, Cooldown, Active }
+    BladeState bState = BladeState.Inactive;
 
     private void Start() {
-        SetUp(Cast);
         sawblade.parent = null;
+        if (!hasAuthority)
+            return;
+        SetUp(Cast);
         trackedHealth = new List<Health>();
     }
 
     private void FixedUpdate() {
-        if (!CoolDown(Time.deltaTime)) {
-            sawblade.position = launchPoint.position;
-            sawblade.rotation = launchPoint.rotation;
-            sawblade.GetChild(0).RotateAround(sawblade.position, sawblade.right, 360 * Time.deltaTime);
-            Active(false);
-        }
 
-        if (active) {
-            sawblade.GetChild(0).RotateAround(sawblade.position, sawblade.right, 360 * Time.deltaTime);
-            sawblade.position += sawblade.forward * Time.deltaTime * bladeSpeed;
-            if(sawblade.position.y > minY) {
-                sawblade.transform.position -= Vector3.up * Time.deltaTime * gravity;
-            }
-
-            Collider[] cols = Physics.OverlapSphere(sawblade.position, radius, unitLayer, QueryTriggerInteraction.Ignore);
-            foreach (Collider other in cols) {//Check for Unit collision
-                if(other.TryGetComponent(out Health health)) {
-                    if (trackedHealth.Contains(health))
-                        continue;
+        switch (bState) {
+            case BladeState.Active:
+                sawblade.GetChild(0).RotateAround(sawblade.position, sawblade.right, 360 * Time.deltaTime);
+                sawblade.position += sawblade.forward * Time.deltaTime * bladeSpeed;
+                if (sawblade.position.y > minY) {
+                    sawblade.transform.position -= Vector3.up * Time.deltaTime * gravity;
                 }
-                if (other.tag.Equals("minion") || other.tag.Equals("Player")) {
-                    if (other.GetComponent<Team>().GetTeam() != GetComponent<Team>().GetTeam()) {
-                        other.GetComponent<Health>().Damage(damage);
-                        trackedHealth.Add(other.GetComponent<Health>());
-                        other.GetComponent<Status>().AddEffect(Status.StatusEffect.Slow, slowTicks, slowStrength);
+
+                if (hasAuthority) {
+                    Collider[] cols = Physics.OverlapSphere(sawblade.position, radius, unitLayer, QueryTriggerInteraction.Ignore);
+                    foreach (Collider other in cols) {//Check for Unit collision
+                        if (other.TryGetComponent(out Health health)) {
+                            if (trackedHealth.Contains(health))
+                                continue;
+                        }
+                        if (other.tag.Equals("minion") || other.tag.Equals("Player")) {
+                            if (other.GetComponent<Team>().GetTeam() != GetComponent<Team>().GetTeam()) {
+                                other.GetComponent<Health>().Damage(damage);
+                                trackedHealth.Add(other.GetComponent<Health>());
+                                other.GetComponent<Status>().AddEffect(Status.StatusEffect.Slow, slowTicks, slowStrength);
+                            }
+                        }
+                    }
+
+                    if (Physics.Raycast(sawblade.position, sawblade.forward, radius, defaultLayer, QueryTriggerInteraction.Ignore)) {
+                        bState = BladeState.Cooldown;            //Check for wall collision
                     }
                 }
-            }
-
-            if (Physics.Raycast(sawblade.position, sawblade.forward, radius, defaultLayer, QueryTriggerInteraction.Ignore)) {
-                Active(false);            //Check for wall collision
-            }
+                break;
+            case BladeState.Cooldown:
+                if (hasAuthority && !CoolDown(Time.deltaTime)) {
+                    ChangeState(0);
+                }
+                break;
+            default:
+                sawblade.position = launchPoint.position;
+                sawblade.rotation = launchPoint.rotation;
+                sawblade.GetChild(0).RotateAround(sawblade.position, sawblade.right, 360 * Time.deltaTime);
+                break;
         }
+                if (!hasAuthority)
+            return;
     }
 
     private void Cast() {
         if (AbilityUsed()) {
-            Active(true);
+            ChangeState(2);
             trackedHealth.Clear();
         }
     }
 
+    #region Change State
 
-    private void Active(bool on) {
-        active = on;
-
+    private void ChangeState(int n) {
         if (isServer) {
-            RpcActive(on);
+            RpcChangeState(n);
         }
-        else {
-            CmdActive(on);
+        else {    //Options for changing state using ints or States, ints are quicker but States are more readable
+            CmdChangeState(n);
         }
     }
 
-
-    [ClientRpc]
-    private void RpcActive(bool on) {
-        tR.emitting = on;
-        if (on) {
-            sawblade.GetChild(0).transform.localScale = Vector3.one * 3;
+    private void ChangeState(BladeState s) {
+        int n = (int)s;
+        if (isServer) {
+            RpcChangeState(n);
         }
         else {
-            sawblade.GetChild(0).transform.localScale = Vector3.one;
+            CmdChangeState(n);
+        }
+    }
+
+    [ClientRpc]
+    private void RpcChangeState(int n) {
+        bState = (BladeState)n;
+        if (bState == BladeState.Active) {
+            tR.emitting = true;
+            sawblade.localScale = Vector3.one * scale;
+        }
+        else {
+            tR.emitting = false;
+            sawblade.localScale = Vector3.one;
         }
     }
 
     [Command]
-    private void CmdActive(bool on) {
-        RpcActive(on);
+    private void CmdChangeState(int n) {
+        RpcChangeState(n);
     }
+    #endregion
 }

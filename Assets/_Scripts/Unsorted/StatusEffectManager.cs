@@ -51,7 +51,7 @@ public class StatusEffectManager : NetworkBehaviour {
 
     private void Start() {
         if (!isServer)
-            Destroy(this);
+            return;
 
         statusList = new List<Status>();
         tickTime = 1 / ((float)tickRate);
@@ -59,7 +59,10 @@ public class StatusEffectManager : NetworkBehaviour {
     }
 
     private void Update() {
-        if(tickTimer > 0) {
+        if (!isServer)
+            return;
+
+        if (tickTimer > 0) {
             tickTimer -= Time.deltaTime;
             return;
         }

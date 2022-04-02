@@ -13,7 +13,8 @@ public class Taser : Ability {
     ParticleSystem pS;
 
     private void Start() {
-        SetUp(Cast);
+        if(hasAuthority)
+            SetUp(Cast);
         pS = spawnPoint.GetComponent<ParticleSystem>();
         aoe.transform.parent = null;
         var shape = aoe.shape;
@@ -21,14 +22,13 @@ public class Taser : Ability {
     }
 
     private void FixedUpdate() {
-        CoolDown(Time.deltaTime);
+        if(hasAuthority)
+            CoolDown(Time.deltaTime);
     }
 
     private void Cast() {
         if (AbilityUsed()) {
-            //Raycast out of weapon & Get collision obsticle and point
-            
-            Ray ray = new Ray(spawnPoint.position, spawnPoint.forward);
+            Ray ray = new Ray(spawnPoint.position, spawnPoint.forward);//Raycast out of weapon & Get collision obsticle and point
             float halfDist = range / 2.0f;
             if (Physics.Raycast(ray, out RaycastHit hit, range, unitTerrainLayer, QueryTriggerInteraction.Ignore)) {
                 halfDist = Helpers.Vector3Distance(hit.point, spawnPoint.position) / 2.0f;
@@ -54,7 +54,7 @@ public class Taser : Ability {
                         //}
                 }
 
-                //For some reason tge gas clouds do not show in the overlapspere so I am doing this here
+                //For some reason the gas clouds does not get scanned in the overlapspere so I am manually checking this here
                 foreach (GasCloud cloud in FindObjectsOfType<GasCloud>()) {
                     //Debug.Log("Dist: " + Helpers.Vector3Distance(hit.point, cloud.transform.position) + ", max dist: " + (radius + cloud.transform.localScale.x * 1.2f));
                     if (Helpers.Vector3Distance(hit.point, cloud.transform.position) <= radius + cloud.transform.localScale.x * 1.2f) {//cloud.transform.localScale.x is radius of cloud & 1.2 is og radius of sphere it scales
@@ -64,20 +64,23 @@ public class Taser : Ability {
                     }
                 }
             }
-            TriggerEffect(halfDist, hit.point);
+
+            if (isServer) {
+                RpcEffect(halfDist, hit.point);
+            }
+            else {
+                CmdEffect(halfDist, hit.point);
+            }
         }
     }
 
-    public void TriggerEffect(float dist, Vector3 pos) {
-        if (isServer) {
-            RpcEffect(dist, pos);
-        }
-        else {
-            CmdEffect(dist, pos);
-        }
+    [Command (requiresAuthority = false)]
+    private void CmdEffect(float dist, Vector3 pos) {
+        RpcEffect(dist, pos);
     }
 
-    private void Effect(float dist, Vector3 pos) {
+    [ClientRpc]
+    private void RpcEffect(float dist, Vector3 pos) {
         aoe.transform.position = pos;
         aoe.Play();
 
@@ -87,22 +90,11 @@ public class Taser : Ability {
         pS.Play();
     }
 
-    [Command (requiresAuthority = false)]
-    private void CmdEffect(float dist, Vector3 pos) {
-        TriggerEffect(dist, pos);
-    }
-
-    [ClientRpc]
-    private void RpcEffect(float dist, Vector3 pos) {
-        Effect(dist, pos);
-    }
-
 
 #if UNITY_EDITOR
     Vector3 pos = Vector3.zero;
     void OnDrawGizmosSelected() {
-        // Draw a yellow sphere at the transform's position
-        Gizmos.color = Color.yellow;
+        Gizmos.color = Color.yellow;        // Draw a yellow sphere at the transform's position
         Gizmos.DrawWireSphere(pos, radius);
     }
 #endif

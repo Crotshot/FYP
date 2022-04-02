@@ -64,7 +64,7 @@ public class PlayerController : Controller {
         if (input.x != 0)
             transform.RotateAround(transform.position, Vector3.up, rotSpeed * Time.deltaTime * input.x);
         if (input.z != 0) {
-            Vector3 currentVelocity = transform.forward * Time.deltaTime * actualSpeed * input.z * 50f;
+            Vector3 currentVelocity = transform.forward * Time.deltaTime * actualSpeed * input.z * force;
             currentVelocity = Helpers.Vector3Clamp(currentVelocity, -actualSpeed, actualSpeed);
             rb.velocity = currentVelocity;
         }

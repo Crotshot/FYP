@@ -4,8 +4,7 @@ using UnityEngine;
 using Mirror;
 using Helpers = Crotty.Helpers.StaticHelpers;
 
-public class BertAttack : PlayerAttack {
-
+public class BertAttack : PlayerAttack { //Uses Networked Child transform so no need for any Cmd/RPC
     [SerializeField] Transform sawBladeParent, pof;
     [SerializeField] float hitsPerSec, bladeSpeed, maxDistance, damageSphereRadius, damage, slowStrength, selfSlowStrength;
     [SerializeField] int slowTicks;

@@ -14,7 +14,7 @@ public class PlayerAttack : NetworkBehaviour {
         if (weaponFired == null)
             weaponFired = new UnityEvent();
         GetComponent<PlayerController>().atk.AddListener(Attack);
-        Debug.Log("Listener for Weapon set");
+        //Debug.Log("Listener for Weapon set");
     }
 
     virtual public void Attack() {

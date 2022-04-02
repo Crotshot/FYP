@@ -6,7 +6,7 @@ using Mirror;
 public class Controller : NetworkBehaviour {
 
     [SerializeField] [Min(0)] protected float characterSpeed = 5f, rotSpeed = 5f;
-    [SerializeField] protected float actualSpeed, modifierSpeed = 1, modifierSlow = 1;
+    [SerializeField] protected float actualSpeed, modifierSpeed = 1, modifierSlow = 1, force = 50f;
     [SyncVar]protected bool stunned = false;
 
     virtual public void Setup() {
@@ -54,5 +54,9 @@ public class Controller : NetworkBehaviour {
             return;
         }
         Debug.Log("Controller for " + gameObject.name + " does not contain effect: " + effect);
+    }
+
+    public bool AuthCheck() {
+        return hasAuthority;
     }
 }

@@ -13,7 +13,7 @@ public class RodgerController : PlayerController {
             return;
         base.FixedUpdate();
         if (overrideForward) {
-            Vector3 currentVelocity = transform.forward * Time.deltaTime * characterSpeed * 50f;
+            Vector3 currentVelocity = transform.forward * Time.deltaTime * characterSpeed * force;
             currentVelocity = Helpers.Vector3Clamp(currentVelocity, -characterSpeed, characterSpeed);
             rb.velocity = currentVelocity;
         }
