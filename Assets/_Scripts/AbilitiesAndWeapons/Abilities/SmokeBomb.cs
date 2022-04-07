@@ -6,9 +6,9 @@ using Helpers = Crotty.Helpers.StaticHelpers;
 
 public class SmokeBomb : Ability {
     [SerializeField] GameObject mortarShell;
-    [SerializeField] float secondShotDelay, maxDistance;
+    [SerializeField] float secondShotDelay, maxDistance, shellSpeed = 60f, peakHeight = 60f, shellRadius = 0.5f;
     [SerializeField] Transform[] mortarBodies, gas, spawnPoints;
-
+    [SerializeField] LayerMask layers, defLayer;
     List<MortarProjectile> mortarProjectiles;
     int projIndex = 0;
 
@@ -31,23 +31,51 @@ public class SmokeBomb : Ability {
         CoolDown(Time.deltaTime);
         foreach (MortarProjectile mort in mortarProjectiles) {
             if(mort.state == MortarProjectile.ProjState.Up) {
-
+                mort.projBody.position += mort.projBody.forward * shellSpeed;
+                if(mort.projBody.position.y >= peakHeight) {
+                    mort.state = MortarProjectile.ProjState.Down;
+                    mort.projBody.position = new Vector3(mort.focal.x, peakHeight, mort.focal.z);
+                    mort.projBody.transform.eulerAngles = new Vector3(90,0,0);
+                }
             }
             else if (mort.state == MortarProjectile.ProjState.Down) {
+                Collider[] hits = Physics.OverlapSphere(mort.projBody.position, shellRadius, layers, QueryTriggerInteraction.Ignore);
+                foreach (Collider hit in hits) {
+                    if (hit.tag.Equals("minion") || hit.tag.Equals("Player")) {
+                        if (hit.GetComponent<Team>().GetTeam() != GetComponent<Team>().GetTeam()) {
+                            Contact(mort);
+                            break;
+                        }
+                    }
+                    else if (hit.gameObject.layer == defLayer) {
+                        Contact(mort);
+                        break;
+                    }
+                }
 
+                if (mort.projBody.position.y <= 0) {
+                    Contact(mort);
+                }
             }
         }
     }
 
+    private void Contact(MortarProjectile mort) {
+        mort.gasCloud.Activate(mort.projBody.position);
+        mort.projBody.position = Vector3.down * 50f;
+        mort.state = MortarProjectile.ProjState.Inactive;
+    }
+
     IEnumerator SecondShell() {
         yield return new WaitForSeconds(secondShotDelay);
-
+        Fire();
         yield break;
     }
 
     private void Cast() {
         if (AbilityUsed()) {
-
+            Fire();
+            StartCoroutine("SecondShell");
         }
     }
 
@@ -66,7 +94,10 @@ public class SmokeBomb : Ability {
         if (projIndex == mortarProjectiles.Count)
             projIndex = 0;
 
-
+        mortarProjectiles[projIndex].projBody.position = spawnPoints[projIndex].position;
+        mortarProjectiles[projIndex].projBody.rotation = spawnPoints[projIndex].rotation;
+        mortarProjectiles[projIndex].state = MortarProjectile.ProjState.Up;
+        mortarProjectiles[projIndex].focal = focal;
 
         projIndex++;
     }
@@ -84,12 +115,9 @@ internal class MortarProjectile {
     }
     public Transform projBody;
     public GasCloud gasCloud;
+    public Vector3 focal;
     public enum ProjState { Up, Down, Inactive }
     public ProjState state = ProjState.Inactive;
-
-    public ProjState Update() {
-        return state;
-    }
 }
 //if (secondShotTimer > 0) {
 //    secondShotTimer -= Time.deltaTime;
