@@ -62,6 +62,7 @@ public class Health : NetworkBehaviour
         }
         currentHealth = maxHealth;
         dead = false;
+        GetComponent<Status>().Init();
         //Debug.Log("GameObject: " + gameObject.name + " health reset to: " + currentHealth);
     }
 
