@@ -31,7 +31,7 @@ public class SmokeBomb : Ability {
         CoolDown(Time.deltaTime);
         foreach (MortarProjectile mort in mortarProjectiles) {
             if(mort.state == MortarProjectile.ProjState.Up) {
-                mort.projBody.position += mort.projBody.forward * shellSpeed;
+                mort.projBody.position += mort.projBody.forward * shellSpeed * Time.deltaTime;
                 if(mort.projBody.position.y >= peakHeight) {
                     mort.state = MortarProjectile.ProjState.Down;
                     mort.projBody.position = new Vector3(mort.focal.x, peakHeight, mort.focal.z);
@@ -39,6 +39,7 @@ public class SmokeBomb : Ability {
                 }
             }
             else if (mort.state == MortarProjectile.ProjState.Down) {
+                mort.projBody.position += mort.projBody.forward * shellSpeed * Time.deltaTime;
                 Collider[] hits = Physics.OverlapSphere(mort.projBody.position, shellRadius, layers, QueryTriggerInteraction.Ignore);
                 foreach (Collider hit in hits) {
                     if (hit.tag.Equals("minion") || hit.tag.Equals("Player")) {

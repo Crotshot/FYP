@@ -13,7 +13,7 @@ public class GasCloud : NetworkBehaviour
 
     List<Status> trackedStatus = new List<Status>();
     ParticleSystem.EmissionModule poisonEmission;
-    Collider coll;
+    SphereCollider coll;
     public enum GasCloudState {Active, Inactive}
     GasCloudState gcs = GasCloudState.Inactive;
 
@@ -25,7 +25,7 @@ public class GasCloud : NetworkBehaviour
 
     private void Start() {
         if (isServer) {
-            coll = GetComponent<Collider>();
+            coll = GetComponent<SphereCollider>();
             tickInterval = 1 / (float) FindObjectOfType<StatusEffectManager>().GetTickRate();
         }
     }
@@ -65,9 +65,12 @@ public class GasCloud : NetworkBehaviour
     public void Activate(Vector3 pos) {
         transform.position = pos;
         gcs = GasCloudState.Active;
-        tickInterval = ticktimer;
         poisonEmission.enabled = true;
-        coll.enabled = true;
+        if (isServer) {
+            Debug.Log("Collider on");
+            coll.enabled = true;
+            tickInterval = ticktimer;
+        }
         durationTimer = duration;
     }
 
@@ -75,15 +78,16 @@ public class GasCloud : NetworkBehaviour
         transform.position = Vector3.down * 50f;
         gcs = GasCloudState.Inactive;
         poisonEmission.enabled = false;
-        coll.enabled = false;
-        trackedStatus.Clear();
+        if (isServer) {
+            coll.enabled = false;
+            trackedStatus.Clear();
+        }
         gasEm.localScale = Vector3.one * 0.7f;
         transform.localScale = Vector3.one;
     }
 
     #region Triggers
-    //Triggers only enabled on server and when cloud is active
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other) {//Triggers only enabled on server and when cloud is active
         if (other.tag.Equals("minion") || other.tag.Equals("Player")) {
             if (other.GetComponent<Team>().GetTeam() != GetComponent<Team>().GetTeam()) {
                 trackedStatus.Add(other.GetComponent<Status>());

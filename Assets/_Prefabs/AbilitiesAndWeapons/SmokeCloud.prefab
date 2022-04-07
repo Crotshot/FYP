@@ -48,7 +48,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 1.2
+  m_Radius: 1.35
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4889636345967225089
 Rigidbody:
@@ -81,11 +81,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   duration: 10
-  poisonDamage: 1.5
-  scalePerSec: 0.5
-  slowStrength: 0.3
-  poisonTicks: 8
-  slownessTicks: 8
+  poisonDamage: 2
+  scalePerSec: 0.65
+  slowStrength: 0.4
+  poisonTicks: 9
+  slownessTicks: 9
   shockEmitter: {fileID: 7457360384315079894}
   poisonEmitter: {fileID: 3191604198215257227}
   gasEm: {fileID: 5900753396411348829}
@@ -5101,7 +5101,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0

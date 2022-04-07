@@ -607,7 +607,7 @@ MonoBehaviour:
   secondShotDelay: 0.5
   maxDistance: 50
   shellSpeed: 60
-  peakHeight: 60
+  peakHeight: 75
   shellRadius: 0.5
   mortarBodies:
   - {fileID: 3443430642320599607}
@@ -21394,7 +21394,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 4
       maxCurve:
         serializedVersion: 2
@@ -26252,7 +26252,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 4
       maxCurve:
         serializedVersion: 2
