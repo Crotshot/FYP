@@ -28,7 +28,6 @@ public class MinionPool : NetworkBehaviour
 
     public void AddMinionToPool(GameObject minion) {
         inactiveMinions.Add(minion);
-
         //DELETE LATER
         NetworkServer.Destroy(minion);
     }

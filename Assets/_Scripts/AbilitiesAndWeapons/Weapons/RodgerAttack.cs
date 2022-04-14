@@ -50,14 +50,12 @@ public class RodgerAttack : PlayerAttack {
                     foreach(Collider hit in hits) {
                         if (hit.tag.Equals("minion") || hit.tag.Equals("Player")) {
                             if (hit.GetComponent<Team>().GetTeam() != GetComponent<Team>().GetTeam()) {
-                                Debug.Log("Hit minion");
                                 hit.GetComponent<Health>().Damage(bulletDamage);
                                 BulletImpact(b);
                                 break;
                             }
                         }
                         else if (hit.gameObject.layer == defLayer) {
-                            Debug.Log("Hit terrain");
                             BulletImpact(b);
                             break;
                         }

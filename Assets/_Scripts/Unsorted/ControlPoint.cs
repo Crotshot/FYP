@@ -5,64 +5,198 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Mirror;
 
-public class ControlPoint : NetworkBehaviour
-{
-    [SerializeField] ControlPoint mid, SE, NE, SW, NW;
-    [SerializeField] private int assignedMinions_1, assignedMinions_2, maxAssignedMinions = 10;
-
-    [SerializeField] private float chargesToCapture;
+public class ControlPoint : NetworkBehaviour {
     [SerializeField] Image captureFillImage;
-    [SerializeField] bool basePoint;
-
-    [SerializeField] private float charges;
-    [SerializeField] int currentTeam = 0;
     [SerializeField] Color fillColor;
+    [SerializeField] private float chargesToCapture, currentCharges, basePointMultiplier = 0;
+    [SerializeField] private int assignedMinions_1, assignedMinions_2, startingMaxMinions = 3, mtsMinionIncrease = 7, currentTeam = 0;
+    [SerializeField] bool basePoint;
+    List<Transform> trackedChars;
+    int currentMaxMinions;
+    bool setUp;
+    Colors cols;
 
-    [SerializeField] float syncGap = 1f;
-    float syncTimer;
+    private enum CaptureState { Neutral, Captured } //Neutral has leaning for teams using current team;
+    [SerializeField] CaptureState capState = CaptureState.Neutral;//[SerializeField] FOR DEBUGGING
 
-    List<Transform> trackedTransforms = new List<Transform>();
-    List<int> teams = new List<int>();
-    private enum TeamState { Neutral, Captured}
-    TeamState capState = TeamState.Neutral;
+    public UnityEvent captured, neutralised;
 
-    bool setUp, notCapped = true;
+    private void Start() {
+        trackedChars = new List<Transform>();
 
-    public UnityEvent captured;
+        if (isServer) {
+            if (captured == null) {
+                captured = new UnityEvent();
+            }
+            if (neutralised == null) {
+                neutralised = new UnityEvent();
+            }
+        }
+    }
+
+    List<Team> teams = new List<Team>(); //Used for Rpcing the colour 
     public void Setup() {
-        if (isServer && captured == null)
-            captured = new UnityEvent();
+        RpcSetup();
+    }
+
+    [ClientRpc]
+    private void RpcSetup() {
+        foreach (PlayerMinions pM in FindObjectsOfType<PlayerMinions>()) {
+            if (!teams.Contains(pM.GetComponent<Team>())) {
+                teams.Add(pM.GetComponent<Team>());
+            }
+        }
         setUp = true;
-        syncTimer = syncInterval;
+        cols = FindObjectOfType<Colors>();
+        currentMaxMinions = startingMaxMinions;
+    }
+
+    float teamCharges;
+    int teamLean;
+    private void Update() {
+        #region Capturing
+        teamCharges = 0;
+        teamLean = 0;
+        for (int i = trackedChars.Count - 1; i > -1; i--) {
+            if (trackedChars[i] == null) {
+                trackedChars.Remove(trackedChars[i]);
+                continue;
+            }
+            if (trackedChars[i].GetComponent<Team>().GetTeam() == teamLean) {
+                if (trackedChars[i].tag.Equals("Player"))
+                    teamCharges += 10f * Time.deltaTime;
+                else
+                    teamCharges += 1f * Time.deltaTime;
+            }
+            else {
+                if (trackedChars[i].tag.Equals("Player"))
+                    teamCharges -= 10f * Time.deltaTime;
+                else
+                    teamCharges -= 1f * Time.deltaTime;
+
+                if (teamCharges <= 0) {
+                    teamCharges *= -1;
+                    teamLean = trackedChars[i].GetComponent<Team>().GetTeam();
+                    fillColor = cols.GetTeamColor(teamLean);
+                }
+            }
+        }
+
+        if (teamCharges == 0)
+            return;
+        #endregion
+
+        teamCharges *= currentTeam == teamLean ? 1 : -1;
+        currentCharges += teamCharges;
+        if (capState == CaptureState.Neutral) {    
+            if (currentCharges >= chargesToCapture) {
+                if (isServer)
+                    RpcReflect(teamLean, chargesToCapture, 1);
+            }
+            else if (currentCharges <= 0) {
+                currentCharges *= -1;
+                if (isServer)
+                    RpcReflect(teamLean, currentCharges, 0);
+            }
+        }
+        else {//capState == CaptureState.Captured
+            if (currentCharges >= chargesToCapture) {
+                currentCharges = chargesToCapture;
+            }
+            else if (currentCharges <= 0) {
+                currentCharges *= -1;
+                if (isServer) {
+                    neutralised?.Invoke();
+                    RpcReflect(teamLean, currentCharges, 0);
+                }
+            }
+        }
+        captureFillImage.fillAmount = currentCharges / chargesToCapture;
+    }
+
+    [ClientRpc]
+    private void RpcReflect(int team, float cCharges, int state) {
+        currentCharges = cCharges;
+        capState = (CaptureState)state;
+
+        fillColor = cols.GetTeamColor(team);
+        currentTeam = team;
+        captureFillImage.color = fillColor;
+        captureFillImage.fillAmount = currentCharges / chargesToCapture;
+
+        if(isServer)
+            captured?.Invoke();
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (!setUp)
+            return;
+        if (other.tag.Equals("minion") || other.tag.Equals("Player") && !trackedChars.Contains(other.transform)) {
+            trackedChars.Add(other.transform);
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (!setUp)
+            return;
+        if (other.tag.Equals("minion") || other.tag.Equals("Player") && trackedChars.Contains(other.transform)) {
+            trackedChars.Remove(other.transform);
+        }
+    }
+
+    public int GetOwningTeam() {
+        if (capState == CaptureState.Captured) {
+            return currentTeam;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public int GetCurrentMinions(int team) {
+        if (team == 1) {
+            return assignedMinions_1;
+        }
+        else if (team == 2) {
+            return assignedMinions_2;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public int GetCurrentMaxMinions() {
+        return currentMaxMinions;
+    }
+
+    public void AddMinion(int team) {
+        if (team == 1) {
+            assignedMinions_1++;
+        }
+        else if (team == 2) {
+            assignedMinions_2++;
+        }
+    }
+
+    public void RemoveMinion(int team) {
+        if (team == 1) {
+            assignedMinions_1--;
+        }
+        else if (team == 2) {
+            assignedMinions_2--;
+        }
+    }
+}
+
+/*
+    public void Start() {
+        if (isServer)
+            captured = new UnityEvent<int>();
     }
 
     private void FixedUpdate() {
-        if (!setUp)
-            return;
         if (isServer) {
-            float teamCharges = 0;
-            int teamLean = 0;
-            for (int i = trackedTransforms.Count -1; i > -1; i--) {
-                if (trackedTransforms[i] == null) {
-                    trackedTransforms.Remove(trackedTransforms[i]);
-                    continue;
-                }
 
-                if (trackedTransforms[i].GetComponent<Team>().GetTeam() == teamLean) {
-                    if (trackedTransforms[i].tag.Equals("Player")) teamCharges += 10f * Time.deltaTime; else teamCharges += 1f * Time.deltaTime;
-                }
-                else {
-                    if (trackedTransforms[i].tag.Equals("Player")) teamCharges -= 10f * Time.deltaTime; else teamCharges -= 1f * Time.deltaTime;
-                    if (teamCharges <= 0) {
-                        teamCharges *= -1;
-                        teamLean = trackedTransforms[i].GetComponent<Team>().GetTeam();
-                        fillColor = trackedTransforms[i].GetComponent<Team>().GetTeamColor();
-                    }
-                }
-            }
-
-            if (teamCharges == 0)
-                return;
             Capturing(teamCharges, teamLean, fillColor);
 
             if(trackedTransforms.Count > 0)
@@ -182,54 +316,15 @@ public class ControlPoint : NetworkBehaviour
     }
 
 
-    public int GetTeam() {
-        if (capState == TeamState.Captured) {
-            return currentTeam;
-        }
-        else {
-            return 0;
-        }
-    }
+
 
     public bool GetBasePoint() {
         return basePoint;
     }
 
-    public int GetCurrentMinions(int team) {
-        if (team == 1) {
-            return assignedMinions_1;
-        }
-        else if (team == 2) {
-            return assignedMinions_2;
-        }
-        else {
-            return 0;
-        }
-    }
 
-    public int GetMaxMinions() {
-        return maxAssignedMinions;
-    }
 
     public void SetMaxMinions(int newMax) {
         maxAssignedMinions = newMax;
     }
-
-    public void AddMinion(int team) {
-        if(team == 1) {
-            assignedMinions_1++;
-        }
-        else if(team == 2) {
-            assignedMinions_2++;
-        }
-    }
-
-    public void RemoveMinion(int team) {
-        if (team == 1) {
-            assignedMinions_1--;
-        }
-        else if (team == 2) {
-            assignedMinions_2--;
-        }
-    }
-}
+*/

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class GateScript : NetworkBehaviour
+public class Gate : NetworkBehaviour
 {
     [SerializeField] ControlPoint[] points;
     [SerializeField] float openDelay, openTime, openDegrees, inverseFPS;
@@ -11,23 +11,24 @@ public class GateScript : NetworkBehaviour
 
     public void Setup() {
         if (!isServer)
-            Destroy(this);
+            return;
 
         if(points.Length > 0)
             foreach (ControlPoint point in points) {
                 point.captured.AddListener(OpenCheck);
             }
         else
-            StartCoroutine("OpenGate");
+            RpcOpenGate();
     }
 
+    [Server]
     private void OpenCheck() {
         if (points.Length > 0) {
-            int team = points[0].GetTeam();
+            int team = points[0].GetOwningTeam();
             if (team == 0)
                 return;
             foreach (ControlPoint point in points) {
-                if (point.GetTeam() != team)
+                if (point.GetOwningTeam() != team)
                     return;
             }
 
@@ -35,6 +36,11 @@ public class GateScript : NetworkBehaviour
                 point.captured.RemoveListener(OpenCheck);
             }
         }
+        RpcOpenGate();//Called on both host and client
+    }
+
+    [ClientRpc]
+    private void RpcOpenGate() {
         StartCoroutine("OpenGate");
     }
 
@@ -51,6 +57,10 @@ public class GateScript : NetworkBehaviour
         }
         if(gateName.Length > 0)
             FindObjectOfType<MinionManager>().OpenGate(gateName);
-        Destroy(this);
+
+        //transform.GetChild(0).parent = null;
+        //transform.GetChild(1).parent = null;
+        //Destroy(GetComponent<NetworkIdentity>(), 1f);
+        //Destroy(this);
     }
 }

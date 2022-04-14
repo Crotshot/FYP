@@ -54,7 +54,6 @@ public class GameStarter : NetworkBehaviour
         if (playersNeededToBeReady > playersReady)
             return;
         RpcGenerateMap(matchSeed);
-        //Debug.Log("GameStarter: Players Connected:" + playersNeededToBeReady);
         StartCoroutine("StartGame");
     }
 
@@ -93,7 +92,7 @@ public class GameStarter : NetworkBehaviour
         FindObjectOfType<MinionManager>().StartWaveSystem();
         StartMatchTimer();
         
-        foreach (GateScript gate in FindObjectsOfType<GateScript>()) {
+        foreach (Gate gate in FindObjectsOfType<Gate>()) {
             gate.Setup();
         }
         foreach (ControlPoint cP in FindObjectsOfType<ControlPoint>()) {
@@ -107,8 +106,7 @@ public class GameStarter : NetworkBehaviour
 
     GameManager gM;
     private void SetupSpawners() {
-        //Called on the server, sets up team 1 spawners
-        gM = FindObjectOfType<GameManager>();
+        gM = FindObjectOfType<GameManager>();//Called on the server, sets up team 1 spawners
         int count = 0;
         foreach(CharacterStats minionS in GameObject.Find("Local").GetComponent<PlayerConstructor>().minions){
             if(minionS != null) {
