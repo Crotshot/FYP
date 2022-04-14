@@ -55,7 +55,7 @@ public class MapBuilder : NetworkBehaviour {
     private void Start() {
         if (isServer) {
             playersNeededToBeReady = NetworkServer.connections.Count;
-            Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
+            //Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
         }
     }
 
@@ -134,7 +134,7 @@ public class MapBuilder : NetworkBehaviour {
             Debug.Log("playersNeededToBeReady is 0 when it should not");
             yield return new WaitForSeconds(2f);
         }
-        Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
+        //Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
 
         if (isServer)
             ready1++;
@@ -835,7 +835,7 @@ public class MapBuilder : NetworkBehaviour {
         #endregion
         UpdateNavMesh();
         ui.UpdateLoadStatusText("Nav finished");
-        Debug.Log("Nav mesh created");
+        //Debug.Log("Nav mesh created");
         StopCoroutine("TimerCounter");
         ui.LoadingComplete();
 

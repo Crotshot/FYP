@@ -26,7 +26,7 @@ public class Camera_Follower : MonoBehaviour
             return;
         transform.position = player.position; //Set position to player
 
-        if (inputs.GetMouseMovement().x != 0 && inputs.GetShiftAlt() > 0) {
+        if (inputs.GetMouseMovement().x != 0 && inputs.GetMiddleMouseInput() > 0) {
             transform.RotateAround(transform.position, transform.up, mouseModifier * inputs.GetMouseMovement().x * Time.deltaTime);
             cameraOrbitPoint.rotation = transform.rotation;
         }

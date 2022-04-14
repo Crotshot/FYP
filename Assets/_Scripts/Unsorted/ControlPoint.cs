@@ -8,9 +8,8 @@ using Mirror;
 public class ControlPoint : NetworkBehaviour {
     [SerializeField] Image captureFillImage;
     [SerializeField] Color fillColor;
-    [SerializeField] private float chargesToCapture, currentCharges, basePointMultiplier = 0;
-    [SerializeField] private int assignedMinions_1, assignedMinions_2, startingMaxMinions = 3, mtsMinionIncrease = 7, currentTeam = 0;
-    [SerializeField] bool basePoint;
+    [SerializeField] protected float chargesToCapture, currentCharges, friendlyModifier = 1, enemyModifier = 1;
+    [SerializeField] protected int assignedMinions_1, assignedMinions_2, startingMaxMinions = 3, mtsMinionIncrease = 7, currentTeam = 0;
     List<Transform> trackedChars;
     int currentMaxMinions;
     bool setUp;
@@ -21,7 +20,10 @@ public class ControlPoint : NetworkBehaviour {
 
     public UnityEvent captured, neutralised;
 
-    private void Start() {
+    protected float teamCharges;
+    protected int teamLean;
+
+    protected virtual void Start() {
         trackedChars = new List<Transform>();
 
         if (isServer) {
@@ -51,10 +53,49 @@ public class ControlPoint : NetworkBehaviour {
         currentMaxMinions = startingMaxMinions;
     }
 
-    float teamCharges;
-    int teamLean;
-    private void Update() {
-        #region Capturing
+
+    protected virtual void Update() {
+        TeamLean();
+        if (teamCharges == 0)
+            return;
+
+        teamCharges *= currentTeam == teamLean ? 1 : -1;
+        currentCharges += teamCharges;
+        if (capState == CaptureState.Neutral) {
+            NeutralPoint();
+        }
+        else {//capState == CaptureState.Captured
+            CapturedPoint();
+        }
+        captureFillImage.fillAmount = currentCharges / chargesToCapture;
+    }
+
+    protected virtual void NeutralPoint() {
+        if (currentCharges >= chargesToCapture) {
+            if (isServer)
+                RpcReflect(teamLean, chargesToCapture, 1);
+        }
+        else if (currentCharges <= 0) {
+            currentCharges *= -1;
+            if (isServer)
+                RpcReflect(teamLean, currentCharges, 0);
+        }
+    }
+
+    protected virtual void CapturedPoint() {
+        if (currentCharges >= chargesToCapture) {
+            currentCharges = chargesToCapture;
+        }
+        else if (currentCharges <= 0) {
+            currentCharges *= -1;
+            if (isServer) {
+                neutralised?.Invoke();
+                RpcReflect(teamLean, currentCharges, 0);
+            }
+        }
+    }
+
+    protected virtual void TeamLean() {
         teamCharges = 0;
         teamLean = 0;
         for (int i = trackedChars.Count - 1; i > -1; i--) {
@@ -64,15 +105,15 @@ public class ControlPoint : NetworkBehaviour {
             }
             if (trackedChars[i].GetComponent<Team>().GetTeam() == teamLean) {
                 if (trackedChars[i].tag.Equals("Player"))
-                    teamCharges += 10f * Time.deltaTime;
+                    teamCharges += 10f * Time.deltaTime * friendlyModifier;
                 else
-                    teamCharges += 1f * Time.deltaTime;
+                    teamCharges += 1f * Time.deltaTime * friendlyModifier;
             }
             else {
                 if (trackedChars[i].tag.Equals("Player"))
-                    teamCharges -= 10f * Time.deltaTime;
+                    teamCharges -= 10f * Time.deltaTime * enemyModifier;
                 else
-                    teamCharges -= 1f * Time.deltaTime;
+                    teamCharges -= 1f * Time.deltaTime * enemyModifier;
 
                 if (teamCharges <= 0) {
                     teamCharges *= -1;
@@ -81,37 +122,6 @@ public class ControlPoint : NetworkBehaviour {
                 }
             }
         }
-
-        if (teamCharges == 0)
-            return;
-        #endregion
-
-        teamCharges *= currentTeam == teamLean ? 1 : -1;
-        currentCharges += teamCharges;
-        if (capState == CaptureState.Neutral) {    
-            if (currentCharges >= chargesToCapture) {
-                if (isServer)
-                    RpcReflect(teamLean, chargesToCapture, 1);
-            }
-            else if (currentCharges <= 0) {
-                currentCharges *= -1;
-                if (isServer)
-                    RpcReflect(teamLean, currentCharges, 0);
-            }
-        }
-        else {//capState == CaptureState.Captured
-            if (currentCharges >= chargesToCapture) {
-                currentCharges = chargesToCapture;
-            }
-            else if (currentCharges <= 0) {
-                currentCharges *= -1;
-                if (isServer) {
-                    neutralised?.Invoke();
-                    RpcReflect(teamLean, currentCharges, 0);
-                }
-            }
-        }
-        captureFillImage.fillAmount = currentCharges / chargesToCapture;
     }
 
     [ClientRpc]

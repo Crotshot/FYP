@@ -77,7 +77,7 @@ public class GameNetworkManager : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
-        Debug.Log( $">Scene Change to {newSceneName}");
+        //Debug.Log( $">Scene Change to {newSceneName}");
         readyPlayers = 0;
         if (sM.GetSceneName() == "Lobby" && newSceneName.StartsWith("Selection")) {
             for (int i = RoomPlayers.Count - 1; i >= 0; i--) {

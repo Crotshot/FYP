@@ -55,7 +55,7 @@ public class Gate : NetworkBehaviour
             transform.GetChild(1).localEulerAngles = new Vector3(0, 180.0f - openDegrees * (openDelay / openTime), 0);
             yield return new WaitForSeconds(inverseFPS);
         }
-        if(gateName.Length > 0)
+        if(gateName.Length > 0 && isServer)
             FindObjectOfType<MinionManager>().OpenGate(gateName);
 
         //transform.GetChild(0).parent = null;

@@ -298,7 +298,7 @@ public class MinionManager : NetworkBehaviour {
     }
 
     public void OpenGate(string gateName) {
-        if (gateName.Equals("t_G")) {
+        if (gateName.Equals("bt_G")) {
             bt_G = true;
         }
         else if (gateName.Equals("e_G")) {

@@ -10,7 +10,7 @@ public class Controller : NetworkBehaviour {
     [SyncVar]protected bool stunned = false;
 
     virtual public void Setup() {
-        Debug.Log("Setting up controller");
+        //Debug.Log("Setting up controller");
         if(isServer)
             GetComponent<Status>().Init();
     }
