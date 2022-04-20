@@ -10,8 +10,7 @@ public class Flinger_Passive : NetworkBehaviour
     bool armed = true;
     int layer;
 
-    void Start()
-    {
+    void Start() {
         if (!isServer)
             return;
         GetComponent<Health>().HealthChanged.AddListener(Explode);

@@ -14972,13 +14972,13 @@ MonoBehaviour:
     pointB: {fileID: 1930757110}
   - pointA: {fileID: 1338630002}
     pointB: {fileID: 989712575}
-  attempts: 5
+  attempts: 7
   useNoise: 0
-  makeFlora: 0
-  makeSmallProps: 0
-  makeLargeProps: 0
+  makeFlora: 1
+  makeSmallProps: 1
+  makeLargeProps: 1
   makeBuildings: 0
-  removeBadPoints: 0
+  removeBadPoints: 1
   bakeNavMesh: 1
   floraClearMin: 10
   floraClearMax: 12
@@ -14994,7 +14994,7 @@ MonoBehaviour:
   outerBuildingClearingDistance: 7.5
   innerBuildingClearingDistance: 14.5
   halfPathWidth: 6.5
-  pathClearance: 0.84
+  pathClearance: 0.695
   innerBuildingTiles:
   - {x: 4, y: 2}
   - {x: 5, y: 2}

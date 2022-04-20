@@ -6,7 +6,7 @@ using Helpers = Crotty.Helpers.StaticHelpers;
 
 public class BertAttack : PlayerAttack { //Uses Networked Child transform so no need for any Cmd/RPC
     [SerializeField] Transform sawBladeParent, pof;
-    [SerializeField] float hitsPerSec, bladeSpeed, maxDistance, damageSphereRadius, damage, slowStrength, selfSlowStrength;
+    [SerializeField] float hitsPerSec, bladeSpeed, maxDistance, damageSphereRadius, damage, slowStrength, selfSlowStrength, rotSpeed = 120f;
     [SerializeField] int slowTicks;
     [SerializeField] LayerMask layers;
     [SerializeField] Vector3 restingOffset;
@@ -37,7 +37,7 @@ public class BertAttack : PlayerAttack { //Uses Networked Child transform so no 
             sawBladeParent.position += sawBladeParent.forward * Time.deltaTime * bladeSpeed;
 
             attackTimer -= Time.deltaTime;
-            sawBladeParent.GetChild(0).RotateAround(sawBladeParent.GetChild(0).position, sawBladeParent.transform.up, 360f * Time.deltaTime);
+            sawBladeParent.GetChild(0).RotateAround(sawBladeParent.GetChild(0).position, sawBladeParent.transform.up, rotSpeed * Time.deltaTime);
             GetComponent<Status>().AddEffect(Status.StatusEffect.Slow, slowTicks, selfSlowStrength);
             hitTimer -= Time.deltaTime;
 
@@ -61,7 +61,7 @@ public class BertAttack : PlayerAttack { //Uses Networked Child transform so no 
         else if (attackTimer <= 0) {
             pof.transform.position = transform.position + restingOffset;
 
-            if (Helpers.Vector3Distance(pof.position, sawBladeParent.position) > 0.4f) {
+            if (Helpers.Vector3Distance(pof.position, sawBladeParent.position) > 0.25f) {
                 sawBladeParent.transform.LookAt(pof);
                 sawBladeParent.position += sawBladeParent.forward * Time.deltaTime * bladeSpeed;
             }

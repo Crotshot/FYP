@@ -1264,7 +1264,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   input: 1
-  startOnCooldown: 0
   coolDown: 2
   sawblade: {fileID: 8905419109072455590}
   launchPoint: {fileID: 6751732820948076511}
@@ -1298,7 +1297,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   input: 2
-  startOnCooldown: 0
   coolDown: 1.25
   mineChargeTime: 10
   minDist: 5
@@ -1339,7 +1337,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   input: 3
-  startOnCooldown: 1
   coolDown: 35
   damage: 50
   minAtDist: 10
@@ -1427,6 +1424,7 @@ MonoBehaviour:
   damage: 15
   slowStrength: 0.2
   selfSlowStrength: 0.15
+  spinSpeed: 120
   slowTicks: 6
   layers:
     serializedVersion: 2

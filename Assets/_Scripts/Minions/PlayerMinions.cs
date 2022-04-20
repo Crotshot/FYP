@@ -216,7 +216,7 @@ public class PlayerMinions : NetworkBehaviour {
 
     public void OrderAttack(int mT) {//Go to mouse and attack anything and everything
         foreach (MinionController min in followerMinions) {//When runs out of fight goes back to player
-            if ((minionTypes[minionTypeSelected].Equals("All") || minionTypes[minionTypeSelected].Equals(min.GetMinionType())) && min.minionState == MinionController.MinionState.Follower) {
+            if ((minionTypes[mT].Equals("All") || minionTypes[mT].Equals(min.GetMinionType())) && min.minionState == MinionController.MinionState.Follower) {
                 min.minionState = MinionController.MinionState.Forward;
                 min.SetDestination(inter.GetMouseWorldPos());
                 break;
@@ -226,7 +226,7 @@ public class PlayerMinions : NetworkBehaviour {
 
     public void OrderDefend(int mT) {//Order minion to stay in spot, will attack anything and everything and will return to spot after fighting is done
         foreach (MinionController min in followerMinions) {
-            if ((minionTypes[minionTypeSelected].Equals("All") || minionTypes[minionTypeSelected].Equals(min.GetMinionType())) && min.minionState == MinionController.MinionState.Follower) {
+            if ((minionTypes[mT].Equals("All") || minionTypes[mT].Equals(min.GetMinionType())) && min.minionState == MinionController.MinionState.Follower) {
                 min.minionState = MinionController.MinionState.Defender;
                 min.SetDestination(inter.GetMouseWorldPos());
                 break;
@@ -236,7 +236,7 @@ public class PlayerMinions : NetworkBehaviour {
 
     public void OrderRecall(int mT, bool all) {
         foreach (MinionController min in followerMinions) {
-            if ((minionTypes[minionTypeSelected].Equals("All") || minionTypes[minionTypeSelected].Equals(min.GetMinionType())) && min.minionState != MinionController.MinionState.Follower && min.minionState != MinionController.MinionState.Retreating && min.minionState != MinionController.MinionState.Recalling) {
+            if ((minionTypes[mT].Equals("All") || minionTypes[mT].Equals(min.GetMinionType())) && min.minionState != MinionController.MinionState.Follower && min.minionState != MinionController.MinionState.Retreating && min.minionState != MinionController.MinionState.Recalling) {
                 min.minionState = MinionController.MinionState.Recalling;
                 if(!all)
                     break;
@@ -246,7 +246,7 @@ public class PlayerMinions : NetworkBehaviour {
 
     public void OrderEnter(int mT) {
         foreach (MinionController min in followerMinions) {
-            if ((minionTypes[minionTypeSelected].Equals("All") || minionTypes[minionTypeSelected].Equals(min.GetMinionType())) && min.minionState != MinionController.MinionState.Recalling && min.minionState != MinionController.MinionState.Retreating && min.minionState != MinionController.MinionState.Entering) {
+            if ((minionTypes[mT].Equals("All") || minionTypes[mT].Equals(min.GetMinionType())) && min.minionState != MinionController.MinionState.Recalling && min.minionState != MinionController.MinionState.Retreating && min.minionState != MinionController.MinionState.Entering) {
                 min.minionState = MinionController.MinionState.Entering;
                 min.SetDestination(inter.GetFocus().transform.position);
                 break;
@@ -256,7 +256,7 @@ public class PlayerMinions : NetworkBehaviour {
 
     public void OrderRetreat(int mT, bool all) {//Recalls minion nearest to worldspacemousepos, minion will ingore all
         foreach (MinionController min in followerMinions) {//Hold to make all retreat
-            if ((minionTypes[minionTypeSelected].Equals("All") || minionTypes[minionTypeSelected].Equals(min.GetMinionType())) && min.minionState != MinionController.MinionState.Follower && min.minionState != MinionController.MinionState.Retreating) {
+            if ((minionTypes[mT].Equals("All") || minionTypes[mT].Equals(min.GetMinionType())) && min.minionState != MinionController.MinionState.Follower && min.minionState != MinionController.MinionState.Retreating) {
                 min.minionState = MinionController.MinionState.Retreating;
                 if (!all)
                     break;

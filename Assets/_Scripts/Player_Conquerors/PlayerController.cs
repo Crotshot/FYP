@@ -16,7 +16,6 @@ public class PlayerController : Controller {
 
     override public void Setup() {
         base.Setup();
-        //GetComponent<WorldSpaceHealthBar>().SetupDelayed();
         if (hasAuthority) {
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
             inputs = FindObjectOfType<Inputs>();
@@ -35,9 +34,15 @@ public class PlayerController : Controller {
             FindObjectOfType<UI>().Setup(GetComponent<PlayerHealth>(), GetComponent<PlayerCurrency>());
             GetComponent<Interactor>().Setup();
             rb = GetComponent<Rigidbody>();
+            if (TryGetComponent(out WorldSpaceHealthBar w)) {
+                w.Setup();
+            }
         }
         else{
             Destroy(transform.GetChild(0).gameObject);
+            if (TryGetComponent(out WorldSpaceHealthBar w)) {
+                w.Setup();
+            }
             Destroy(this);
         }
     }
