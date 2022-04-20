@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 610386076131778531}
   - component: {fileID: 1035807118671677107}
   m_Layer: 6
-  m_Name: SmokeCloud
+  m_Name: SmokeCloud_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: d7b754b381598284e9a603ca0a5c0d71
+  m_AssetId: c0754bd8e4dd89f41adc02546f7ab10c
   hasSpawned: 0
 --- !u!114 &1035807118671677107
 MonoBehaviour:
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  team: 0
+  team: 1
   teamColor: {r: 0, g: 0, b: 0, a: 0}
   teamAccents: []
 --- !u!1 &665430717466902067

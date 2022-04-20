@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 public class Minion_Melee : Minion_Attack{
     //Attack time is the time an attack is active
@@ -10,8 +11,8 @@ public class Minion_Melee : Minion_Attack{
     [SerializeField] Vector3[] directions;
 
     private void Start() {
-        if (!isServer)
-            Destroy(this);
+        //if (!isServer)
+        //    Destroy(this);
         animatedWeapon.localPosition = animatedTimings[0].pos;
         animatedWeapon.localScale = animatedTimings[0].scale;
         animatedWeapon.localEulerAngles = animatedTimings[0].localEuler;
@@ -41,7 +42,8 @@ public class Minion_Melee : Minion_Attack{
         }
     }
 
-    public override void Attack(){
+    [ClientRpc]
+    public override void RpcAttack(){
         if (attacking)
             return;
         attackTimer = 0;

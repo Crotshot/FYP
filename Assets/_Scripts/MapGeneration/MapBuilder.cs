@@ -461,7 +461,7 @@ public class MapBuilder : NetworkBehaviour {
                 ui.UpdateLoadStatusText("Waiting on other Player 6");
                 yield return new WaitForEndOfFrame();
             }
-            ui.UpdateLoadStatusText("Instatiating Flora");
+            ui.UpdateLoadStatusText("Instantiating Flora");
             yield return new WaitForSeconds(0.999f);
             ready2 = 0;
             yield return new WaitForSeconds(0.999f);
@@ -585,7 +585,7 @@ public class MapBuilder : NetworkBehaviour {
             ready2 = 0;
             yield return new WaitForSeconds(0.999f);
             currentTime = 0;
-            ui.UpdateLoadStatusText("Instatiating Large Props");
+            ui.UpdateLoadStatusText("Instantiating Large Props");
             #region Instantiate Large Map Props
             for (int i = largePropList.Count - 1; i >= 0; i--) {
                 totalWeight = 0; //Weigh odds of picking a prop variant
@@ -645,7 +645,7 @@ public class MapBuilder : NetworkBehaviour {
         ready1 = 0;
         yield return new WaitForSeconds(0.999f);
         currentTime = 0;
-        ui.UpdateLoadStatusText("Instatiating Buildings");
+        ui.UpdateLoadStatusText("Instantiating Buildings");
         if (makeBuildings && isServer) {
             #region Instantiating Buildings
             if (isServer) {

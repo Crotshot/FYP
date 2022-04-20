@@ -61,7 +61,7 @@ public class BertAttack : PlayerAttack { //Uses Networked Child transform so no 
         else if (attackTimer <= 0) {
             pof.transform.position = transform.position + restingOffset;
 
-            if (Helpers.Vector3Distance(pof.position, sawBladeParent.position) > 0.25f) {
+            if (Helpers.Vector3Distance(pof.position, sawBladeParent.position) > 0.4f) {
                 sawBladeParent.transform.LookAt(pof);
                 sawBladeParent.position += sawBladeParent.forward * Time.deltaTime * bladeSpeed;
             }

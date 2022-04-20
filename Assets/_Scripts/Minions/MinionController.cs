@@ -43,14 +43,22 @@ public class MinionController : Controller {
         agentC.angularSpeed = rotSpeed;
         pathPoints.Clear();
         layer = 1 << LayerMask.NameToLayer("Unit");
-        GetComponent<WorldSpaceHealthBar>().Setup();
         if (!isServer) {
-            Destroy(this);
+            Destroy(this, 5f);
             return;
         }
-        this.enabled = false;
+        //else {
+        //    RpcSetupHealthBars();
+        //}
+        enabled = false;
     }
-    
+
+    //[ClientRpc]
+    //private void RpcSetupHealthBars() {
+    //    Debug.Log("Client Health Bars");
+    //    GetComponent<WorldSpaceHealthBar>().Setup();
+    //}
+
     RaycastHit[] hits;
     override protected void FixedUpdate() {
         base.FixedUpdate();
@@ -120,7 +128,7 @@ public class MinionController : Controller {
                     transform.LookAt(destination + Vector3.up);
                 else 
                     indWeapon.LookAt(destination + Vector3.up);
-                attackC.Attack();
+                attackC.RpcAttack();
             }
         }
         #region Base Path Following

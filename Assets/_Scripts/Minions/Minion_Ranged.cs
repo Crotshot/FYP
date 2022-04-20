@@ -5,12 +5,14 @@ using Mirror;
 
 public class Minion_Ranged : Minion_Attack {
     bool projectTileLaunched, projCreated;
-    [SerializeField] GameObject archingProjectilePrefab, projectileSpawnPoint;
+    Projectile projectile;
+    [SerializeField] Transform projectileSpawnPoint;
 
-    public void Setup() {
-        if (!isServer)
-            Destroy(this);
+    private void Start() {
+        projectile = GetComponent<Projectile>();
+    }
 
+    public void Setup() { 
         animatedWeapon.localPosition = animatedTimings[0].pos;
         animatedWeapon.localScale = animatedTimings[0].scale;
         animatedWeapon.localEulerAngles = animatedTimings[0].localEuler;
@@ -24,21 +26,14 @@ public class Minion_Ranged : Minion_Attack {
 
     private void LaunchProjectile() {
         if (!projectTileLaunched) {
-            projectTileLaunched = true;
-            GameObject obj = Instantiate(archingProjectilePrefab, projectileSpawnPoint.transform.position, projectileSpawnPoint.transform.rotation);
-            NetworkServer.Spawn(obj);
-            obj.transform.position = projectileSpawnPoint.transform.position;
-            obj.transform.position = projectileSpawnPoint.transform.position;
-            obj.transform.parent = null;
-            obj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
-            Color c = GetComponent<Team>().GetTeamColor();
-            obj.GetComponent<Team>().SetTeamColor(c.r, c.g, c.b, c.a);
-            if(GetComponent<MinionController>().GetMinionTarget() != null)
-                obj.GetComponent<ArchingProjectile>().Setup(GetComponent<MinionController>().GetMinionTarget().position);
+            var v = GetComponent<MinionController>().GetMinionTarget();
+            if(v != null)
+                projectile.RpcFire(projectileSpawnPoint.position, v.position);
         }
     }
 
-    public override void Attack() {
+    [ClientRpc]
+    public override void RpcAttack() {
         if (attacking)
             return;
         attackTimer = 0;
@@ -48,3 +43,14 @@ public class Minion_Ranged : Minion_Attack {
         index = 1;
     }
 }
+
+//projectTileLaunched = true;
+//GameObject obj = Instantiate(archingProjectilePrefab, projectileSpawnPoint.transform.position, projectileSpawnPoint.transform.rotation);
+//NetworkServer.Spawn(obj);
+//obj.transform.position = projectileSpawnPoint.transform.position;
+//obj.transform.parent = null;
+//obj.GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
+//Color c = GetComponent<Team>().GetTeamColor();
+//obj.GetComponent<Team>().SetTeamColor(c.r, c.g, c.b, c.a);
+//if (GetComponent<MinionController>().GetMinionTarget() != null)
+//    obj.GetComponent<ArchingProjectile>().Setup(GetComponent<MinionController>().GetMinionTarget().position);

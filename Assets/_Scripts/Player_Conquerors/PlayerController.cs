@@ -16,6 +16,7 @@ public class PlayerController : Controller {
 
     override public void Setup() {
         base.Setup();
+        //GetComponent<WorldSpaceHealthBar>().SetupDelayed();
         if (hasAuthority) {
             transform.GetChild(0).GetComponent<Camera_Follower>().Setup();
             inputs = FindObjectOfType<Inputs>();
@@ -30,14 +31,13 @@ public class PlayerController : Controller {
             if (atk == null)
                 atk = new UnityEvent();
 
-            Destroy(GetComponent<WorldSpaceHealthBar>());
+            //Destroy(GetComponent<WorldSpaceHealthBar>());
             FindObjectOfType<UI>().Setup(GetComponent<PlayerHealth>(), GetComponent<PlayerCurrency>());
             GetComponent<Interactor>().Setup();
             rb = GetComponent<Rigidbody>();
         }
         else{
             Destroy(transform.GetChild(0).gameObject);
-            GetComponent<WorldSpaceHealthBar>().SetupDelayed();
             Destroy(this);
         }
     }

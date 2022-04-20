@@ -12,8 +12,9 @@ public class Minion_Attack : NetworkBehaviour
     [SerializeField] protected Transform animatedWeapon;
     protected float attackTimer;
     protected bool attacking;
-    protected int index;
-    public virtual void Attack() { }
+    protected int index; 
+    [ClientRpc]
+    public virtual void RpcAttack() { }
 
     protected bool stunned;
 
@@ -32,9 +33,8 @@ public class Minion_Attack : NetworkBehaviour
                 animatedWeapon.localEulerAngles = Helpers.Vector3Follow(animatedTimings[index - 1].localEuler, animatedTimings[index].localEuler, percentage);
             }
 
-            if (attackTimer <= attackTime) {
-                //Check for damage
-                act();
+            if (isServer && attackTimer <= attackTime) {
+                act();//Check for damage only on server
             }
             else if (attackTimer >= attackTime + attackCooldownTime) {
                 attacking = false;
@@ -43,7 +43,7 @@ public class Minion_Attack : NetworkBehaviour
                 animatedWeapon.localEulerAngles = animatedTimings[animatedTimings.Length - 1].localEuler;
             }
 
-            ReflectWeapon(animatedWeapon.localPosition, animatedWeapon.localEulerAngles, animatedWeapon.localScale);
+            //ReflectWeapon(animatedWeapon.localPosition, animatedWeapon.localEulerAngles, animatedWeapon.localScale);
 
 
             attackTimer += Time.deltaTime;
@@ -59,12 +59,17 @@ public class Minion_Attack : NetworkBehaviour
         stunned = stun;
     }
 
-    [ClientRpc]
-    public void ReflectWeapon(Vector3 pos, Vector3 rot, Vector3 scale) {
-        animatedWeapon.localPosition = pos;
-        animatedWeapon.localEulerAngles = rot;
-        animatedWeapon.localScale = scale;
-    }
+    //[ClientRpc]
+    //public void ReflectWeapon(Vector3 pos, Vector3 rot, Vector3 scale) {
+    //    animatedWeapon.localPosition = pos;
+    //    animatedWeapon.localEulerAngles = rot;
+    //    animatedWeapon.localScale = scale;
+    //}
+
+    //[ClientRpc]
+    //public void RpcAttack() {
+    //    Attack();
+    //}
 }
 
 [System.Serializable]

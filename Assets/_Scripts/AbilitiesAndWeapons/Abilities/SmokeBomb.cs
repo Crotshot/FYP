@@ -5,7 +5,7 @@ using Mirror;
 using Helpers = Crotty.Helpers.StaticHelpers;
 
 public class SmokeBomb : Ability {
-    [SerializeField] GameObject mortarShell;
+    [SerializeField] GameObject mortarGasPrefab1, mortarGasPrefab2;
     [SerializeField] float secondShotDelay, maxDistance, shellSpeed = 60f, peakHeight = 60f, shellRadius = 0.5f;
     [SerializeField] Transform[] mortarBodies, gas, spawnPoints;
     [SerializeField] LayerMask layers, defLayer;
@@ -14,17 +14,44 @@ public class SmokeBomb : Ability {
 
     private void Awake() {
         mortarProjectiles = new List<MortarProjectile>();
-        foreach (Transform mortarBody in mortarBodies) {
-            mortarProjectiles.Add(new MortarProjectile(mortarBody, gas[projIndex].GetComponent<GasCloud>()));
-            gas[projIndex].GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
-            mortarBody.transform.parent = null;
-            gas[projIndex].parent = null;
-            projIndex++;
-        }
     }
 
     private void Start() {
         SetUp(Cast);
+        gas = new Transform[2];
+        if (isServer) {//Bit of a dirty fix for a otherwise annoying complex issue where gas cloud needs it on the client before it is assigned a team
+            int t = GetComponent<Team>().GetTeam();
+            GameObject s1 = t == 1 ? Instantiate(mortarGasPrefab1, null) : Instantiate(mortarGasPrefab2, null);
+            GameObject s2 = t == 1 ? Instantiate(mortarGasPrefab1, null) : Instantiate(mortarGasPrefab2, null);
+            NetworkServer.Spawn(s1);
+            NetworkServer.Spawn(s2);
+            Invoke(nameof(SmokeBombs), 5f);
+        }
+    }
+
+    private void SmokeBombs() {
+        int t = GetComponent<Team>().GetTeam();
+        RpcSmokeBombs(t);
+    }
+
+    [ClientRpc]
+    private void RpcSmokeBombs(int team) {
+        var clouds = FindObjectsOfType<GasCloud>();
+        foreach (GasCloud gC in clouds) {
+            if(gC.GetComponent<Team>().GetTeam() == team) {
+                gas[projIndex] = gC.transform;
+                projIndex++;
+            }
+        }
+
+        projIndex = 0;
+        foreach (Transform mortarBody in mortarBodies) {
+            mortarProjectiles.Add(new MortarProjectile(mortarBody, gas[projIndex].GetComponent<GasCloud>()));
+            //gas[projIndex].GetComponent<Team>().SetTeam(GetComponent<Team>().GetTeam());
+            mortarBody.transform.parent = null;
+            //gas[projIndex].parent = null;
+            projIndex++;
+        }
     }
 
     private void FixedUpdate() {

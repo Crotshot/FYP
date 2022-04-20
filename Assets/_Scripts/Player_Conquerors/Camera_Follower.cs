@@ -20,7 +20,7 @@ public class Camera_Follower : MonoBehaviour
         //Cursor.lockState = CursorLockMode.Confined;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (player == null)// Remove later
             return;
