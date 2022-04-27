@@ -17,6 +17,12 @@ public class Inputs : MonoBehaviour
     public Vector3 GetMousePosition() { return Input.mousePosition; }
     public Vector2 GetMouseMovement() { return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); }
 
+<<<<<<< Updated upstream
+=======
+
+    public float GetMenu() { return Input.GetAxisRaw("Menu"); }
+
+>>>>>>> Stashed changes
     public float GetShiftAlt() { return Input.GetAxisRaw("ShiftAlt"); }
     public float GetCtrlTab() { return Input.GetAxisRaw("CtrlTab"); }
 
@@ -25,8 +31,11 @@ public class Inputs : MonoBehaviour
     public float GetAbility2Input() { return Input.GetAxisRaw("Ability2"); }
     public float GetAbility3Input() { return Input.GetAxisRaw("Ability3"); }
 
+<<<<<<< Updated upstream
+=======
     public float GetMiddleMouseInput() { return Input.GetAxisRaw("MiddleMouse"); }
 
+>>>>>>> Stashed changes
     public float GetCommandAttackInput() { return Input.GetAxisRaw("Command_Attack"); }
     public float GetCommandDefendInput() { return Input.GetAxisRaw("Command_Defend"); }
     public float GetCommandRecallInput() { return Input.GetAxisRaw("Command_Recall"); }
@@ -61,6 +70,10 @@ public class Inputs : MonoBehaviour
 
     public float GetAnyInput(string name) { return Input.GetAxisRaw(name); }
 
+<<<<<<< Updated upstream
+=======
+    bool toggleFScreen, fullscreen;
+>>>>>>> Stashed changes
     private void FixedUpdate() {
         if (Input.GetAxisRaw("Command_Attack") > 0) cAttackT += Time.deltaTime; else cAttackT = 0;
         if (Input.GetAxisRaw("Command_Defend") > 0) cDefendT += Time.deltaTime; else  cDefendT = 0;
@@ -71,5 +84,24 @@ public class Inputs : MonoBehaviour
 
         if (scrollLimter > 0)
             scrollLimter -= Time.deltaTime;
+<<<<<<< Updated upstream
+=======
+
+        if (GetMenu() < 0) {
+            if(toggleFScreen) {
+                toggleFScreen = false;
+                if (fullscreen) {
+                    Screen.SetResolution(1280, 720, false);
+                }
+                else {
+                    Screen.SetResolution(2560, 1440, true);
+                }
+                fullscreen = !fullscreen;
+            }
+        }
+        else {
+            toggleFScreen = true;
+        }
+>>>>>>> Stashed changes
     }
 }

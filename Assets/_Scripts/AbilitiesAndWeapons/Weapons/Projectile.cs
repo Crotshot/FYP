@@ -71,6 +71,14 @@ public class Projectile : NetworkBehaviour {
     public List<Proj> GetProjectiles() {
         return projectiles;
     }
+
+    private void OnDestroy() {
+        foreach (Proj p in projectiles) {
+            if (p.projBody != null) {
+                Destroy(p.projBody.gameObject);
+            }
+        }
+    }
 }
 
 public class Proj {

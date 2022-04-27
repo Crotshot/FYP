@@ -233,7 +233,11 @@ InputManager:
     m_Name: Menu
     descriptiveName: 
     descriptiveNegativeName: 
+<<<<<<< Updated upstream
     negativeButton: 
+=======
+    negativeButton: f11
+>>>>>>> Stashed changes
     positiveButton: escape
     altNegativeButton: 
     altPositiveButton: 
@@ -246,6 +250,8 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
+<<<<<<< Updated upstream
+=======
     m_Name: MiddleMouse
     descriptiveName: 
     descriptiveNegativeName: 
@@ -262,6 +268,7 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
+>>>>>>> Stashed changes
     m_Name: Submit
     descriptiveName: 
     descriptiveNegativeName: 
@@ -454,11 +461,19 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
+<<<<<<< Updated upstream
+    m_Name: Debug Vertical
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: down
+    positiveButton: up
+=======
     m_Name: Debug Horizontal
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: left
     positiveButton: right
+>>>>>>> Stashed changes
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -467,6 +482,16 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
+<<<<<<< Updated upstream
+    axis: 6
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Debug Horizontal
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: left
+    positiveButton: right
+=======
     axis: 5
     joyNum: 0
   - serializedVersion: 3
@@ -475,6 +500,7 @@ InputManager:
     descriptiveNegativeName: 
     negativeButton: down
     positiveButton: up
+>>>>>>> Stashed changes
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -483,5 +509,9 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
+<<<<<<< Updated upstream
+    axis: 5
+=======
     axis: 6
+>>>>>>> Stashed changes
     joyNum: 0

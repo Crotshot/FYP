@@ -12,6 +12,10 @@ GameObject:
   - component: {fileID: 4961337267069555434}
   - component: {fileID: 3477115363465750207}
   - component: {fileID: 7722708062978905785}
+<<<<<<< Updated upstream
+  - component: {fileID: 4775517333058713542}
+=======
+>>>>>>> Stashed changes
   m_Layer: 0
   m_Name: Flinger_Death_Exp
   m_TagString: Untagged
@@ -4877,3 +4881,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad62dde302baa14b8b49cd536e4e3bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream
+  syncMode: 0
+  syncInterval: 0.1
+--- !u!114 &4775517333058713542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7424425583773993260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 540dc788045b54643852a4b86d6a8f09
+  hasSpawned: 0
+=======
+>>>>>>> Stashed changes

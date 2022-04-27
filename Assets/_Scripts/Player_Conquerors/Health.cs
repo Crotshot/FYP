@@ -12,7 +12,7 @@ public class Health : NetworkBehaviour
     public UnityEvent<float, float> HealthChanged;
     protected bool dead;
 
-    private void Start() {
+    virtual protected void Start() {
         if (HealthChanged == null)
             HealthChanged = new UnityEvent<float, float>();
     }
@@ -55,7 +55,7 @@ public class Health : NetworkBehaviour
         Damage(damage);
     }
 
-    public void ResetHealth() {
+    public virtual void ResetHealth() {
         if (!isServer) {
             CmdResetHealth();
             return;

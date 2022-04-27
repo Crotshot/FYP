@@ -5,7 +5,10 @@ using TMPro;
 using Mirror;
 
 public class ChatBox : NetworkBehaviour { 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     [SerializeField] TMP_InputField messageInput;
     [SerializeField] GameObject content, textMessagePrefab, chat;
 
@@ -35,7 +38,11 @@ public class ChatBox : NetworkBehaviour {
         message.GetComponent<TMP_Text>().text = messageText;
     }
 
+<<<<<<< Updated upstream
     [Command]
+=======
+    [Command (requiresAuthority =false)]
+>>>>>>> Stashed changes
     public void CmdMessage(string messageText) {
         Message(messageText);
     }

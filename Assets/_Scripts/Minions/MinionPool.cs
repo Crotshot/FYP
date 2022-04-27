@@ -5,6 +5,12 @@ using Mirror;
 
 public class MinionPool : NetworkBehaviour
 {
+<<<<<<< Updated upstream
+=======
+#if UNITY_EDITOR
+    [SerializeField] public bool disablePool;
+#endif
+>>>>>>> Stashed changes
     List<GameObject> inactiveMinions = new List<GameObject>();
 
     private void Start() {
@@ -13,8 +19,15 @@ public class MinionPool : NetworkBehaviour
     }
 
     public GameObject FindMinionOfType(string type) {
+<<<<<<< Updated upstream
         ////TEMPORARILY DISABLED, strange excess minion spawning issues;
         return null;
+=======
+#if UNITY_EDITOR
+        if(disablePool)
+            return null;
+#endif
+>>>>>>> Stashed changes
         GameObject returnedMinion = null;
         foreach (GameObject minion in inactiveMinions) {
             if (minion.GetComponent<MinionController>().GetMinionType().Equals(type)) {
@@ -28,7 +41,16 @@ public class MinionPool : NetworkBehaviour
 
     public void AddMinionToPool(GameObject minion) {
         inactiveMinions.Add(minion);
+<<<<<<< Updated upstream
+
         //DELETE LATER
         NetworkServer.Destroy(minion);
+=======
+        
+#if UNITY_EDITOR
+        if(disablePool)
+            NetworkServer.Destroy(minion);
+#endif
+>>>>>>> Stashed changes
     }
 }

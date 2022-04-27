@@ -7,6 +7,46 @@ public class GasCloud : NetworkBehaviour
 {
     [SerializeField] float duration, poisonDamage, scalePerSec, slowStrength;
     [SerializeField] int poisonTicks, slownessTicks;
+<<<<<<< Updated upstream
+    [SerializeField] ParticleSystem shockEmitter;
+    [SerializeField] Transform gasEm;
+    float tickInterval = 0.25f, ticktimer = 0.25f;
+
+    List<Status> trackedStatus = new List<Status>();
+
+    private void FixedUpdate() {
+        gasEm.localScale += Vector3.one * scalePerSec * Time.deltaTime;
+
+        if (!isServer)
+            return;
+
+        if (ticktimer > 0) {
+            ticktimer -= Time.deltaTime;
+        }
+        else {
+            for(int i = trackedStatus.Count - 1; i > -1; i--) {
+                if (trackedStatus[i] == null) {
+                    trackedStatus.Remove(trackedStatus[i]);
+                    continue;
+                }
+                trackedStatus[i].AddEffect(Status.StatusEffect.Poison, poisonTicks, poisonDamage);
+                trackedStatus[i].AddEffect(Status.StatusEffect.Slow, slownessTicks, slowStrength);
+            }
+            ticktimer = tickInterval;
+        }
+
+        transform.localScale += Vector3.one * scalePerSec * Time.deltaTime;
+        duration -= Time.deltaTime;
+
+        if(duration <= 0) {
+            NetworkServer.Destroy(gameObject);
+            Destroy(gameObject);
+        }
+    }
+
+    //Player, minion
+    private void OnTriggerEnter(Collider other) {
+=======
     [SerializeField] ParticleSystem shockEmitter, poisonEmitter;
     [SerializeField] Transform gasEm;
     float tickInterval, ticktimer, durationTimer;
@@ -88,6 +128,7 @@ public class GasCloud : NetworkBehaviour
 
     #region Triggers
     private void OnTriggerEnter(Collider other) {//Triggers only enabled on server and when cloud is active
+>>>>>>> Stashed changes
         if (other.tag.Equals("minion") || other.tag.Equals("Player")) {
             if (other.GetComponent<Team>().GetTeam() != GetComponent<Team>().GetTeam()) {
                 trackedStatus.Add(other.GetComponent<Status>());
@@ -104,9 +145,13 @@ public class GasCloud : NetworkBehaviour
             }
         }
     }
+<<<<<<< Updated upstream
+
+=======
     #endregion
 
     #region Taser Combo
+>>>>>>> Stashed changes
     public void TaserStun(int ticks) {
         if (isServer) {
             for (int i = trackedStatus.Count - 1; i > -1; i--) {
@@ -135,5 +180,9 @@ public class GasCloud : NetworkBehaviour
     private void CmdTaserStun(int ticks) {
         TaserStun(ticks);
     }
+<<<<<<< Updated upstream
+}
+=======
     #endregion
 }
+>>>>>>> Stashed changes

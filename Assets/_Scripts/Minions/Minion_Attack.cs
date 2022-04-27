@@ -12,9 +12,14 @@ public class Minion_Attack : NetworkBehaviour
     [SerializeField] protected Transform animatedWeapon;
     protected float attackTimer;
     protected bool attacking;
+<<<<<<< Updated upstream
+    protected int index;
+    public virtual void Attack() { }
+=======
     protected int index; 
     [ClientRpc]
     public virtual void RpcAttack() { }
+>>>>>>> Stashed changes
 
     protected bool stunned;
 
@@ -33,8 +38,14 @@ public class Minion_Attack : NetworkBehaviour
                 animatedWeapon.localEulerAngles = Helpers.Vector3Follow(animatedTimings[index - 1].localEuler, animatedTimings[index].localEuler, percentage);
             }
 
+<<<<<<< Updated upstream
+            if (attackTimer <= attackTime) {
+                //Check for damage
+                act();
+=======
             if (isServer && attackTimer <= attackTime) {
                 act();//Check for damage only on server
+>>>>>>> Stashed changes
             }
             else if (attackTimer >= attackTime + attackCooldownTime) {
                 attacking = false;
@@ -43,7 +54,11 @@ public class Minion_Attack : NetworkBehaviour
                 animatedWeapon.localEulerAngles = animatedTimings[animatedTimings.Length - 1].localEuler;
             }
 
+<<<<<<< Updated upstream
+            ReflectWeapon(animatedWeapon.localPosition, animatedWeapon.localEulerAngles, animatedWeapon.localScale);
+=======
             //ReflectWeapon(animatedWeapon.localPosition, animatedWeapon.localEulerAngles, animatedWeapon.localScale);
+>>>>>>> Stashed changes
 
 
             attackTimer += Time.deltaTime;
@@ -59,6 +74,14 @@ public class Minion_Attack : NetworkBehaviour
         stunned = stun;
     }
 
+<<<<<<< Updated upstream
+    [ClientRpc]
+    public void ReflectWeapon(Vector3 pos, Vector3 rot, Vector3 scale) {
+        animatedWeapon.localPosition = pos;
+        animatedWeapon.localEulerAngles = rot;
+        animatedWeapon.localScale = scale;
+    }
+=======
     //[ClientRpc]
     //public void ReflectWeapon(Vector3 pos, Vector3 rot, Vector3 scale) {
     //    animatedWeapon.localPosition = pos;
@@ -70,6 +93,7 @@ public class Minion_Attack : NetworkBehaviour
     //public void RpcAttack() {
     //    Attack();
     //}
+>>>>>>> Stashed changes
 }
 
 [System.Serializable]

@@ -1,5 +1,48 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+<<<<<<< Updated upstream
+--- !u!114 &8126158287747717565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697022809498404649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b81b1b69c7548b4790494b28995ce7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  attackTime: 0.1
+  attackCooldownTime: 1.3
+  animatedTimings:
+  - pos: {x: 0, y: 0.204, z: -0.423}
+    localEuler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    time: 0
+  - pos: {x: 0, y: 0.204, z: 0.48}
+    localEuler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    time: 0.1
+  - pos: {x: 0, y: 0.204, z: 0.294}
+    localEuler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    time: 0.2
+  - pos: {x: 0, y: 0.204, z: 0.379}
+    localEuler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    time: 0.3
+  - pos: {x: 0, y: 0.204, z: -0.423}
+    localEuler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    time: 1.4
+  animatedWeapon: {fileID: 1250174621182876528}
+  archingProjectilePrefab: {fileID: 6276850478000177189, guid: 7e4b6451a7c76f04eaac37a8cb0de51a, type: 3}
+  projectileSpawnPoint: {fileID: 7309653580013008057}
+=======
+>>>>>>> Stashed changes
 --- !u!1 &1170721025772830035
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,6 +361,35 @@ Transform:
   m_Father: {fileID: 6395714293501470383}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< Updated upstream
+=======
+--- !u!114 &273969410634397154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697022809498404649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c06bcd38837d1244a830303c6c58c90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  projDamage: 25
+  projSpeed: 0.5
+  projRadius: 0.3
+  projDecayTime: 1
+  projectileBodies:
+  - {fileID: 8323189667374013352}
+  layers:
+    serializedVersion: 2
+    m_Bits: 65
+  defLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  archHeight: 3
 --- !u!114 &8126158287747717565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,33 +429,6 @@ MonoBehaviour:
     time: 1.4
   animatedWeapon: {fileID: 1250174621182876528}
   projectileSpawnPoint: {fileID: 7296727123572744556}
---- !u!114 &273969410634397154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 697022809498404649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c06bcd38837d1244a830303c6c58c90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  projDamage: 25
-  projSpeed: 0.5
-  projRadius: 0.3
-  projDecayTime: 1
-  projectileBodies:
-  - {fileID: 8323189667374013352}
-  layers:
-    serializedVersion: 2
-    m_Bits: 65
-  defLayer:
-    serializedVersion: 2
-    m_Bits: 1
-  archHeight: 3
 --- !u!1 &3254557960954523461
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,6 +511,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+>>>>>>> Stashed changes
 --- !u!1 &5413362086698887570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1030,6 +1076,13 @@ PrefabInstance:
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 9198961231487344513, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+<<<<<<< Updated upstream
+=======
+      propertyPath: deathPrefab
+      value: 
+      objectReference: {fileID: 307736054912130718, guid: 84ec6053d3c68c14290cf02b451c7477, type: 3}
+    - target: {fileID: 9198961231487344513, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
+>>>>>>> Stashed changes
       propertyPath: currentHealth
       value: 25
       objectReference: {fileID: 0}

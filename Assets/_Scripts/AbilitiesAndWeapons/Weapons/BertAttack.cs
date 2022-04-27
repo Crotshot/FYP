@@ -6,7 +6,11 @@ using Helpers = Crotty.Helpers.StaticHelpers;
 
 public class BertAttack : PlayerAttack { //Uses Networked Child transform so no need for any Cmd/RPC
     [SerializeField] Transform sawBladeParent, pof;
+<<<<<<< Updated upstream
+    [SerializeField] float hitsPerSec, bladeSpeed, maxDistance, damageSphereRadius, damage, slowStrength, selfSlowStrength;
+=======
     [SerializeField] float hitsPerSec, bladeSpeed, maxDistance, damageSphereRadius, damage, slowStrength, selfSlowStrength, rotSpeed = 120f;
+>>>>>>> Stashed changes
     [SerializeField] int slowTicks;
     [SerializeField] LayerMask layers;
     [SerializeField] Vector3 restingOffset;
@@ -37,7 +41,11 @@ public class BertAttack : PlayerAttack { //Uses Networked Child transform so no 
             sawBladeParent.position += sawBladeParent.forward * Time.deltaTime * bladeSpeed;
 
             attackTimer -= Time.deltaTime;
+<<<<<<< Updated upstream
+            sawBladeParent.GetChild(0).RotateAround(sawBladeParent.GetChild(0).position, sawBladeParent.transform.up, 360f * Time.deltaTime);
+=======
             sawBladeParent.GetChild(0).RotateAround(sawBladeParent.GetChild(0).position, sawBladeParent.transform.up, rotSpeed * Time.deltaTime);
+>>>>>>> Stashed changes
             GetComponent<Status>().AddEffect(Status.StatusEffect.Slow, slowTicks, selfSlowStrength);
             hitTimer -= Time.deltaTime;
 

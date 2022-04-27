@@ -4,9 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Helpers = Crotty.Helpers.StaticHelpers;
 
+<<<<<<< Updated upstream
+public class MortarProj : NetworkBehaviour
+{
+=======
 
 //MARKED FOR DELETION
 public class MortarProj : NetworkBehaviour {
+>>>>>>> Stashed changes
     private Vector3 targetPos;
     [SerializeField] GameObject spawnOnCollision;
     [SerializeField] float trackDelay;
@@ -22,7 +27,11 @@ public class MortarProj : NetworkBehaviour {
         if (targetPos == null)
             return;
 
+<<<<<<< Updated upstream
+        if(trackTimer <= 0) {
+=======
         if (trackTimer <= 0) {
+>>>>>>> Stashed changes
             if (rb != null)
                 rb.AddForce(transform.forward * 100f);
         }

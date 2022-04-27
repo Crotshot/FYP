@@ -9,7 +9,11 @@ public class MinionManager : NetworkBehaviour {
     float timer;
 
     [SerializeField] MinionSpawner t1_E, t1_W, t1_C, t2_E, t2_W, t2_C;
+<<<<<<< Updated upstream
+    private bool t_G = false, e_G = false, w_G = false, started = false;
+=======
     private bool bt_G = false, e_G = false, w_G = false, started = false;
+>>>>>>> Stashed changes
 
     [SerializeField] MinionPath NW_C, NE_C, C_SW, C_S, SW_S, SE_S, NW_SW, NE_SE; //All paths except spawn path for team 1
     [SerializeField] MinionPath SW_C, SE_C, C_NE, C_N, NW_N, NE_N, SW_NW, SE_NE; //All paths except spawn path for team 2
@@ -36,6 +40,15 @@ public class MinionManager : NetworkBehaviour {
         else {
             timer = waveTimer;
             #region Team One Minion Logic
+<<<<<<< Updated upstream
+            if (t_G) {//TEAM ONE //If middle gates are open
+                if (C.GetTeam() == 1) {
+                    if ((NW.GetTeam() == 1 || NE.GetTeam() == 1) && (SW.GetTeam() == 1 || SE.GetTeam() == 1)) {
+                        foreach (MinionController min in minions_1) {
+                            if (!min.isBaseMinion())
+                                continue;
+                            if (BS.GetCurrentMinions(1) < BS.GetMaxMinions()) {
+=======
             if (bt_G) {//TEAM ONE //If middle gates are open
                 if (C.GetOwningTeam() == 1) {
                     if ((NW.GetOwningTeam() == 1 || NE.GetOwningTeam() == 1) && (SW.GetOwningTeam() == 1 || SE.GetOwningTeam() == 1)) {
@@ -43,16 +56,25 @@ public class MinionManager : NetworkBehaviour {
                             if (!min.isBaseMinion())
                                 continue;
                             if (BS.GetCurrentMinions(1) < BS.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                                 if (min.GetAssignedControlPoint() == C.transform) {
                                     min.AddPathPoints(C_S.points);
                                     min.AssignControlPoint(BS.transform);
                                     continue;
                                 }
+<<<<<<< Updated upstream
+                                else if (min.GetAssignedControlPoint() == SW.transform && SW.GetTeam() == 1) {
+                                    min.AddPathPoints(SW_S.points);
+                                    min.AssignControlPoint(BS.transform);
+                                }
+                                else if (min.GetAssignedControlPoint() == SE.transform && SE.GetTeam() == 1) {
+=======
                                 else if (min.GetAssignedControlPoint() == SW.transform && SW.GetOwningTeam() == 1) {
                                     min.AddPathPoints(SW_S.points);
                                     min.AssignControlPoint(BS.transform);
                                 }
                                 else if (min.GetAssignedControlPoint() == SE.transform && SE.GetOwningTeam() == 1) {
+>>>>>>> Stashed changes
                                     min.AddPathPoints(SE_S.points);
                                     min.AssignControlPoint(BS.transform);
                                 }
@@ -66,7 +88,11 @@ public class MinionManager : NetworkBehaviour {
                         foreach (MinionController min in minions_1) {
                             if (!min.isBaseMinion())
                                 continue;
+<<<<<<< Updated upstream
+                            if (SW.GetCurrentMinions(1) < SW.GetMaxMinions()) {
+=======
                             if (SW.GetCurrentMinions(1) < SW.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                                 if (min.GetAssignedControlPoint() == C.transform) {
                                     min.AddPathPoints(C_SW.points);
                                     min.AssignControlPoint(SW.transform);
@@ -81,12 +107,20 @@ public class MinionManager : NetworkBehaviour {
                 }
                 MinionSpawnWave(minions_1, C, t1_C, 1);
             }
+<<<<<<< Updated upstream
+            if(NE.GetTeam() == 1) {
+=======
             if(NE.GetOwningTeam() == 1) {
+>>>>>>> Stashed changes
                 if (e_G) { //If east gate is open
                     foreach (MinionController min in minions_1) {
                         if (!min.isBaseMinion())
                             continue;
+<<<<<<< Updated upstream
+                        if (SE.GetCurrentMinions(1) < SE.GetMaxMinions()) {
+=======
                         if (SE.GetCurrentMinions(1) < SE.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                             if (min.GetAssignedControlPoint() == NE.transform) {
                                 min.AddPathPoints(NE_SE.points);
                                 min.AssignControlPoint(SE.transform);
@@ -101,7 +135,11 @@ public class MinionManager : NetworkBehaviour {
                 foreach (MinionController min in minions_1) {
                     if (!min.isBaseMinion())
                         continue;
+<<<<<<< Updated upstream
+                    if (C.GetCurrentMinions(1) < C.GetMaxMinions()) {
+=======
                     if (C.GetCurrentMinions(1) < C.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                         if (min.GetAssignedControlPoint() == NE.transform) {
                             min.AddPathPoints(NE_C.points);
                             min.AssignControlPoint(C.transform);
@@ -115,12 +153,20 @@ public class MinionManager : NetworkBehaviour {
             }
             MinionSpawnWave(minions_1, NE, t1_E, 1);
 
+<<<<<<< Updated upstream
+            if (NW.GetTeam() == 1) {
+=======
             if (NW.GetOwningTeam() == 1) {
+>>>>>>> Stashed changes
                 if (w_G) { //If east gate is open
                     foreach (MinionController min in minions_1) {
                         if (!min.isBaseMinion())
                             continue;
+<<<<<<< Updated upstream
+                        if (SW.GetCurrentMinions(1) < SW.GetMaxMinions()) {
+=======
                         if (SW.GetCurrentMinions(1) < SW.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                             if (min.GetAssignedControlPoint() == NW.transform) {
                                 min.AddPathPoints(NW_SW.points);
                                 min.AssignControlPoint(SW.transform);
@@ -135,7 +181,11 @@ public class MinionManager : NetworkBehaviour {
                 foreach (MinionController min in minions_1) {
                     if (!min.isBaseMinion())
                         continue;
+<<<<<<< Updated upstream
+                    if (C.GetCurrentMinions(1) < C.GetMaxMinions()) {
+=======
                     if (C.GetCurrentMinions(1) < C.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                         if (min.GetAssignedControlPoint() == NW.transform) {
                             min.AddPathPoints(NW_C.points);
                             min.AssignControlPoint(C.transform);
@@ -150,6 +200,15 @@ public class MinionManager : NetworkBehaviour {
             MinionSpawnWave(minions_1, NW, t1_W, 1);
             #endregion
             #region Team Two Minion Logic
+<<<<<<< Updated upstream
+            if (t_G) {//TEAM ONE //If middle gates are open
+                if (C.GetTeam() == 2) {
+                    if ((SW.GetTeam() == 2 || SE.GetTeam() == 2) && (NW.GetTeam() == 2 || NE.GetTeam() == 2)) {
+                        foreach (MinionController min in minions_2) {
+                            if (!min.isBaseMinion())
+                                continue;
+                            if (BN.GetCurrentMinions(2) < BN.GetMaxMinions()) {
+=======
             if (bt_G) {
                 if (C.GetOwningTeam() == 2) {
                     if ((SW.GetOwningTeam() == 2 || SE.GetOwningTeam() == 2) && (NW.GetOwningTeam() == 2 || NE.GetOwningTeam() == 2)) {
@@ -157,16 +216,25 @@ public class MinionManager : NetworkBehaviour {
                             if (!min.isBaseMinion())
                                 continue;
                             if (BN.GetCurrentMinions(2) < BN.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                                 if (min.GetAssignedControlPoint() == C.transform) {
                                     min.AddPathPoints(C_N.points);
                                     min.AssignControlPoint(BN.transform);
                                     continue;
                                 }
+<<<<<<< Updated upstream
+                                else if (min.GetAssignedControlPoint() == NW.transform && NW.GetTeam() == 2) {
+                                    min.AddPathPoints(NW_N.points);
+                                    min.AssignControlPoint(BN.transform);
+                                }
+                                else if (min.GetAssignedControlPoint() == NE.transform && NE.GetTeam() == 2) {
+=======
                                 else if (min.GetAssignedControlPoint() == NW.transform && NW.GetOwningTeam() == 2) {
                                     min.AddPathPoints(NW_N.points);
                                     min.AssignControlPoint(BN.transform);
                                 }
                                 else if (min.GetAssignedControlPoint() == NE.transform && NE.GetOwningTeam() == 2) {
+>>>>>>> Stashed changes
                                     min.AddPathPoints(NE_N.points);
                                     min.AssignControlPoint(BN.transform);
                                 }
@@ -180,7 +248,11 @@ public class MinionManager : NetworkBehaviour {
                         foreach (MinionController min in minions_2) {
                             if (!min.isBaseMinion())
                                 continue;
+<<<<<<< Updated upstream
+                            if (NW.GetCurrentMinions(2) < NW.GetMaxMinions()) {
+=======
                             if (NW.GetCurrentMinions(2) < NW.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                                 if (min.GetAssignedControlPoint() == C.transform) {
                                     min.AddPathPoints(C_NE.points);
                                     min.AssignControlPoint(NE.transform);
@@ -196,12 +268,20 @@ public class MinionManager : NetworkBehaviour {
                 MinionSpawnWave(minions_2, C, t2_C,2);
             }
 
+<<<<<<< Updated upstream
+            if (SW.GetTeam() == 2) {
+=======
             if (SW.GetOwningTeam() == 2) {
+>>>>>>> Stashed changes
                 if (w_G) { //If east gate is open
                     foreach (MinionController min in minions_2) {
                         if (!min.isBaseMinion())
                             continue;
+<<<<<<< Updated upstream
+                        if (NW.GetCurrentMinions(2) < NW.GetMaxMinions()) {
+=======
                         if (NW.GetCurrentMinions(2) < NW.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                             if (min.GetAssignedControlPoint() == SW.transform) {
                                 min.AddPathPoints(SW_NW.points);
                                 min.AssignControlPoint(NW.transform);
@@ -216,7 +296,11 @@ public class MinionManager : NetworkBehaviour {
                 foreach (MinionController min in minions_2) {
                     if (!min.isBaseMinion())
                         continue;
+<<<<<<< Updated upstream
+                    if (C.GetCurrentMinions(2) < C.GetMaxMinions()) {
+=======
                     if (C.GetCurrentMinions(2) < C.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                         if (min.GetAssignedControlPoint() == SW.transform) {
                             min.AddPathPoints(SW_C.points);
                             min.AssignControlPoint(C.transform);
@@ -230,12 +314,20 @@ public class MinionManager : NetworkBehaviour {
             }
             MinionSpawnWave(minions_2, SW, t2_W,2);
 
+<<<<<<< Updated upstream
+            if (SE.GetTeam() == 2) {
+=======
             if (SE.GetOwningTeam() == 2) {
+>>>>>>> Stashed changes
                 if (e_G) { //If east gate is open
                     foreach (MinionController min in minions_2) {
                         if (!min.isBaseMinion())
                             continue;
+<<<<<<< Updated upstream
+                        if (NE.GetCurrentMinions(2) < NE.GetMaxMinions()) {
+=======
                         if (NE.GetCurrentMinions(2) < NE.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                             if (min.GetAssignedControlPoint() == SE.transform) {
                                 min.AddPathPoints(SE_NE.points);
                                 min.AssignControlPoint(NE.transform);
@@ -250,7 +342,11 @@ public class MinionManager : NetworkBehaviour {
                 foreach (MinionController min in minions_2) {
                     if (!min.isBaseMinion())
                         continue;
+<<<<<<< Updated upstream
+                    if (C.GetCurrentMinions(2) < C.GetMaxMinions()) {
+=======
                     if (C.GetCurrentMinions(2) < C.GetCurrentMaxMinions()) {
+>>>>>>> Stashed changes
                         if (min.GetAssignedControlPoint() == SE.transform) {
                             min.AddPathPoints(SE_C.points);
                             min.AssignControlPoint(C.transform);
@@ -268,7 +364,11 @@ public class MinionManager : NetworkBehaviour {
     }
 
     private void MinionSpawnWave(List<MinionController> minions, ControlPoint p, MinionSpawner mS, int team) {
+<<<<<<< Updated upstream
+        int minionsNeeded = p.GetMaxMinions() - p.GetCurrentMinions(team), meleeC = 0, rangedC = 0, meleeN = 0, rangedN = 0;
+=======
         int minionsNeeded = p.GetCurrentMaxMinions() - p.GetCurrentMinions(team), meleeC = 0, rangedC = 0, meleeN = 0, rangedN = 0;
+>>>>>>> Stashed changes
         foreach (MinionController min in minions) {
             if (min.GetAssignedControlPoint() == p.transform) {
                 if (min.GetMinionType().Equals("Base_Melee")) {
@@ -298,8 +398,13 @@ public class MinionManager : NetworkBehaviour {
     }
 
     public void OpenGate(string gateName) {
+<<<<<<< Updated upstream
+        if (gateName.Equals("t_G")) {
+            t_G = true;
+=======
         if (gateName.Equals("bt_G")) {
             bt_G = true;
+>>>>>>> Stashed changes
         }
         else if (gateName.Equals("e_G")) {
             e_G = true;
