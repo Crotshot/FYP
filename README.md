@@ -35,28 +35,28 @@ enable different forms of strategic gameplay. Minons despite being combat units 
 in structures around the map to gain a resource or strategic advantage over your oppponent
 
 ### Controls
->> W/S  == Forward/ Backward
->>A/D == Rotate Clockwise/Anticlockwise
->>Left Click/Hold == Attack
->>Q == Ability 1
->>2 == Ability 2
->>3 == Ability 3
+>> ##### W/S  == Forward/ Backward
+>> ##### A/D == Rotate Clockwise/Anticlockwise
+>> ##### Left Click/Hold == Attack
+>> ##### Q == Ability 1
+>> ##### 2 == Ability 2
+>> ##### 3 == Ability 3
 
->> Scroll Wheel Up/Down == Change Selected Minion Type
->> Right Click/Hold == Send current selected minion type to attack at mouse
->> F Press/Hold == Send current selected minion to defend at mouse
->> R Press/Hold == Retreat any minions not currently following back to the Conqueror (Retreating minions do not fight)
->> E Press/Hold ( When mouse over Structure )== Summon/ Send into structures
->> E Press/Hold == Recall minions back to Conqueror(Recalling minions will still fight on their way back)
+>> #####  Scroll Wheel Up/Down == Change Selected Minion Type
+>> ##### Right Click/Hold == Send current selected minion type to attack at mouse
+>> #####  F Press/Hold == Send current selected minion to defend at mouse
+>> #####  R Press/Hold == Retreat any minions not currently following back to the Conqueror (Retreating minions do not fight)
+>> #####  E Press/Hold ( When mouse over Structure )== Summon/ Send into structures
+>> #####  E Press/Hold == Recall minions back to Conqueror(Recalling minions will still fight on their way back)
 
 Holding will continuously send minions to perform actions, except recall and retreat which when held will be performed on all minions of selected type
 
 
 
 ### Known bugs: 
->> In some instances the minion summoning buildings will not function on the client and be stationary in the centre of the map!
->> Buildings may sometimes function when not fully captured
->> Inconsistency with host and client control point capture rates
->> Possible sightings of Herobrine
->> Conqueror mouse followers do not function across network so it may look like attacks are missing but theya re infact hitting
->> Minions respawn through object pool can have the wrong healthbar colour
+>> #####  In some instances the minion summoning buildings will not function on the client and be stationary in the centre of the map!
+>> #####  Buildings may sometimes function when not fully captured
+>> #####  Inconsistency with host and client control point capture rates
+>> #####  Possible sightings of Herobrine
+>> #####  Conqueror mouse followers do not function across network so it may look like attacks are missing but theya re infact hitting
+>> #####  Minions respawn through object pool can have the wrong healthbar colour
