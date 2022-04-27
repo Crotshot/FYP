@@ -18,11 +18,7 @@ public class MinionSpawner_Base : NetworkBehaviour {
             NetworkServer.Spawn(freshMinion);
         }
         else
-<<<<<<< Updated upstream
-            Debug.Log("Reusing minion from pool instead of making a new one !!!!!");
-=======
             Debug.Log("Reusing a minion from pool instead of making a new one!");
->>>>>>> Stashed changes
         freshMinion.transform.parent = null;
         freshMinion.transform.position = spawnPoint.position;
         freshMinion.transform.rotation = spawnPoint.rotation;

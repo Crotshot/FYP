@@ -23,11 +23,11 @@ public class GateScript : NetworkBehaviour
 
     private void OpenCheck() {
         if (points.Length > 0) {
-            int team = points[0].GetTeam();
+            int team = points[0].GetOwningTeam();
             if (team == 0)
                 return;
             foreach (ControlPoint point in points) {
-                if (point.GetTeam() != team)
+                if (point.GetOwningTeam() != team)
                     return;
             }
 

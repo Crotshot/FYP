@@ -37,15 +37,11 @@ public class MapBuilder : NetworkBehaviour {
 
     [SerializeField] int attempts = 30;
     int attemptCounter = 0;
-<<<<<<< Updated upstream
-    [SerializeField] bool useNoise, makeFlora, makeSmallProps, makeLargeProps, makeBuildings, removeBadPoints, bakeNavMesh;
-=======
     [SerializeField] bool /*useNoise,*/ makeFlora, makeSmallProps, makeLargeProps, makeBuildings, removeBadPoints, bakeNavMesh;
->>>>>>> Stashed changes
     [SerializeField]
     float floraClearMin, floraClearMax, smallClearMin, smallClearMax, largeClearMin, largeClearMax,
-        floraNoiseModifier, smallNoiseModifier, largeNoiseModifier, smallClearingDistance,
-        largeClearingDistance, outerBuildingClearingDistance, innerBuildingClearingDistance, halfPathWidth = 8f;
+       //floraNoiseModifier, smallNoiseModifier, largeNoiseModifier, 
+       smallClearingDistance, largeClearingDistance, outerBuildingClearingDistance, innerBuildingClearingDistance, halfPathWidth = 8f;
     [SerializeField] [Range(0, 1)] float pathClearance;
 
     List<Vector2> innerBuildingList = new List<Vector2>(), outerBuildingList = new List<Vector2>(), floraPropList = new List<Vector2>(),
@@ -59,11 +55,7 @@ public class MapBuilder : NetworkBehaviour {
     private void Start() {
         if (isServer) {
             playersNeededToBeReady = NetworkServer.connections.Count;
-<<<<<<< Updated upstream
-            Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
-=======
             //Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
->>>>>>> Stashed changes
         }
     }
 
@@ -142,11 +134,7 @@ public class MapBuilder : NetworkBehaviour {
             Debug.Log("playersNeededToBeReady is 0 when it should not");
             yield return new WaitForSeconds(2f);
         }
-<<<<<<< Updated upstream
-        Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
-=======
         //Debug.Log("MapBuilder: Players Connected:" + playersNeededToBeReady);
->>>>>>> Stashed changes
 
         if (isServer)
             ready1++;
@@ -473,11 +461,7 @@ public class MapBuilder : NetworkBehaviour {
                 ui.UpdateLoadStatusText("Waiting on other Player 6");
                 yield return new WaitForEndOfFrame();
             }
-<<<<<<< Updated upstream
-            ui.UpdateLoadStatusText("Instatiating Flora");
-=======
             ui.UpdateLoadStatusText("Instantiating Flora");
->>>>>>> Stashed changes
             yield return new WaitForSeconds(0.999f);
             ready2 = 0;
             yield return new WaitForSeconds(0.999f);
@@ -601,11 +585,7 @@ public class MapBuilder : NetworkBehaviour {
             ready2 = 0;
             yield return new WaitForSeconds(0.999f);
             currentTime = 0;
-<<<<<<< Updated upstream
-            ui.UpdateLoadStatusText("Instatiating Large Props");
-=======
             ui.UpdateLoadStatusText("Instantiating Large Props");
->>>>>>> Stashed changes
             #region Instantiate Large Map Props
             for (int i = largePropList.Count - 1; i >= 0; i--) {
                 totalWeight = 0; //Weigh odds of picking a prop variant
@@ -665,11 +645,7 @@ public class MapBuilder : NetworkBehaviour {
         ready1 = 0;
         yield return new WaitForSeconds(0.999f);
         currentTime = 0;
-<<<<<<< Updated upstream
-        ui.UpdateLoadStatusText("Instatiating Buildings");
-=======
         ui.UpdateLoadStatusText("Instantiating Buildings");
->>>>>>> Stashed changes
         if (makeBuildings && isServer) {
             #region Instantiating Buildings
             if (isServer) {
@@ -859,11 +835,7 @@ public class MapBuilder : NetworkBehaviour {
         #endregion
         UpdateNavMesh();
         ui.UpdateLoadStatusText("Nav finished");
-<<<<<<< Updated upstream
-        Debug.Log("Nav mesh created");
-=======
         //Debug.Log("Nav mesh created");
->>>>>>> Stashed changes
         StopCoroutine("TimerCounter");
         ui.LoadingComplete();
 

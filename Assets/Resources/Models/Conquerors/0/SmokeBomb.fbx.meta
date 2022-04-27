@@ -73,11 +73,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-<<<<<<< Updated upstream
-  importAnimation: 1
-=======
   importAnimation: 0
->>>>>>> Stashed changes
   humanDescription:
     serializedVersion: 3
     human: []
@@ -96,11 +92,7 @@ ModelImporter:
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-<<<<<<< Updated upstream
-  animationType: 2
-=======
   animationType: 0
->>>>>>> Stashed changes
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1

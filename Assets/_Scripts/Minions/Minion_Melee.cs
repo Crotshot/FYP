@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-<<<<<<< Updated upstream
-=======
 using Mirror;
->>>>>>> Stashed changes
 
 public class Minion_Melee : Minion_Attack{
     //Attack time is the time an attack is active
@@ -14,13 +11,8 @@ public class Minion_Melee : Minion_Attack{
     [SerializeField] Vector3[] directions;
 
     private void Start() {
-<<<<<<< Updated upstream
-        if (!isServer)
-            Destroy(this);
-=======
         //if (!isServer)
         //    Destroy(this);
->>>>>>> Stashed changes
         animatedWeapon.localPosition = animatedTimings[0].pos;
         animatedWeapon.localScale = animatedTimings[0].scale;
         animatedWeapon.localEulerAngles = animatedTimings[0].localEuler;
@@ -50,12 +42,8 @@ public class Minion_Melee : Minion_Attack{
         }
     }
 
-<<<<<<< Updated upstream
-    public override void Attack(){
-=======
     [ClientRpc]
     public override void RpcAttack(){
->>>>>>> Stashed changes
         if (attacking)
             return;
         attackTimer = 0;

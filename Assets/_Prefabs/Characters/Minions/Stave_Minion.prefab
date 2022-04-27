@@ -82,8 +82,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
-<<<<<<< Updated upstream
-=======
 --- !u!114 &6167305446057923605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,7 +129,6 @@ MonoBehaviour:
   directions:
   - {x: 0, y: 0.05, z: 1}
   - {x: 0, y: -0.05, z: 1}
->>>>>>> Stashed changes
 --- !u!1 &6098035991521437593
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,56 +242,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
-<<<<<<< Updated upstream
---- !u!114 &6167305446057923605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5927185862016235415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d3e597c9d3a2374f81f8ecbafcc57a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  attackTime: 0.6
-  attackCooldownTime: 1.2
-  animatedTimings:
-  - pos: {x: 0, y: 0.882, z: 0.834}
-    localEuler: {x: -164.283, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 0
-  - pos: {x: 0, y: 0.882, z: 0.834}
-    localEuler: {x: -93.724, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 0.2
-  - pos: {x: 0, y: 0.882, z: 0.834}
-    localEuler: {x: 12.233, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 0.3
-  - pos: {x: 0, y: 0.882, z: 0.834}
-    localEuler: {x: -12.846, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 0.8
-  - pos: {x: 0, y: 0.882, z: 0.834}
-    localEuler: {x: -105.952, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 1.4
-  - pos: {x: 0, y: 0.882, z: 0.834}
-    localEuler: {x: -164.283, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    time: 1.8
-  animatedWeapon: {fileID: 6935020973065256121}
-  damage: 7
-  rayLength: 4.9
-  directions:
-  - {x: 0, y: 0.05, z: 1}
-  - {x: 0, y: -0.05, z: 1}
-=======
->>>>>>> Stashed changes
 --- !u!1001 &9031673718723649079
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -427,13 +374,10 @@ PrefabInstance:
       value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 9198961231487344513, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
-<<<<<<< Updated upstream
-=======
       propertyPath: deathPrefab
       value: 
       objectReference: {fileID: 7538752134345990072, guid: 3ff5b40bea253004ea0d41c5981fc206, type: 3}
     - target: {fileID: 9198961231487344513, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
->>>>>>> Stashed changes
       propertyPath: currentHealth
       value: 72
       objectReference: {fileID: 0}

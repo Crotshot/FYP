@@ -43,16 +43,6 @@ public class MinionController : Controller {
         agentC.angularSpeed = rotSpeed;
         pathPoints.Clear();
         layer = 1 << LayerMask.NameToLayer("Unit");
-<<<<<<< Updated upstream
-        GetComponent<WorldSpaceHealthBar>().Setup();
-        if (!isServer) {
-            Destroy(this);
-            return;
-        }
-        this.enabled = false;
-    }
-    
-=======
         if (!isServer) {
             Destroy(this, 5f);
             return;
@@ -69,7 +59,6 @@ public class MinionController : Controller {
     //    GetComponent<WorldSpaceHealthBar>().Setup();
     //}
 
->>>>>>> Stashed changes
     RaycastHit[] hits;
     override protected void FixedUpdate() {
         base.FixedUpdate();
@@ -139,11 +128,7 @@ public class MinionController : Controller {
                     transform.LookAt(destination + Vector3.up);
                 else 
                     indWeapon.LookAt(destination + Vector3.up);
-<<<<<<< Updated upstream
-                attackC.Attack();
-=======
                 attackC.RpcAttack();
->>>>>>> Stashed changes
             }
         }
         #region Base Path Following
@@ -238,15 +223,10 @@ public class MinionController : Controller {
         if (effect.Equals("Stun")) {
             stunned = true;
             attackC.isStun(true);
-<<<<<<< Updated upstream
-            agentC.enabled = false;
-            destination = agentC.destination;
-=======
             if (agentC != null && agentC.isOnNavMesh) {
                 agentC.enabled = false;
                 destination = agentC.destination;
             }
->>>>>>> Stashed changes
             return;
         }
         base.EffectStart(effect, value);
@@ -257,15 +237,10 @@ public class MinionController : Controller {
         if (effect.Equals("Stun")) {
             stunned = false;
             attackC.isStun(false);
-<<<<<<< Updated upstream
-            agentC.enabled = true;
-            agentC.destination = destination;
-=======
             if (agentC != null && agentC.isOnNavMesh) { 
                 agentC.enabled = true;
                 agentC.destination = destination;
             }
->>>>>>> Stashed changes
             return;
         }
         base.EffectEnd(effect);

@@ -85,11 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 48883643853072201}
   - component: {fileID: 3390407184810277678}
-<<<<<<< Updated upstream
-  - component: {fileID: 4966987779268217321}
-=======
   - component: {fileID: 6875523999135120203}
->>>>>>> Stashed changes
   - component: {fileID: 5210046811566618405}
   m_Layer: 0
   m_Name: BaseControlPoint
@@ -127,11 +123,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 58.20462
   m_Center: {x: -0.18010712, y: 0, z: 3.9435883}
-<<<<<<< Updated upstream
---- !u!114 &4966987779268217321
-=======
 --- !u!114 &6875523999135120203
->>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,29 +132,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2754763163506118667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-<<<<<<< Updated upstream
-  m_Script: {fileID: 11500000, guid: e96b6d422a9c2a04891405b31554f544, type: 3}
-=======
   m_Script: {fileID: 11500000, guid: 34bec0b673acefd4ca0f615990784a10, type: 3}
->>>>>>> Stashed changes
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-<<<<<<< Updated upstream
-  assignedMinions_1: 0
-  assignedMinions_2: 0
-  maxAssignedMinions: 10
-  chargesToCapture: 3
-  captureFillImage: {fileID: 8898325773920815708}
-  basePoint: 1
-  charges: 0
-  currentTeam: 0
-  fillColor: {r: 0, g: 0, b: 0, a: 0}
-  captured:
-    m_PersistentCalls:
-      m_Calls: []
-=======
   captureFillImage: {fileID: 8898325773920815708}
   fillColor: {r: 0, g: 0, b: 0, a: 0}
   chargesToCapture: 3.5
@@ -183,7 +157,6 @@ MonoBehaviour:
       m_Calls: []
   basePointModifier: 100
   defenderModifier: 0.1
->>>>>>> Stashed changes
 --- !u!114 &5210046811566618405
 MonoBehaviour:
   m_ObjectHideFlags: 0

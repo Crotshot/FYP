@@ -196,8 +196,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-<<<<<<< Updated upstream
-=======
     - target: {fileID: 2249008475495961199, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}
       propertyPath: redConqCol.a
       value: 1
@@ -246,7 +244,6 @@ PrefabInstance:
       propertyPath: friendlyConqCol.r
       value: 0.25432587
       objectReference: {fileID: 0}
->>>>>>> Stashed changes
     - target: {fileID: 2277960445811590514, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -303,8 +300,6 @@ PrefabInstance:
       propertyPath: transport
       value: 
       objectReference: {fileID: 0}
-<<<<<<< Updated upstream
-=======
     - target: {fileID: 2277960445811590527, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}
       propertyPath: spawnPrefabs.Array.size
       value: 23
@@ -413,6 +408,5 @@ PrefabInstance:
       propertyPath: spawnPrefabs.Array.data[31]
       value: 
       objectReference: {fileID: 0}
->>>>>>> Stashed changes
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f17ec7d2223f62d43a27ea10af157d00, type: 3}

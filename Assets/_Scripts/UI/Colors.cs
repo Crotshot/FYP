@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Colors : MonoBehaviour
 {
-<<<<<<< Updated upstream
-    [SerializeField] public Color enemyConqCol, redMinionCol, blueMinionCol, red, blu, black;
-=======
     [SerializeField] public Color redConqCol, blueConqCol, redMinionCol, blueMinionCol, red, blu, black;
->>>>>>> Stashed changes
     [SerializeField] public Material team1, team2;
 
     public Material GetTeamMaterial(int team) {

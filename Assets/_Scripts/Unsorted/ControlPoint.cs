@@ -5,66 +5,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Mirror;
 
-<<<<<<< Updated upstream
-public class ControlPoint : NetworkBehaviour
-{
-    [SerializeField] ControlPoint mid, SE, NE, SW, NW;
-    [SerializeField] private int assignedMinions_1, assignedMinions_2, maxAssignedMinions = 10;
-
-    [SerializeField] private float chargesToCapture;
-    [SerializeField] Image captureFillImage;
-    [SerializeField] bool basePoint;
-
-    [SerializeField] private float charges;
-    [SerializeField] int currentTeam = 0;
-    [SerializeField] Color fillColor;
-
-    [SerializeField] float syncGap = 1f;
-    float syncTimer;
-
-    List<Transform> trackedTransforms = new List<Transform>();
-    List<int> teams = new List<int>();
-    private enum TeamState { Neutral, Captured}
-    TeamState capState = TeamState.Neutral;
-
-    bool setUp, notCapped = true;
-
-    public UnityEvent captured;
-    public void Setup() {
-        if (isServer && captured == null)
-            captured = new UnityEvent();
-        setUp = true;
-        syncTimer = syncInterval;
-    }
-
-    private void FixedUpdate() {
-        if (!setUp)
-            return;
-        if (isServer) {
-            float teamCharges = 0;
-            int teamLean = 0;
-            for (int i = trackedTransforms.Count -1; i > -1; i--) {
-                if (trackedTransforms[i] == null) {
-                    trackedTransforms.Remove(trackedTransforms[i]);
-                    continue;
-                }
-
-                if (trackedTransforms[i].GetComponent<Team>().GetTeam() == teamLean) {
-                    if (trackedTransforms[i].tag.Equals("Player")) teamCharges += 10f * Time.deltaTime; else teamCharges += 1f * Time.deltaTime;
-                }
-                else {
-                    if (trackedTransforms[i].tag.Equals("Player")) teamCharges -= 10f * Time.deltaTime; else teamCharges -= 1f * Time.deltaTime;
-                    if (teamCharges <= 0) {
-                        teamCharges *= -1;
-                        teamLean = trackedTransforms[i].GetComponent<Team>().GetTeam();
-                        fillColor = trackedTransforms[i].GetComponent<Team>().GetTeamColor();
-                    }
-                }
-            }
-
-            if (teamCharges == 0)
-                return;
-=======
 public class ControlPoint : NetworkBehaviour {
     [SerializeField] Image captureFillImage;
     [SerializeField] Color fillColor;
@@ -267,7 +207,6 @@ public class ControlPoint : NetworkBehaviour {
     private void FixedUpdate() {
         if (isServer) {
 
->>>>>>> Stashed changes
             Capturing(teamCharges, teamLean, fillColor);
 
             if(trackedTransforms.Count > 0)
@@ -387,66 +326,15 @@ public class ControlPoint : NetworkBehaviour {
     }
 
 
-<<<<<<< Updated upstream
-    public int GetTeam() {
-        if (capState == TeamState.Captured) {
-            return currentTeam;
-        }
-        else {
-            return 0;
-        }
-    }
-=======
 
->>>>>>> Stashed changes
 
     public bool GetBasePoint() {
         return basePoint;
     }
 
-<<<<<<< Updated upstream
-    public int GetCurrentMinions(int team) {
-        if (team == 1) {
-            return assignedMinions_1;
-        }
-        else if (team == 2) {
-            return assignedMinions_2;
-        }
-        else {
-            return 0;
-        }
-    }
 
-    public int GetMaxMinions() {
-        return maxAssignedMinions;
-    }
-=======
-
->>>>>>> Stashed changes
 
     public void SetMaxMinions(int newMax) {
         maxAssignedMinions = newMax;
     }
-<<<<<<< Updated upstream
-
-    public void AddMinion(int team) {
-        if(team == 1) {
-            assignedMinions_1++;
-        }
-        else if(team == 2) {
-            assignedMinions_2++;
-        }
-    }
-
-    public void RemoveMinion(int team) {
-        if (team == 1) {
-            assignedMinions_1--;
-        }
-        else if (team == 2) {
-            assignedMinions_2--;
-        }
-    }
-}
-=======
 */
->>>>>>> Stashed changes

@@ -481,13 +481,10 @@ PrefabInstance:
       value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 9198961231487344513, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
-<<<<<<< Updated upstream
-=======
       propertyPath: deathPrefab
       value: 
       objectReference: {fileID: 4243743856314547844, guid: 0f678f04fbb68d2498f0e8eb0c6f4bd0, type: 3}
     - target: {fileID: 9198961231487344513, guid: 74d359a1ed62fa94d91a6400aa72a987, type: 3}
->>>>>>> Stashed changes
       propertyPath: currentHealth
       value: 72
       objectReference: {fileID: 0}

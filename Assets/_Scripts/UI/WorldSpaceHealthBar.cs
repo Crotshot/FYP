@@ -12,35 +12,6 @@ public class WorldSpaceHealthBar : MonoBehaviour
     private Image healthFill;
     GameObject localUI;
 
-<<<<<<< Updated upstream
-    public void SetupDelayed() {
-        Invoke("Setup", 4f);
-    }
-
-    public void Setup() {
-        localUI = Instantiate(healthbarFab, transform);
-        GetComponent<Health>().HealthChanged.AddListener(HealthDisplay);
-        healthFill = localUI.transform.GetChild(0).GetComponent<Image>();
-        healthFill.transform.parent.position = new Vector3(transform.position.x, yOffset, transform.position.z);
-        cameraTrans = FindObjectOfType<Camera>().transform;
-        int team = GetComponent<Team>().GetTeam();
-        if (minion) {
-            localUI.transform.localScale = Vector3.one * 0.5f;
-            if (team == 1) {
-                healthFill.color = FindObjectOfType<Colors>().redMinionCol;
-            }
-            else {
-                healthFill.color = FindObjectOfType<Colors>().blueMinionCol;
-            }
-        }
-        else {
-            healthFill.color = FindObjectOfType<Colors>().enemyConqCol;
-        }
-
-        localUI.SetActive(false);
-    }
-
-=======
     private void Start() {
         Invoke("Setup", 2f);
     }
@@ -67,7 +38,6 @@ public class WorldSpaceHealthBar : MonoBehaviour
     }
 
 
->>>>>>> Stashed changes
     private void HealthDisplay(float health, float maxHealth) {
         if (health == maxHealth || health <= 0)
             localUI.SetActive(false);
