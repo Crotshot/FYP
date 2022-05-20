@@ -1,6 +1,8 @@
 # Subjugation
 The unity project files for Subjugation.
 ### GitHub Pages https://crotshot.github.io/FYP/
+### You can get all the assets here https://github.com/Crotshot/FYP_Models !
+
 
 ## What is Subjugation?
 Subjugation is a 3rd person 1 vs 1 MOBA (Multiplayer Online Battle Arena). Similarly, to other
